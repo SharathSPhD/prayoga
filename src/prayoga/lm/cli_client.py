@@ -45,7 +45,18 @@ class CliLMClient:
     timeout_s: float = 120.0
     max_retries: int = 3
     backoff_s: float = 2.0
+    lean: bool = True  # strip MCP + settings sources (~6x cheaper per call)
     extra_args: list[str] = field(default_factory=list)
+
+    # Flags that disable MCP servers and project/user settings so each Tier-1
+    # call carries only the base system prompt (~2.5k vs ~35k input tokens).
+    _LEAN_FLAGS = (
+        "--strict-mcp-config",
+        "--mcp-config",
+        '{"mcpServers":{}}',
+        "--setting-sources",
+        "",
+    )
 
     def __post_init__(self) -> None:
         if shutil.which(self.binary) is None:
@@ -56,6 +67,8 @@ class CliLMClient:
 
     def _build_cmd(self, prompt: str, system: str | None) -> list[str]:
         cmd = [self.binary, "-p", prompt, "--output-format", "json"]
+        if self.lean:
+            cmd += list(self._LEAN_FLAGS)
         if self.model:
             cmd += ["--model", self.model]
         if system:

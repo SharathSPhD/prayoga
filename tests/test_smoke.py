@@ -28,3 +28,16 @@ def test_cli_parse_json_envelope() -> None:
 
 def test_cli_parse_raw_text_fallback() -> None:
     assert CliLMClient._parse("not json, raw text") == "not json, raw text"
+
+
+def test_cli_lean_flags_present_by_default() -> None:
+    c = CliLMClient.__new__(CliLMClient)  # skip __post_init__ PATH check
+    c.model = None
+    c.lean = True
+    c.extra_args = []
+    cmd = c._build_cmd("hi", None)
+    assert "--strict-mcp-config" in cmd
+    assert "--setting-sources" in cmd
+    # lean disabled => no MCP-strip flags
+    c.lean = False
+    assert "--strict-mcp-config" not in c._build_cmd("hi", None)
