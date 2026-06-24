@@ -1,0 +1,36 @@
+# macOS metadata artifacts (flagged as non-content in CLAUDE.md)
+.DS_Store
+._*
+
+# session / local agent state
+.remember/
+scratchpad/
+
+# python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+.env
+.python-version
+
+# tooling caches
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.ipynb_checkpoints/
+
+# experiment outputs / heavy artifacts (kept out of git; released via OSF/HF, safety-gated)
+data/
+results/
+checkpoints/
+*.safetensors
+*.pt
+wandb/
+
+# notebooks scratch outputs
+notebooks/**/outputs/

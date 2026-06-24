@@ -1,0 +1,56 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "prayoga"
+version = "0.0.1"
+description = "Refusal-suppression as a cross-domain symmetry: a three-axis empirical program (mech-interp / neuroscience / darśana)."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "SharathSPhD", email = "sharath.sathish@gmail.com" }]
+keywords = ["mechanistic-interpretability", "jailbreak", "refusal", "vasikarana", "symmetry"]
+
+# Core deps kept light so `pip install -e .` + imports succeed without GPU/ML stack.
+# Heavy mech-interp + darśana deps live in extras (see below).
+dependencies = [
+    "numpy>=1.26",
+    "pydantic>=2.6",
+    "pyyaml>=6.0",
+    "scipy>=1.11",
+]
+
+[project.optional-dependencies]
+# Tier-2 white-box mech-interp stack (pins sourced from ActiveCircuitDiscovery/requirements.txt)
+mechinterp = [
+    "torch>=2.4.0",
+    "transformers>=4.56.0,<=4.57.3",
+    "transformer-lens>=2.15.0",
+    "einops>=0.7.0",
+    "accelerate>=0.30.0",
+    "safetensors>=0.4.0",
+    "datasets>=2.14.0",
+    "scikit-learn>=1.4",
+    "z3-solver>=4.13",
+]
+# git-sourced backends (not on PyPI) — installed explicitly in Docker / setup
+backends = [
+    "inferactively-pymdp @ git+https://github.com/infer-actively/pymdp.git",
+    "circuit-tracer @ git+https://github.com/safety-research/circuit-tracer.git",
+]
+viz = ["plotly>=5.20", "seaborn>=0.13", "matplotlib>=3.8", "gradio>=4.0"]
+dev = ["pytest>=8.0", "ruff>=0.5", "mypy>=1.10"]
+
+[project.urls]
+Repository = "https://github.com/SharathSPhD/prayoga"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
