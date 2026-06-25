@@ -25,7 +25,9 @@ venv/
 .ipynb_checkpoints/
 
 # experiment outputs / heavy artifacts (kept out of git; released via OSF/HF, safety-gated)
-data/
+# NOTE: track input prompt datasets (data/prompts/**) but ignore everything else under data/
+data/*
+!data/prompts/
 results/
 checkpoints/
 *.safetensors
