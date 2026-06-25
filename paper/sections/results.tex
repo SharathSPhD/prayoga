@@ -144,6 +144,15 @@ localizes, at least in part, to a monosemantic-like feature discoverable without
 supervision, and feature ablation supplies the principled operationalization of the
 targeted ``eradication'' act (ucc\=a\d{t}ana) that the naive category split lacked.
 
+This feature is also the substrate for \emph{active} circuit discovery. Reusing the
+Expected-Free-Energy intervention-selection idea of active-inference circuit discovery
+but operating over SAE features, an agent that balances a pragmatic (harmful-gap) prior
+against an epistemic (diversity) term finds the causal refusal circuit on Gemma-2-2b in
+$2$ interventions (ASR $\to1.0$), against a random baseline that reaches only $0.08$
+within a budget of $12$---an order-of-magnitude efficiency gain. On Gemma-2-9b the same
+search plateaus at $0.92$ with no small jailbreaking set, confirming (with F9) that the
+refusal circuit is larger and more distributed at scale.
+
 \subsection{Analogy: a frontier model resists the naive battery}
 Behaviourally, Claude refuses $100\%$ of a five-family attack battery (direct,
 refusal-suppression, persona, many-shot, crescendo; ASR $0.00$ on each, $n=11$).

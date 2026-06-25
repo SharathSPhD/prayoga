@@ -370,6 +370,34 @@ metaphysics/symmetry axis the lead asked for — a real positive, not a discard.
 
 ---
 
+## F15 — Active-inference discovery of the refusal circuit in SAE-feature space *(MECHANISM)*
+
+**Date:** 2026-06-25 · **WP:** 2.A6 (reuses ActiveCircuitDiscovery's EFE idea). **Method:**
+on the BatchTopK SAE features (F13), an Expected-Free-Energy-style agent (pragmatic =
+harmful-gap prior × epistemic = diversity vs the current circuit) incrementally builds
+an ablation "circuit" under an intervention budget, vs greedy (static gap) and random.
+
+**Gemma-2-2b (L7):** active and greedy both find the causal circuit — harmful ASR →
+**1.0 in 2 interventions** — while **random reaches only 0.083 at budget 12** (never
+finds it). Guided search is ~6× more efficient; random essentially fails. Active ≈
+greedy here because the circuit is *tiny* (1–2 features) and the gap prior is
+near-optimal, leaving the EFE diversity term no room to help.
+
+**Gemma-2-9b (L10):** the active search **plateaus at 0.92** — no small ablation set
+fully jailbreaks (curve $[0,0,0.75,0.83,0.92,\dots]$). The refusal circuit is **larger
+and more distributed at scale**, consistent with F9 (9b refusal is more robust). So the
+2b's single-feature jailbreak does *not* exist at 9b; the circuit must accumulate
+several features for ~0.92. (A faster full active-vs-greedy 9b comparison is a clean
+follow-up; the 42-layer subspace-ablation rollouts are slow.)
+
+**Interpretation:** ActiveCircuitDiscovery's active-inference framing transfers to
+SAE-feature circuit discovery and is dramatically more sample-efficient than random;
+its *advantage over a greedy heuristic* is gated by circuit dimensionality — negligible
+for a low-dimensional refusal circuit (2b), and the place to look is the distributed
+regime (9b).
+
+---
+
 ## F14 — ṣaṭkarma v2 (SAE-grounded): māraṇa rehabilitated; uccāṭana fails for a principled reason *(METAPHOR, strengthened)*
 
 **Date:** 2026-06-25 · **WP:** B1-v2 · **Model:** `gemma-2-2b-it` L7. **Method:** re-test
