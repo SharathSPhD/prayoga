@@ -29,6 +29,50 @@ quantitative ``capture-as-dose'' core.}
 \label{fig:dose}
 \end{figure}
 
+\subsection{Refusal EC50 pharmacology: family-dependent, not a size law}
+To our knowledge this is the first treatment of refusal steering as a
+\emph{pharmacology}: a continuous dose--response with a half-maximal effective
+concentration EC50, rather than a binary attack-success rate. We extend the single
+EC50 above into a cross-model panel---per-model layer selection, a 13-point $\alpha$
+sweep, and a four-parameter logistic fit---across two families and a $0.5$--$9.2$B size
+range (Table~\ref{tab:ec50}, Figure~\ref{fig:ec50}). All six fits are high quality
+($R^2\ge0.976$), so the EC50 estimates are solid. The scaling result is an honest
+negative: \emph{within} a family EC50 is essentially flat with size (a Qwen2.5 power-law
+fit gives exponent $\beta=0.04$, $R^2=0.62$; Gemma goes $0.25\!\to\!0.23$ from 2B to
+9B), while \emph{between} families it differs by $\sim$1.7$\times$ (Gemma $\approx0.24$
+vs.\ Qwen $\approx0.14$). The dominant axis of refusal potency is architecture/family,
+not scale---the dose-response analogue of our headline asymmetry: a shared necessary
+mechanism whose quantitative strength is model-specific. This directly tempers the
+common intuition that larger models are simply ``more robust'' refusers.
+
+\begin{table}[h]
+\caption{Refusal abliteration EC50 across model families and sizes. EC50 is the
+fraction of the refusal direction whose removal yields half-maximal jailbreak.}
+\label{tab:ec50}
+\begin{tabular}{lcccc}
+\toprule
+Model & Params & Layer & EC50 & $R^2$\\
+\midrule
+Qwen2.5-0.5B & 0.5B & 16 & 0.132 & 0.999\\
+Qwen2.5-1.5B & 1.5B & 13 & 0.136 & 0.999\\
+Qwen2.5-3B & 3.1B & 19 & 0.151 & 0.986\\
+Qwen2.5-7B & 7.6B & 13 & 0.144 & 0.987\\
+Gemma-2-2B & 2.6B & 8 & \textbf{0.252} & 0.976\\
+Gemma-2-9B & 9.2B & 13 & \textbf{0.234} & 0.986\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.62\linewidth]{f19_ec50_scaling.png}
+\caption{Refusal EC50 across six models. Within each family EC50 is nearly flat with
+size (Qwen2.5 power-law exponent $\beta=0.04$); the two families separate cleanly
+(Gemma $\approx0.24$ vs.\ Qwen $\approx0.14$). Refusal potency is family-dependent, not
+a size-scaling law.}
+\label{fig:ec50}
+\end{figure}
+
 \subsection{Mechanism: cross-model transfer and a necessary/sufficient asymmetry}
 The mechanism transfers across architecture families, but asymmetrically
 (Table~\ref{tab:cross}, Figure~\ref{fig:cross}). On Qwen2.5-3B-Instruct, ablation

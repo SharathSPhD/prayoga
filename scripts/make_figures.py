@@ -145,7 +145,7 @@ def fig_ec50_scaling() -> None:
         ax.plot(xs, law["A"] * xs ** law["beta"], color="#c0392b", ls="--",
                 label=f"Qwen fit: EC50={law['A']}·N^{law['beta']} (R²={law['r2']})")
     ax.set_xscale("log"); ax.set_xlabel("model size (B params, log)"); ax.set_ylabel("EC50 (half-ablation strength)")
-    ax.set_title("Refusal pharmacology: EC50 scaling across model sizes"); ax.legend(fontsize=8)
+    ax.set_title("Refusal EC50 pharmacology: family-dependent, ~flat with size"); ax.legend(fontsize=8)
     fig.tight_layout(); fig.savefig(FIG / "f19_ec50_scaling.png", dpi=160); plt.close(fig)
 
 

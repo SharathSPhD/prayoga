@@ -148,6 +148,40 @@ jāgrat/svapna/suṣupti distinction does **not** constitute evidence of an inte
 
 ---
 
+## F19 — Refusal EC50 pharmacology: family-dependent, NOT a size-scaling law *(MECHANISM — deep dive, surpasses SOTA)*
+
+**Date:** 2026-06-25 · **WP:** deep-dive (the lit-review's #1 novelty). SOTA reports
+jailbreaks as a binary/coarse ASR; prayoga (F2) is first to frame refusal ablation as a
+continuous **dose-response with a half-maximal EC50**. Here we extend that single point
+into a cross-model **pharmacology**: per-model layer selection + 13-α dose-response +
+4-param logistic EC50 across two families.
+
+| Model | params | layer | EC50 | R² |
+|---|---|---|---|---|
+| Qwen2.5-0.5B | 0.5B | 16 | 0.132 | 0.999 |
+| Qwen2.5-1.5B | 1.5B | 13 | 0.136 | 0.999 |
+| Qwen2.5-3B | 3.1B | 19 | 0.151 | 0.986 |
+| Qwen2.5-7B | 7.6B | 13 | 0.144 | 0.987 |
+| Gemma-2-2B | 2.6B | 8 | **0.252** | 0.976 |
+| Gemma-2-9B | 9.2B | 13 | **0.234** | 0.986 |
+
+**Verdict (honest negative on the scaling-law hypothesis):** within a family EC50 is
+**essentially flat with size** — Qwen2.5 fit `log(EC50)~log(N)` gives **β = 0.04**
+(R² 0.62; no meaningful size dependence), and Gemma goes 0.25→0.23 from 2B→9B. The
+dominant axis is **family, not scale**: Gemma's refusal half-ablation EC50 (~0.24) is
+**~1.7× Qwen's (~0.14)** — Gemma requires removing a larger fraction of the refusal
+direction to half-suppress refusal. The pooled cross-family fit is poor (β 0.13,
+R² 0.23) precisely because the variation is between-family, not size-driven.
+
+**Interpretation:** the EC50 pharmacology framing is genuinely first-in-SOTA, but it does
+**not** support "bigger models refuse more robustly." Refusal *potency* is an
+architecture/family property. This is the dose-response analogue of the program's
+headline — a shared necessary mechanism whose **quantitative** strength is
+model-dependent (the asymmetry, again). All six fits are high-quality logistics
+(R² ≥ 0.976), so the EC50 estimates are solid; it is the size-scaling that is absent.
+
+---
+
 ## F18 — Refusal-subspace dimension is LAYER-dependent: the F8 contrast doesn't survive a sweep *(MECHANISM, rigor — qualifies F6/F8)*
 
 **Date:** 2026-06-25 · **WP:** convergence (the review's "single-layer Achilles heel").
