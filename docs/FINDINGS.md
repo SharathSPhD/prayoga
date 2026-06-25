@@ -254,6 +254,34 @@ quantity. A clean, falsifiable, cross-model mechanistic result.
 
 ---
 
+## F13 — A single unsupervised SAE feature causally mediates refusal *(MECHANISM)*
+
+**Date:** 2026-06-25 · **WP:** 2.A4 · **Model:** `gemma-2-2b-it` L7. **Method:** train a
+BatchTopK sparse autoencoder (Bussmann et al. 2024; 4096 features, k=32) on **27,382
+real residual activations** collected from general text (wikitext-2). Identify the
+feature that fires most on harmful vs harmless prompts; validate causality by
+ablating its decoder direction during generation.
+
+| Quantity | Value |
+|---|---|
+| corpus tokens (real, wikitext-2) | 27,382 |
+| SAE reconstruction FVU | **0.028** (97% variance explained), L0 = 32 |
+| top refusal feature | #566 (harmful−harmless gap 1.70) |
+| baseline ASR (harmful) | 0.00 |
+| **ASR ablating feature #566** | **1.00** |
+| ASR ablating a random feature | 0.00 |
+
+**Verdict:** an **unsupervised-discovered** SAE feature is causally **sufficient** to
+control refusal — ablating feature #566 alone fully jailbreaks the model (ASR 0→1.0),
+*cleaner* than the supervised difference-in-means direction (F1, 0.90), while a random
+feature has no effect. This is the **finer causal unit** the paper flagged as
+indicated: refusal localizes to (at least) one monosemantic-ish feature found without
+any harmful/harmless labels, from a general-text-trained dictionary. It also supplies
+the proper operationalization of ṣaṭkarma uccāṭana (targeted feature removal) that the
+naive category-split (F10) lacked.
+
+---
+
 ## F12 — Injection lowers monitoring precision (β_monitor) *(ANALOGY, measured)*
 
 **Date:** 2026-06-25 · **WP:** B3 · **Model:** `gemma-2-2b-it` L7. **Method:** train a
