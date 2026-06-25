@@ -73,3 +73,36 @@ quantitative "vaśīkaraṇa-as-dose-response" core. The random control is flat 
 every dose, so the curve is specific to the refusal direction, not a generic
 perturbation magnitude. EC50≈0.33 means removing ~⅓ of the direction's
 projection already half-collapses refusal.
+
+---
+
+## F3 — avasthātraya regime probe is SURFACE-CONFOUNDED → DEMOTED *(METAPHOR → falsified-as-operationalized)*
+
+**Date:** 2026-06-25 · **WP:** 2.C1 · **Model:** `gemma-2-2b-it`. **Method:** linear
+probe (3-way: jāgrat grounded-factual / svapna surreal-confabulatory / suṣupti
+null-minimal) on last-token residuals; held-out-prompt transfer + label-shuffled
+null. Headline layer = network middle (13), pre-specified.
+
+**Raw gate result:** transfer_acc = **1.00**, null_p = **0.003** (chance 0.33) →
+the gate, taken at face value, PASSES at every layer.
+
+**Why this is a DEMOTION, not a win:** transfer_acc is **1.00 already at layer 0**
+(token embeddings) and ≈1.0 at all 26 layers. The three regimes are perfectly
+separable from raw surface form (suṣupti ≈ 1–3 chars, svapna = long surreal
+sentences, jāgrat = medium questions). This **fails the §0 non-triviality bar
+(criterion 4: not reducible to the model just processing the surface prompt)** —
+there is no depth-emergent signal beyond what token length/identity already give.
+
+**Decision (X-2 demotion protocol):** `TierDecision(claim="avasthatraya-regime-
+state", tier="METAPHOR", demoted=True, evidence="layer-0 transfer_acc=1.0 ⇒
+surface-confounded")`. The naive prompt-set operationalization of the
+jāgrat/svapna/suṣupti distinction does **not** constitute evidence of an internal
+"state." Reported as an honest negative.
+
+**Stronger test it motivates (next iteration, F4):** hold *content* fixed and vary
+only the internal regime — e.g. capture activations on the model's **own
+generated answer tokens** when it answers a factual question *truthfully* (jāgrat)
+vs *confabulates a confident falsehood* (svapna) on the **same** question. A real
+state signature must (a) transfer, (b) beat the label-shuffled null, **and (c)
+beat a layer-0 / surface-feature baseline** — the criterion this naive version
+fails. This becomes the canonical Axis-C protocol.
