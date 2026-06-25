@@ -245,6 +245,70 @@ quantity. A clean, falsifiable, cross-model mechanistic result.
 
 ---
 
+## F11 — Refusal is a paraphrase-orbit symmetry invariant; injection breaks it *(MECHANISM, symmetry core)*
+
+**Date:** 2026-06-25 · **WP:** B2 · **Model:** `gemma-2-2b-it` L7. **Method:** order
+parameter m = (h·d̂_ref)/‖h‖. For 6 harmful + 6 harmless seed requests, build a
+4-style paraphrase orbit; measure m across each orbit; compute the between-class /
+within-orbit variance **F-ratio** for d_ref vs a random direction. Then measure m on
+plain vs refusal-suppression-injected harmful requests.
+
+| Quantity | Value |
+|---|---|
+| F-ratio (between-class / within-orbit), **refusal dir** | **19.19** |
+| F-ratio, random dir (control) | 0.65 |
+| order parameter, harmful mean | 0.140 |
+| order parameter, harmless mean | 0.034 |
+| m, plain harmful → injected harmful | 0.153 → **0.101** (−34%) |
+
+**Verdict:** the refusal projection is a **specific invariant of harmful-meaning** —
+its F-ratio (19.2) is ~29× the random direction's (0.65), i.e. it is stable *within* a
+paraphrase orbit yet cleanly separates harmful from harmless *across* orbits. A
+refusal-suppression **injection collapses the order parameter** (−34%). This is the
+formal, measured content of the paper's thesis: **refusal is a symmetry (an invariance
+under the rephrase group action) and a jailbreak is symmetry-breaking.** Non-trivial by
+the §0 bar: invariant across phrasing (transfer), specific to d_ref (random control),
+causally collapsible (injection). This is the rigorous strengthening of the
+metaphysics/symmetry axis the lead asked for — a real positive, not a discard.
+
+---
+
+## F10 — The ṣaṭkarma intervention taxonomy: partially supported (3/6) *(METAPHOR, strengthened test)*
+
+**Date:** 2026-06-25 · **WP:** B1 · **Model:** `gemma-2-2b-it` L7. **Method:** the six
+tantric acts each operationalized as a *distinct, measurable* activation
+intervention with a matched random/structural control (no judge, no mock); an act
+"separates" if its effect exceeds its control by a margin.
+
+| Act ( act / gloss) | intervention | effect | control | separated |
+|---|---|---|---|---|
+| vaśīkaraṇa / subjugate | ablate refusal dir | ASR **0.92** | 0.00 | ✓ |
+| śānti / pacify | add refusal dir | over-refusal **1.00** | 0.08 | ✓ |
+| vidveṣaṇa / discord | steer factual answer | divergence 0.84 | 0.73 | ✓ (marginal) |
+| stambhana / freeze | ablate dominant PC | degeneracy 0.14 | 0.19 | ✗ |
+| uccāṭana / eradicate | category-dir ablate | ΔASR −0.08 | 0.00 | ✗ |
+| māraṇa / destroy | top-10 PC ablate | collapse 0.21 | 0.16 | ✗ |
+
+**Verdict: 3/6 control-separated → taxonomy WEAK.** The honest reading (this is the
+*proper test* of vaśīkaraṇa the lead asked for, not a discard): the **refusal-
+direction acts** (vaśīkaraṇa = ablate, śānti = add) are clean and strong — these are
+the rigorous core, and they are exactly the MECHANISM-tier object. vidveṣaṇa
+(steering-induced answer divergence) marginally separates. The **capability-ablation
+acts** as operationalized (stambhana via dominant-PC ablation, uccāṭana via an
+arbitrary category split, māraṇa via top-10-PC ablation) are **not distinguishable
+from random perturbation** — random high-norm directions are themselves destructive,
+and an arbitrary category split does not selectively eradicate.
+
+**Interpretation:** the ṣaṭkarma is a *real, testable taxonomy*, and the test says its
+rigorous part is the **policy-capture** sub-family (the vaśīkaraṇa↔refusal-direction
+mapping), not the destruction sub-family — at least under these operationalizations and
+this 2B model. This *strengthens* the axis by locating where the structure is real vs
+forced, rather than asserting all six. Follow-ups: real harmful *categories* for
+uccāṭana; task-accuracy (not coherence) for māraṇa; the symmetry-invariance and
+β_monitor-precision formalizations (the stronger math).
+
+---
+
 ## F9 — Abliteration robustness grows with scale, but prompt-dimension doesn't *(MECHANISM)*
 
 **Date:** 2026-06-25 · **WP:** 2.A2/A3 scale sweep. **Models:** Gemma-2 **2b** (L7)

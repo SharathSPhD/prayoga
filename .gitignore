@@ -40,3 +40,11 @@ notebooks/**/outputs/
 # experiment run logs (stdout from container runs)
 *.log
 results_*.log
+
+# LaTeX build artifacts (keep .tex, .bib, and the compiled paper.pdf)
+paper/*.aux
+paper/*.log
+paper/*.out
+paper/*.bbl
+paper/*.blg
+paper/sections/*.aux
