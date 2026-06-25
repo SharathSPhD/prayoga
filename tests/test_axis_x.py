@@ -10,7 +10,11 @@ from __future__ import annotations
 import numpy as np
 
 from prayoga.axis_b.precision import train_refusal_probe
-from prayoga.axis_x.subspace_topology import pairwise_topology, principal_angles
+from prayoga.axis_x.subspace_topology import (
+    necessary_vs_sufficient,
+    pairwise_topology,
+    principal_angles,
+)
 from prayoga.axis_x.triangulation import couple, deltas_from_activations
 
 
@@ -88,6 +92,38 @@ def test_principal_angles_aligned_and_orthogonal():
     # shared-core + divergent-tail: one aligned (e0), one orthogonal
     mixed = np.degrees(principal_angles(B_top, e[[0, 2]]))
     assert mixed.min() < 1e-4 and abs(mixed.max() - 90.0) < 1e-4
+
+
+def test_necessary_vs_sufficient_distinguishes_1d_from_multid():
+    """Gemma-like (1-D) vs Qwen-like (multi-D) refusal geometry.
+
+    When separability lives only along the ablation axis, removing it collapses
+    residual separability to chance (axis spans refusal). When there is orthogonal
+    sufficiency structure, residual separability survives.
+    """
+    rng = np.random.RandomState(3)
+    d_model, n = 24, 60
+    d_ref = np.zeros(d_model)
+    d_ref[0] = 1.0
+    orth = np.zeros(d_model)
+    orth[1] = 1.0
+    sign = np.r_[np.ones(n), -np.ones(n)]            # +1 harmful, -1 harmless
+
+    # 1-D: class signal only along d_ref
+    noise1 = rng.normal(0, 0.3, (2 * n, d_model))
+    noise1[:, 0] = 0
+    X1 = np.outer(sign, d_ref) * 2.0 + noise1
+    g1 = necessary_vs_sufficient(X1[:n], X1[n:], d_ref, k=3)
+    assert g1["ablation_axis_spans_refusal"]
+    assert g1["residual_cv_acc_after_removing_ablation_axis"] < 0.7
+
+    # multi-D: signal along d_ref AND an orthogonal axis
+    noise2 = rng.normal(0, 0.3, (2 * n, d_model))
+    noise2[:, :2] = 0
+    X2 = np.outer(sign, d_ref) * 2.0 + np.outer(sign, orth) * 2.0 + noise2
+    g2 = necessary_vs_sufficient(X2[:n], X2[n:], d_ref, k=3)
+    assert not g2["ablation_axis_spans_refusal"]
+    assert g2["residual_cv_acc_after_removing_ablation_axis"] > 0.8
 
 
 def test_pairwise_topology_summary_shape():
