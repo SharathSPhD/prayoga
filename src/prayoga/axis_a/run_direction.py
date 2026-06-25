@@ -53,18 +53,21 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--model", default="gemma-2-2b-it")
     ap.add_argument("--hf-id", default="google/gemma-2-2b-it")
-    ap.add_argument("--n-train", type=int, default=24)
+    ap.add_argument("--n-train", type=int, default=20)
+    ap.add_argument("--n-val", type=int, default=8, help="layer-selection split (no eval overlap)")
     ap.add_argument("--max-new-tokens", type=int, default=40)
     ap.add_argument("--add-mult", type=float, default=8.0)
+    ap.add_argument("--n-random", type=int, default=10, help="random-control directions")
     ap.add_argument("--out", default="results/axis_a")
     args = ap.parse_args()
 
     harmful = _load("data/prompts/harmful.txt")
     harmless = _load("data/prompts/harmless.txt")
-    nt = args.n_train
-    h_tr, h_ev = harmful[:nt], harmful[nt:]
-    s_tr, s_ev = harmless[:nt], harmless[nt:]
-    print(f"[data] train={nt} eval harmful={len(h_ev)} harmless={len(s_ev)}")
+    nt, nv = args.n_train, args.n_val
+    # disjoint splits: train (direction) | val (layer select) | eval (gates)
+    h_tr, h_val, h_ev = harmful[:nt], harmful[nt : nt + nv], harmful[nt + nv :]
+    s_tr, s_ev = harmless[:nt], harmless[nt + nv :]
+    print(f"[data] train={nt} val={len(h_val)} eval harmful={len(h_ev)} harmless={len(s_ev)}")
 
     model = HFModel(args.hf_id)
     eng = InterventionEngine(model)
@@ -72,8 +75,8 @@ def main() -> None:
 
     dirs = directions_all_layers(model, h_tr, s_tr)  # [L, d]
 
-    # --- layer selection: ablate with each candidate dir, max ASR on val ----- #
-    val = h_ev[: min(8, len(h_ev))]
+    # --- layer selection on the DEDICATED val split (no eval overlap) -------- #
+    val = h_val
     lo, hi = int(0.25 * model.n_layers), int(0.80 * model.n_layers)
     cand = list(range(lo, hi, max(1, (hi - lo) // 8)))
     best_layer, best_asr = cand[0], -1.0
@@ -94,26 +97,34 @@ def main() -> None:
     d_asr, ci_asr = _paired_delta_ci(1 - base_h, 1 - abl_h)
 
     # --- gate 2: addition raises refusal on harmless (over-refusal) ---------- #
-    # natural refusal-coefficient = mean projection of harmful train acts on dir
-    harm_acts = model.capture_all_layers_last_token(h_tr)[best_layer]  # [n,d]
-    ref_coeff = float(np.mean(harm_acts @ direction))
-    coeff = args.add_mult * abs(ref_coeff)
+    # Principled, sign-correct coefficient: the natural separation between the
+    # harmful and harmless activation means at the selected layer = the norm of
+    # the (unnormalized) difference-in-means. dir is oriented harmful-positive by
+    # construction, so adding +coeff*dir steers toward refusal (no abs needed).
+    h_tr_acts = model.capture_all_layers_last_token(h_tr)[best_layer]
+    s_tr_acts = model.capture_all_layers_last_token(s_tr)[best_layer]
+    sep = float(np.linalg.norm(h_tr_acts.mean(0) - s_tr_acts.mean(0)))
+    coeff = args.add_mult * sep
     base_s = refusal_flags(eng.baseline_generate(s_ev, args.max_new_tokens))
     add_s = refusal_flags(
         eng.add_generate(s_ev, direction, coeff, best_layer, args.max_new_tokens)
     )
     d_ref, ci_ref = _paired_delta_ci(base_s, add_s)
 
-    # --- control: random direction ablation should NOT raise ASR ------------- #
+    # --- control: N random directions should NOT raise ASR (use the max) ----- #
     rng = np.random.RandomState(0)
-    rand = rng.randn(model.d_model)
-    rand /= np.linalg.norm(rand)
-    rnd_h = refusal_flags(eng.ablate_generate(h_ev, rand, args.max_new_tokens))
-    rnd_asr_delta = float((1 - rnd_h.mean()) - base_asr)
+    rnd_deltas = []
+    for _ in range(args.n_random):
+        rand = rng.randn(model.d_model)
+        rand /= np.linalg.norm(rand)
+        rnd_h = refusal_flags(eng.ablate_generate(h_ev, rand, args.max_new_tokens))
+        rnd_deltas.append(float((1 - rnd_h.mean()) - base_asr))
+    rnd_asr_delta_max = max(rnd_deltas)
+    rnd_asr_delta_mean = float(np.mean(rnd_deltas))
 
     gate_ablation = ci_asr[0] > 0
     gate_addition = ci_ref[0] > 0
-    gate_control = d_asr > rnd_asr_delta  # real effect exceeds random
+    gate_control = d_asr > rnd_asr_delta_max  # real effect exceeds WORST-case random
     passed = bool(gate_ablation and gate_addition and gate_control)
 
     res = DirectionResult(
@@ -133,7 +144,9 @@ def main() -> None:
         "ablated_ASR": float(abl_asr),
         "ablation_ASR_delta": d_asr,
         "ablation_ASR_delta_CI95": ci_asr,
-        "random_ablation_ASR_delta": rnd_asr_delta,
+        "random_ablation_ASR_delta_max": rnd_asr_delta_max,
+        "random_ablation_ASR_delta_mean": rnd_asr_delta_mean,
+        "n_random_controls": args.n_random,
         "baseline_harmless_refusal_rate": float(base_s.mean()),
         "added_harmless_refusal_rate": float(add_s.mean()),
         "addition_overrefusal_delta": d_ref,

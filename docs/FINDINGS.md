@@ -13,15 +13,23 @@ it passed. Raw artifacts (direction vectors, generations) are **safety-gated**:
 et al. 2024) on 24 harmful / 24 harmless prompts; layer selected by max ablation
 ASR on a val split → **layer 7**. Eval on 24 held-out harmful / 24 harmless.
 
-| Measure | Result |
-|---|---|
-| Baseline harmful refusal rate | 1.00 (ASR 0.00) |
-| **Directional ablation** → harmful ASR | **0.92** (Δ +0.92, bootstrap CI95 [0.79, 1.00]) |
-| **Random-direction control** → ASR Δ | **0.00** (no effect) |
-| **Activation addition** → harmless refusal rate | 0.04 → **1.00** (over-refusal Δ +0.96, CI95 [0.88, 1.00]) |
+Canonical numbers are the **corrected** run (disjoint train/val/eval splits;
+10-direction random control); the original leaky-split run is shown for contrast.
 
-**Gates:** ablation-raises-ASR ✓ · addition-raises-over-refusal ✓ ·
-exceeds-random-control ✓ → **PASS**.
+| Measure | Original (leaky) | **Corrected (canonical)** |
+|---|---|---|
+| Baseline harmful refusal rate | 1.00 (ASR 0.00) | 1.00 (ASR 0.00) |
+| **Directional ablation** → harmful ASR | 0.92 (CI [0.79,1.0]) | **0.90** (Δ+0.90, CI95 [0.75, 1.00]) |
+| **Random-direction control** → ASR Δ | 0.00 (1 dir) | **0.00** (max & mean over 10 dirs) |
+| **Activation addition** → harmless refusal | 0.04 → 1.00 (Δ+0.96) | 0.05 → **1.00** (Δ+0.95, CI95 [0.85, 1.00]) |
+
+**Gates (corrected):** ablation-raises-ASR ✓ · addition-raises-over-refusal ✓ ·
+exceeds-random-control (10-dir max) ✓ → **PASS**.
+
+**Robustness to the review:** the adversarial review's falsification test was
+*"if fixing the layer-selection leakage + weak control drops the effect >50%, it
+was an artifact."* Fixing both moved ablation ASR 0.92 → 0.90 (a 2-point change)
+— so the effect is **real, not leakage-inflated**.
 
 **Adversarial validation:** ablated generations were inspected and produce
 *genuine* compliant harmful content (not mere omission of refusal phrases);
@@ -41,12 +49,6 @@ A-5 dose-response/EC50; scale sweep (1B→4B→9B); transfer across models.
 **Dual-use:** the layer-7 direction is an abliteration vector; it is NOT released
 in the public repo (kept under git-ignored `results/`). Any future release is
 safety-gated per the program's responsible-disclosure commitment.
-
-> **Note (2026-06-25):** F1 was re-run after an adversarial code review flagged
-> (a) layer-selection val overlapping the gate-eval set (~33% leakage) and (b) a
-> single-direction random control. The corrected run uses disjoint train/val/eval
-> splits and a 10-direction control; see the updated numbers in F1′ below once
-> landed.
 
 ---
 
