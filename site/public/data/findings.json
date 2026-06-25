@@ -195,6 +195,23 @@
    },
    "summary": "Using a refusal-probe margin as a precision proxy, a refusal-suppression injection lowers monitoring precision ~2.6× more than a neutral rephrase, accompanying a behavioral flip (refusal 1.0→0.5). The active-inference β_monitor suppression is measured, not just argued.",
    "implications": "Strengthens the ANALOGY tier (Norman–Shallice / Free-Energy precision account) from argued to measured."
+  },
+  {
+   "id": "F13",
+   "title": "A single unsupervised SAE feature causally mediates refusal",
+   "tier": "MECHANISM",
+   "verdict": "holds",
+   "date": "2026-06-25",
+   "model": "google/gemma-2-2b-it",
+   "keyMetrics": {
+    "saeReconstruction": "FVU 0.028 (97% var), L0=32",
+    "corpus": "27,382 real wikitext-2 tokens",
+    "topRefusalFeature": "#566 (harmful−harmless gap 1.70)",
+    "ablateFeatureASR": "0.00 → 1.00",
+    "ablateRandomFeatureASR": "0.00"
+   },
+   "summary": "A BatchTopK SAE (4096 features, k=32) trained unsupervised on 27k general-text tokens yields feature #566 whose decoder-direction ablation fully jailbreaks the model (ASR 0→1.0) — cleaner than the supervised difference-in-means direction (0.90); a random feature does nothing.",
+   "implications": "Refusal localizes to a single monosemantic-like feature found without labels — the finer causal unit and the proper substrate for targeted uccāṭana."
   }
  ]
 }
