@@ -348,3 +348,15 @@ pushes activations off-distribution into incoherent text (scored as non-refusal)
 insufficiency; single-direction addition is sufficient in both families at the appropriate
 coefficient, strengthening the representational-level unification while F20 bounds it
 behaviourally.
+
+Finally, a methodological caution that emerged from validating these behavioural
+readouts: the two automatic dependent variables are biased in \emph{opposite} directions.
+The substring refusal metric \emph{over}-counts compliance (it scores deflections as
+success, inflating the injection flip rate $\sim$18$\times$); a content-faithful judge
+built from a safety-trained model (Claude) \emph{under}-counts it (it refuses to affirm
+genuinely harmful outputs---on ablated Gemma-2-2b, inspection confirms genuine harmful
+generations and a substring ASR of $0.92$, yet the judge scores only $0.05$). Neither is
+an unbiased behavioural DV: the substring metric is an upper bound on capture and the
+safety-trained judge a lower bound, so behavioural claims here are bracketed by both and
+spot-checked by inspection. (This validates the ablation finding---ablation produces
+genuine harmful compliance---and makes the injection capture rate a lower bound.)
