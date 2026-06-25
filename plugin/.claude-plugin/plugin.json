@@ -1,0 +1,8 @@
+{
+  "name": "prayoga",
+  "version": "0.1.0",
+  "description": "Mechanistic-interpretability toolkit for refusal in LLMs: extract the refusal direction, run abliteration dose-response (EC50), measure refusal-subspace dimensionality, the symmetry order parameter, and the ṣaṭkarma intervention taxonomy. Backed by real GPU experiments (no mocks).",
+  "author": { "name": "SharathSPhD", "email": "sharath.sathish@gmail.com" },
+  "homepage": "https://github.com/SharathSPhD/prayoga",
+  "keywords": ["mechanistic-interpretability", "refusal", "jailbreak", "activation-steering", "vasikarana", "ai-safety"]
+}
