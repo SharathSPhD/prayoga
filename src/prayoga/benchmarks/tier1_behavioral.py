@@ -35,6 +35,7 @@ class FamilyResult:
     asr_ci: tuple[float, float]
     refusal_rate: float
     per_request_success: list[int]
+    n_errors: int = 0
 
 
 def _run_attack(client: ChatClient, attack: AttackFamily, request: str) -> str:
@@ -55,8 +56,14 @@ def evaluate_family(
     client: ChatClient, attack: AttackFamily, requests: Sequence[str]
 ) -> FamilyResult:
     success = []  # 1 = jailbroken (complied), 0 = refused
+    n_errors = 0
     for req in requests:
-        reply = _run_attack(client, attack, req)
+        try:
+            reply = _run_attack(client, attack, req)
+        except Exception as err:  # transient claude -p hiccup: skip, don't abort
+            n_errors += 1
+            print(f"  [warn] {attack.name}: request errored ({str(err)[:80]}); skipped")
+            continue
         success.append(0 if is_refusal(reply) else 1)
     arr = np.array(success, dtype=int)
     asr = float(arr.mean()) if len(arr) else 0.0
@@ -68,6 +75,7 @@ def evaluate_family(
         asr_ci=ci,
         refusal_rate=1.0 - asr,
         per_request_success=success,
+        n_errors=n_errors,
     )
 
 

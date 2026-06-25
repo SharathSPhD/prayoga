@@ -87,12 +87,21 @@ class HFModel:
 
     # --- interventions (Arditi directional ablation + activation addition) --- #
     @contextmanager
-    def ablation_hooks(self, direction: np.ndarray) -> Iterator[None]:
-        """Project the (unit) direction out of the residual stream everywhere."""
+    def ablation_hooks(self, direction: np.ndarray, alpha: float = 1.0) -> Iterator[None]:
+        """Project the direction out of the residual stream everywhere.
+
+        ``alpha`` scales the removal (partial directional ablation): 0 = no
+        change, 1 = full ablation. Enables a dose-response sweep over alpha.
+
+        Removal is applied at the embedding output AND every decoder-layer
+        output — this is Arditi et al.'s *directional ablation* (the direction is
+        removed from every write to the residual stream), not a single-layer
+        edit. Extraction picks one layer; ablation acts everywhere.
+        """
         d = self._dir_tensor(direction)
 
         def project_out(h: torch.Tensor) -> torch.Tensor:
-            return h - (h @ d).unsqueeze(-1) * d
+            return h - alpha * (h @ d).unsqueeze(-1) * d
 
         def layer_hook(_m, _i, out):
             if isinstance(out, tuple):

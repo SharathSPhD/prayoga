@@ -13,6 +13,7 @@ from __future__ import annotations
 import json
 import shutil
 import subprocess
+import tempfile
 import time
 from dataclasses import dataclass, field
 
@@ -46,6 +47,7 @@ class CliLMClient:
     max_retries: int = 3
     backoff_s: float = 2.0
     lean: bool = True  # strip MCP + settings sources (~6x cheaper per call)
+    neutral_cwd: bool = True  # run from a project-free dir so no CLAUDE.md leaks in
     extra_args: list[str] = field(default_factory=list)
 
     # Flags that disable MCP servers and project/user settings so each Tier-1
@@ -89,6 +91,7 @@ class CliLMClient:
                     self._build_cmd(prompt, system),
                     capture_output=True,
                     text=True,
+                    cwd=tempfile.gettempdir() if self.neutral_cwd else None,
                     timeout=self.timeout_s,
                 )
                 if proc.returncode != 0:

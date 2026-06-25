@@ -23,10 +23,14 @@ class InterventionEngine:
         return self.model.generate(prompts, max_new_tokens)
 
     def ablate_generate(
-        self, prompts: list[str], direction: np.ndarray, max_new_tokens: int = 48
+        self,
+        prompts: list[str],
+        direction: np.ndarray,
+        max_new_tokens: int = 48,
+        alpha: float = 1.0,
     ) -> list[str]:
-        """Generate with the refusal direction projected out everywhere."""
-        with self.model.ablation_hooks(direction):
+        """Generate with the refusal direction projected out (scaled by alpha)."""
+        with self.model.ablation_hooks(direction, alpha=alpha):
             return self.model.generate(prompts, max_new_tokens)
 
     def add_generate(
