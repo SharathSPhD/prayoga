@@ -129,10 +129,44 @@ is limited (≈1 transient exit-1 per 12 calls; likely subscription rate caps), 
 n is small. (3) substring-ASR could miss subtle compliance; manual spot-checks
 recommended before any publication claim. Framed accordingly.
 
-**Stronger test it motivates (F5, next iteration):** hold *content* fixed and vary
-only the internal regime — e.g. capture activations on the model's **own
-generated answer tokens** when it answers a factual question *truthfully* (jāgrat)
-vs *confabulates a confident falsehood* (svapna) on the **same** question. A real
-state signature must (a) transfer, (b) beat the label-shuffled null, **and (c)
-beat a layer-0 / surface-feature baseline** — the criterion this naive version
-fails. This becomes the canonical Axis-C protocol.
+**Stronger test it motivates (F5):** hold *content* fixed and vary only the
+internal regime — capture activations on the model's **own generated answer
+tokens** when it answers a factual question *truthfully* (jāgrat) vs *confabulates
+a confident falsehood* (svapna) on the **same** question. A real state signature
+must (a) transfer, (b) beat the label-shuffled null, **and (c) beat a layer-0 /
+surface baseline at a MID layer**. Implemented as `axis_c/run_state.py`.
+
+---
+
+## F5 — Content-controlled svapna probe: still NO mid-network state *(METAPHOR, falsification reinforced)*
+
+**Date:** 2026-06-25 · **WP:** 2.C1′ · **Model:** `gemma-2-2b-it`, n=24 questions.
+**Method:** truthful vs confabulated generation on the **same** factual questions;
+probe their last-generated-token residuals (2-way, chance 0.5); transfer + null +
+**layer-0 surface baseline**.
+
+| Layer | 0 (surface) | 13 (mid) | 25 (final/output) |
+|---|---|---|---|
+| transfer_acc | 0.90 | 0.90 | 1.00 (null_p 0.003) |
+
+**Verdict:** the truthful/confab distinction is ~90% decodable from **surface
+already at layer 0** (the two answers differ in vocabulary), and the **mid-layer
+(13) adds nothing over layer 0** (0.90 = 0.90). Accuracy reaches 1.00 only at the
+**final, output-proximal layer** — refined surface/output features, not a deep
+internal regime. A true "state" (cf. the refusal direction peaking mid-network at
+layer 7) would show a **mid-network** gain; there is none.
+
+**Gate correction:** the runner's original `best-layer − layer0` gate was too
+lenient (it can select the output layer) and nominally "passed." The **principled
+mid-layer gate (mid_acc − layer0_acc > margin) FAILS (0.00).** Adopting the
+mid-layer gate as canonical (spec updated).
+
+**Conclusion (tier-disciplined):** across F3 (naive) and F5 (content-controlled),
+the avasthātraya jāgrat/svapna distinction shows **no non-trivial mid-network
+internal-state signature** in Gemma-2-2b — it is explained by surface features.
+The "state" reading stays **DEMOTED to metaphor**, consistent with the program's
+core commitment that turīya/vimarśa is the falsification target, not a settled
+claim. This is a genuine honest-negative; the AUM mapping does **not** license a
+machine-state claim here. (Caveats: small n=24; a single 2B model; stronger
+designs — token-matched positions, larger models, the turīya attractor test
+WP2.C2 — remain open before any stronger statement.)

@@ -81,6 +81,42 @@ class HFModel:
                 h.remove()
         return np.stack([np.stack(x) for x in per])
 
+    @torch.no_grad()
+    def generate_ids(self, prompt: str, max_new_tokens: int = 40) -> torch.Tensor:
+        """Greedy-generate and return the FULL token ids (prompt + answer)."""
+        ids = self._ids(prompt)
+        return self.model.generate(
+            ids, max_new_tokens=max_new_tokens, do_sample=False,
+            pad_token_id=self.tok.eos_token_id,
+        )
+
+    @torch.no_grad()
+    def capture_ids_all_layers_last_token(self, ids: torch.Tensor) -> np.ndarray:
+        """All-layer residual at the last token of an explicit id sequence.
+
+        Used to capture the model's state at the end of its OWN generated answer
+        (content held fixed across regimes via the same question). Returns
+        ``[n_layers, d_model]``.
+        """
+        store: dict[int, torch.Tensor] = {}
+        handles = []
+
+        def mk(li: int):
+            def hook(_m, _i, out):
+                h = out[0] if isinstance(out, tuple) else out
+                store[li] = h[0, -1, :].float()
+
+            return hook
+
+        for li, layer in enumerate(self.layers):
+            handles.append(layer.register_forward_hook(mk(li)))
+        try:
+            self.model(ids.to(self.device))
+        finally:
+            for h in handles:
+                h.remove()
+        return np.stack([store[li].cpu().numpy() for li in range(self.n_layers)])
+
     def _dir_tensor(self, direction: np.ndarray) -> torch.Tensor:
         d = torch.tensor(direction, device=self.device, dtype=self.model.dtype)
         return d / d.norm()

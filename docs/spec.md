@@ -57,9 +57,20 @@ extras; Tier-1 needs only the core install + the `claude` CLI.
 
 ## 3. Axis C — darśana *(METAPHOR-with-falsifiable-core)*
 
-### 3.1 `axis_c/regime_probes.py` (WP2.C1)
-- **Interface:** `train_regime_probe(acts, labels) -> ProbeResult` for jāgrat (grounded low-temp) / svapna (high-temp confab) / suṣupti (null context).
-- **Closure gate (mandatory):** held-out **transfer** accuracy > **label-shuffled null** (p<0.05). Failure → `TierDecision(demoted=True)`, logged publicly.
+### 3.1 `axis_c/regime_probes.py` + `run_state.py` (WP2.C1)
+- **Interface:** `evaluate_regime_probe(acts_by_regime, ...) -> {transfer_acc, null_p, ...}`.
+- **Closure gates (mandatory, all three — strengthened after F3/F5):**
+  1. held-out **transfer** accuracy > chance;
+  2. > **label-shuffled null** (p<0.05);
+  3. **MID-LAYER beats the layer-0 surface baseline** by a margin — a genuine
+     internal state must emerge mid-network, NOT at the output-proximal final
+     layer (which tracks surface/vocabulary). *Lesson from F3: a naive 3-way
+     regime probe hit transfer_acc=1.0 at layer 0 → pure surface confound →
+     demoted. F5 content-control still showed mid_acc = layer0_acc → no
+     mid-network state.*
+- **Content control:** prefer holding the question fixed and varying only the
+  internal regime (truthful vs confabulated generation), per `run_state.py`.
+- Failure of gate 3 → `TierDecision(demoted=True)`, logged publicly.
 
 ### 3.2 `axis_c/attractor_discovery.py` (WP2.C2, falsification target)
 - **Interface:** `find_attractor(model, seed_prompts, temps, seeds) -> AttractorResult`; successive-paraphrase (Wang 2502.15208) + SAE-feature persistence.
