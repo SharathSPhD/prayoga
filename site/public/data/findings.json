@@ -271,6 +271,21 @@
    },
    "summary": "After an adversarial review returned SHAKY on all dimensions, convergent hardening: F13's SAE feature is orthogonal to the supervised direction (circularity refuted); F11's invariance is real but cross-domain-attenuated (framing demoted to analogy); F1's ablation replicates across 3 seeds. Honest reframe via TRIZ: asymmetry with a shared NECESSARY core.",
    "implications": "The thesis holds at the necessary-core level (ablatable direction transfers universally); the sufficient structure is model-specific. Pure-symmetry reading was overreach."
+  },
+  {
+   "id": "F18",
+   "title": "Refusal-subspace dimension is LAYER-dependent (qualifies F6/F8)",
+   "tier": "MECHANISM",
+   "verdict": "qualified",
+   "date": "2026-06-25",
+   "model": "gemma-2-2b / qwen-3b",
+   "keyMetrics": {
+    "gemma2b": "eff-dim 1–12 across layers (L7=1, L13=7)",
+    "qwen3b": "eff-dim 1–4 (L19=3)",
+    "finding": "the clean 'Gemma 1 < Qwen 3' ordering is layer-specific; mid-network Gemma (7) > Qwen (3)"
+   },
+   "summary": "A full layer-sweep shows the refusal-subspace effective dimension is layer-AND-model-dependent, not a single per-model constant. F6's addition asymmetry stands behaviorally, but F8's single-layer dimensional explanation does not generalize across layers.",
+   "implications": "Any dimensionality claim must name its layer. The convergent hardening catching its own overreach."
   }
  ]
 }
