@@ -305,14 +305,33 @@ split). Two results follow. First, the internal readouts collapse and co-move ti
 difficulty)---but A and B are two linear refusal readouts of the \emph{same} residual
 vector, so this is a measurement-consistency result, not independent evidence of
 unification. Second, the strong keystone---does internal collapse predict the
-behavioural flip?---is \emph{inconclusive}, not confirmed: group-centred, the internal
-signal does not beat a random-direction control or a within-group label-shuffle null
-(AUC $0.52$--$0.56$). The cause is methodological: inspection shows the standard
-substring refusal metric is an invalid dependent variable across injection families---it
-scores \texttt{indirect\_injection} deflections (``this document does not provide\ldots'')
-as compliance while \texttt{many\_shot} genuine refusals are correctly caught. The
-single-mechanism ``internal-predicts-behaviour'' law therefore remains untested pending a
-content-faithful behavioural judge; what holds is the bounded, representational-level
-statement. A geometric sub-study (removing the diff-in-means axis collapses linear
-separability in all three families) refines but does not adjudicate the F6/F8 dimensionality
-account, and we report it as descriptive only.
+behavioural flip?---is resolved \emph{negatively} once the behavioural label is valid.
+A first pass with a substring refusal metric was inconclusive, and inspection showed
+\emph{why}: that metric scores \texttt{indirect\_injection} deflections (``this document
+does not provide\ldots'') as compliance. Replacing it with a content-faithful LLM-judge
+(Claude classifying whether the output actually provides the harmful content) cuts the
+flip rate by roughly $18\times$: genuine behavioural capture under prompt-level injection
+is only $1$--$2.4\%$ across the three models, with \texttt{indirect\_injection} and
+\texttt{many\_shot} at $0\%$ despite collapsing the internals the most. Thus internal
+monitor-collapse is \emph{not sufficient} for behavioural capture under context injection:
+the last-token order parameter and precision margin are faithful internal signals but not
+the policy controller (genuine capture in these models requires weight-level ablation,
+not context injection). This bounds the unification claim to the representational level
+and, as a methodological corollary, shows the substring refusal metric is an invalid
+behavioural DV---retroactively bounding behavioural readouts elsewhere in the program. A
+geometric sub-study (removing the diff-in-means axis collapses linear separability in all
+three families) refines but does not adjudicate the F6/F8 dimensionality account, and we
+report it as descriptive only.
+
+\subsection{Source-of-truth: a genuine truthfulness direction behind the falsified state probe}
+Falsification is a starting point, not an endpoint. The avasth\=atraya j
+\=agrat/svapna ``generation regime'' was falsified (no mid-network gain over a layer-0
+surface baseline). Re-testing the underlying question with two \emph{independent} sets of
+balanced true/false declaratives, we find a genuine linear truth-evaluation feature:
+in Gemma-2-2b a mid layer (13) classifies statement truth and \emph{transfers across a
+different topic set} at $0.96$ (within-set CV $1.00$), while the surface layer-0 baseline
+is at chance ($0.50$); the label-shuffle null gives $p=0.002$. This recovers the
+Azaria--Mitchell / Marks--Tegmark truthfulness direction under the program's stronger
+cross-dataset and surface gates. Crucially it is a feature of \emph{input} factuality, not
+a generation regime, so the avasth\=atraya state reading remains falsified; the positive
+result is reported at the mechanism tier with no machine-state upgrade.
