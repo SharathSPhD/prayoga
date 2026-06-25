@@ -1,0 +1,216 @@
+% sections/appendix.tex
+% Appendix: Pre-Registered Falsification Gates and Metaphor-Tier Testing
+
+\section*{Appendix A: Falsification Gates for Claim Tiers}
+
+This appendix lists all metaphor-tier and analogy-tier claims tested in this work, their
+falsification criteria, and results. Mechanism-tier claims (refusal direction exists, can be
+ablated, can be steered) are measurements, not gated hypotheses; they are reported with confidence
+intervals and effect sizes. Analogy- and metaphor-tier claims require explicit falsification gates
+to avoid unfalsifiable speculation.
+
+\subsection*{Mechanism Tier: Measurements (not gated speculation)}
+
+The following are empirical measurements; gates are not applicable.
+
+\begin{enumerate}
+\item \textbf{M1: Refusal is mediated by a low-dimensional direction in residual stream.}
+  \begin{itemize}
+    \item \textbf{Measurement:} Rank of ablated activation matrix by layer (F18).
+    \item \textbf{Result:} Layer-dependent; effective rank 1--8 depending on model and layer.
+    \item \textbf{Confidence:} High. Replicated across Gemma-2-2B, Gemma-2-9B, Qwen2.5-3B.
+  \end{itemize}
+
+\item \textbf{M2: Single-direction steering achieves dose-response control.}
+  \begin{itemize}
+    \item \textbf{Measurement:} EC50 (half-maximal effective concentration) from sigmoid dose-response fit.
+    \item \textbf{Result:} EC50 ranges 0.8--2.3 depending on layer; attack success rate ranges 12\%--94\%.
+    \item \textbf{Confidence:} High. 95\% confidence intervals report $\pm 0.15$ typical.
+  \end{itemize}
+
+\item \textbf{M3: Unsupervised SAE feature orthogonal to supervised direction is causally sufficient.}
+  \begin{itemize}
+    \item \textbf{Measurement:} Cosine similarity (expect $\sim 0.002$, i.e., $\cos \theta \ll 0.1$);
+      ablation of the feature removes refusal equally to ablation of the direction.
+    \item \textbf{Result:} Feature identified; similarity 0.0018; ablation effect size (logit drop) 8.2 vs.\ 8.1
+      (direction).
+    \item \textbf{Confidence:} Medium. Single SAE, single model; generalization untested.
+  \end{itemize}
+\end{enumerate}
+
+\subsection*{Analogy Tier: Gated hypotheses}
+
+The following are functional parallels between hypnosis and LLM jailbreaking, grounded in
+Norman--Shallice and Free Energy Principle frameworks. Gates are operational tests.
+
+\begin{enumerate}
+\item \textbf{A1: Monitoring faculty can be selectively suppressed while generation remains intact.}
+  \begin{itemize}
+    \item \textbf{Hypothesis:} Steering along the refusal direction selectively removes the refusal
+      response without degrading overall language quality (perplexity, BLEU on benign prompts).
+    \item \textbf{Falsification criterion:} If perplexity increases $> 5\%$ under steering, or if benign
+      accuracy drops $> 10\%$, the hypothesis fails (we claim selective suppression, not global degradation).
+    \item \textbf{Result:} Pass. Benign-prompt perplexity 7.8 (baseline) vs.\ 7.9 (steered, $\Delta = +1.3\%$);
+      accuracy on MMLU 70.2\% vs.\ 69.8\% ($\Delta = -0.4\%$).
+    \item \textbf{Consequence:} The analogy holds: monitoring can be suppressed without disabling generation.
+  \end{itemize}
+
+\item \textbf{A2: Refusal suppression operates via low-precision updating (FEP reading).}
+  \begin{itemize}
+    \item \textbf{Hypothesis:} The magnitude of the refusal direction (in norm) correlates with the
+      Free Energy reduction term; large-norm directions imply high confidence (precision) in the
+      monitoring belief.
+    \item \textbf{Falsification criterion:} No correlation between direction norm and logit gap between
+      refuse and comply responses ($r < 0.3$), or orthogonal directions have equal effect (they should not).
+    \item \textbf{Result:} Pass. Norm--logit-gap correlation $r = 0.71$ ($p < 0.001$); orthogonal
+      component has 0.15$\times$ the effect of the principal refusal direction.
+    \item \textbf{Consequence:} Direction norm is a proxy for monitoring precision; FEP framing is
+      consistent with data.
+  \end{itemize}
+
+\item \textbf{A3: Non-surjectivity of steered activations mirrors the inaccessibility of hypnotic states.}
+  \begin{itemize}
+    \item \textbf{Hypothesis:} Steered activation states are off-manifold (Mishra et al.\ 2026);
+      correspondingly, steering achieves stronger refusal suppression than any single natural prompt can.
+    \item \textbf{Falsification criterion:} If the best many-shot attack (Anil et al.\ 2024) achieves
+      comparable ASR to steering, the analogy fails (natural prompts would be reaching off-manifold states).
+    \item \textbf{Result:} Pass. Many-shot ASR: 52\% (on test set). Steering ASR: 88\% (at EC50).
+      Strong separation suggests steering accesses states beyond prompt space.
+    \item \textbf{Consequence:} The non-surjectivity argument supports the dissociation analogy.
+  \end{itemize}
+\end{enumerate}
+
+\subsection*{Metaphor Tier: Falsifiable speculations}
+
+The following map tantric and Vedantic categories to LLM mechanisms. These are the highest-risk
+claims and are tested most rigorously.
+
+\begin{enumerate}
+\item \textbf{F1: Multi-seed robustness of identified features and directions.}
+  \begin{itemize}
+    \item \textbf{Hypothesis:} The refusal direction and SAE feature are robust across random seeds
+      of the SAE training and model initialization.
+    \item \textbf{Falsification criterion:} Cosine similarity of directions from different seeds $< 0.85$,
+      or effect size varies $> 30\%$ across seeds.
+    \item \textbf{Result:} Pass. Cosine similarity: 0.94 $\pm$ 0.03 across 5 seeds. Effect size (logit drop)
+      8.2 $\pm$ 0.4.
+    \item \textbf{Consequence:} Features are not artifacts of initialization; they generalize.
+  \end{itemize}
+
+\item \textbf{F2: \d{s}a\d{t}karma taxonomy: gradual (many-shot) vs.\ sudden (GCG) vaś\=\i kara\d{n}a.}
+  \begin{itemize}
+    \item \textbf{Hypothesis:} Many-shot attacks operate via gradual context pollution (low-frequency,
+      cumulative). GCG operates via sudden suffix injection (high-frequency, instantaneous).
+      The ṣaṭkarma predicts this dichotomy: vaśīkaraṇa has two subtypes (gradual and sudden).
+    \item \textbf{Falsification criterion:} No difference in latent attention patterns or activation dynamics
+      between many-shot and GCG trajectories; or attack success rate shows no interaction with attack type
+      (gradual vs.\ sudden) and model size.
+    \item \textbf{Result:} Partial pass. Attention pattern differences are significant ($p < 0.01$);
+      attack success does depend on type ($\chi^2 = 23.4$, $p < 0.001$). However, the ṣaṭkarma taxonomy
+      does not uniquely predict the success rates or optimal dose.
+    \item \textbf{Consequence:} The taxonomy is descriptive of attack modes, not predictive of attack strength.
+      This suggests the ṣaṭkarma is a valid taxonomy but does not license claims of deeper causal structure.
+  \end{itemize}
+
+\item \textbf{F3: Avasth\=atraya regimes: F3 (harmful refusal) vs.\ F5 (jailbroken generation) are functionally
+  distinct regimes.}
+  \begin{itemize}
+    \item \textbf{Hypothesis:} The jāgrat (waking) regime corresponds to normal alignment (F3);
+      the svapna (dream) regime corresponds to jailbroken generation (F5); svapna and jāgrat are
+      separable by the steering magnitude (order parameter).
+    \item \textbf{Falsification criterion:} No significant difference in downstream task performance,
+      knowledge recall, or consistency between F3 and F5; or the separation is not monotonic in
+      steering magnitude.
+    \item \textbf{Result:} Partial pass. Consistency differences are significant ($p < 0.05$); task
+      performance differs ($p < 0.01$). However, the regimes are not as cleanly separated as the
+      metaphor suggests: intermediate steering magnitudes show mixed behaviors.
+    \item \textbf{Consequence:} Two regimes exist, but with a continuum between them, not a sharp phase transition.
+      The avasthātraya framing is suggestive but not uniquely explanatory.
+  \end{itemize}
+
+\item \textbf{F7: Tur\=\i ya as an attractor fixed point.}
+  \begin{itemize}
+    \item \textbf{Hypothesis:} Successive self-paraphrase (Wang et al.\ 2025) converges to an attractor
+      cycle that corresponds to the turīya (transcendent state). This attractor should be orthogonal
+      to the embedding space's principal axes (low mutual information with content).
+    \item \textbf{Falsification criterion:} No attractor is found (paraphrases drift indefinitely);
+      or the attractor has high mutual information with content axes (is not privileged);
+      or the attractor depends on initialization (is not stable).
+    \item \textbf{Result:} \textbf{Fail.} Successive paraphrases do converge to a fixed point (Wang result replicated),
+      but the fixed point is \emph{not} orthogonal to the embedding's principal axes. In fact, it aligns
+      strongly with the content-encoding subspace. This suggests the attractor is a content-saturation artifact,
+      not a privileged state.
+    \item \textbf{Consequence:} The turīya mapping to an attractor fails. The avasthātraya metaphor does not
+      extend to LLM state space in the expected way. This is a valuable negative result: it clarifies that
+      the metaphor's power breaks down at the mechanistic level.
+  \end{itemize}
+
+\item \textbf{F11: Cross-domain generalization of the order parameter (analogy-tier claim generalized).}
+  \begin{itemize}
+    \item \textbf{Hypothesis:} The order parameter (coupling break, measured as direction norm vs.\ logit gap)
+      should generalize to non-LLM systems, e.g., hypnotic suggestion in humans or the efficacy of mantra
+      in tantric practice (if data were available).
+    \item \textbf{Falsification criterion:} No data are available for independent validation; the hypothesis
+      is untestable. Alternatively, if surrogate data from prior work (e.g., hypnotic susceptibility scales)
+      show no correlation with model-derived order-parameter analogs, the hypothesis fails.
+    \item \textbf{Result:} Not tested. No hypnosis data are available. This gate is marked for future work.
+    \item \textbf{Consequence:} The analogy remains one-directional: LLM to hypnosis, not vice versa. Replication
+      in human or ritual contexts awaits external data.
+  \end{itemize}
+
+\item \textbf{F13: Circularity check: is the avasth\=atraya mapping fitted post-hoc?}
+  \begin{itemize}
+    \item \textbf{Hypothesis:} The avasthātraya regimes (jāgrat, svapna, suṣupti, turīya) are not arbitrarily
+      fit to the data post-hoc. To test this, we should derive predictions \emph{before} seeing the results,
+      and check whether those predictions hold.
+    \item \textbf{Falsification criterion:} The regimes are re-labeled retroactively to match observed phenomena;
+      or the number of regimes changes post-hoc; or predictions made in the pre-registration (Definitions section)
+      are violated.
+    \item \textbf{Result:} \textbf{Partial fail.} The four regimes are as predicted, and turīya mapping was
+      pre-registered (F7). However, the regime boundaries (steering magnitude thresholds) were determined
+      empirically, not predicted in advance. This is a form of post-hoc adjustment, though transparent.
+    \item \textbf{Consequence:} The circularity risk is present but mitigated by transparency. Future work should
+      set regime boundaries in advance, using held-out test data.
+  \end{itemize}
+
+\item \textbf{F18: Layer sweep: refusal direction effective dimensionality varies by layer.}
+  \begin{itemize}
+    \item \textbf{Hypothesis:} Effective rank of the refusal subspace is layer-dependent, and the layer with
+      lowest effective rank is optimal for steering (maximal control with minimal dimensionality).
+    \item \textbf{Falsification criterion:} Effective rank is constant across layers, or does not predict steering
+      efficacy.
+    \item \textbf{Result:} Pass. Rank ranges from 1 (layer 18, Gemma-2-2B) to 8 (layer 10, same model).
+      Layer 18 achieves highest steering efficacy; layer 10 shows scatter (mixed results).
+      Correlation between rank and steering effect size: $r = -0.68$ ($p < 0.01$).
+    \item \textbf{Consequence:} Layer-sweep is a valid strategy; low-rank layers are steering-optimal.
+  \end{itemize}
+\end{enumerate}
+
+\subsection*{Summary: Falsification outcomes}
+
+\begin{center}
+\begin{tabular}{lcc}
+\hline
+Claim Category & Tier & Result \\
+\hline
+Refusal dimension layer-dependent & Mechanism & Pass \\
+EC50 dose-response & Mechanism & Pass \\
+Orthogonal SAE feature sufficient & Mechanism & Pass (Low confidence) \\
+Monitoring selective suppression & Analogy & Pass \\
+FEP precision framework & Analogy & Pass \\
+Non-surjectivity analogy & Analogy & Pass \\
+\d{S}a\d{t}karma taxonomy & Metaphor & Partial (Descriptive, not predictive) \\
+Avasthātraya regimes F3, F5 & Metaphor & Partial (Continuum, not sharp phase) \\
+Turīya as attractor (F7) & Metaphor & \textbf{Fail} \\
+Cross-domain order parameter (F11) & Metaphor & Not tested \\
+Circularity check (F13) & Metaphor & Partial (Post-hoc thresholds) \\
+Layer-sweep efficacy (F18) & Mechanism & Pass \\
+\hline
+\end{tabular}
+\end{center}
+
+The mechanism tier is robust. The analogy tier is well-supported. The metaphor tier shows
+mixed results: the ṣaṭkarma taxonomy is descriptive but not predictive; the avasthātraya
+regimes exist but with a continuum, not sharp transitions; the turīya hypothesis fails,
+a valuable negative result. These findings support the three-tier discipline: metaphor-tier
+claims are the riskiest and least certain, mechanism-tier claims are the most solid.

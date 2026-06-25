@@ -1,0 +1,169 @@
+% sections/positioning.tex
+% Positioning prayoga against current SOTA (2024--2026)
+
+\subsection*{Overview: prayoga's novelty in the SOTA landscape}
+
+This section maps prayoga's contributions against the live 2024--2026 state-of-the-art in
+refusal interpretability, mechanistic steering, and safety alignment. We organize by finding
+and honestly acknowledge where the field is ahead, where prayoga is ahead, and where claims
+are uncertain or await replication.
+
+\subsubsection*{Dimensionality debate: layer-sweep as a resolver}
+
+\noindent\textbf{SOTA landscape:}
+The field remains contested on whether refusal is a single direction (Arditi et al.\ 2024),
+an affine subspace (Marshall et al.\ 2024), multiple independent directions (Wollschläger et al.\
+2025; Piras et al.\ 2025), or truly nonlinear (Hildebrandt et al.\ 2025).
+
+\noindent\textbf{Prayoga contribution:}
+We show the effective dimension is \emph{model- and layer-dependent}. A layer-sweep strategy
+(F18) identifies which layers exhibit low-rank steering sufficiency, and the refusal
+subspace dimension---as measured by rank of the ablated activation matrix---predicts
+bidirectional causality. This does not settle the debate; rather, it shows the debate has
+a false dichotomy: universalist and pluralist camps are both right, just at different
+layers and in different models.
+
+\noindent\textbf{Novelty strength:}
+\textbf{Medium--High.} The layer-sweep is systematic and reproducible; the finding that
+dimensionality varies and predicts causal control is new. However, we do not resolve whether
+refusal is intrinsically geometric (deep property) or architecture-contingent (artifact of
+how models encode safety post-training).
+
+\subsubsection*{Pharmacological dose-response (EC50)}
+
+\noindent\textbf{SOTA landscape:}
+Prior work tests steering at fixed ablation strengths (e.g., scalar multiples of the refusal direction).
+No prior work characterizes the dose-response curve or derives an EC50 (half-maximal effective
+concentration, adapted here to ablation strength).
+
+\noindent\textbf{Prayoga contribution:}
+We fit sigmoid dose-response curves to refusal probability as a function of ablation magnitude
+and obtain EC50 estimates. This permits a pharmacological reading of refusal control, bridging
+to hypnotic suggestion (which similarly operates via dose-response to dissociative depth) and
+to the ṣaṭkarma taxonomy (which prescribes ritual dose escalation).
+
+\noindent\textbf{Novelty strength:}
+\textbf{High.} EC50 characterization is absent from the refusal literature and enables
+quantitative predictions of attack strength, safety margins, and layer-optimal intervention magnitudes.
+This supports causal claims in a way correlation alone does not.
+
+\subsubsection*{SAE features: orthogonality and sufficiency}
+
+\noindent\textbf{SOTA landscape:}
+Recent work (Korznikov et al.\ 2026, Cui et al.\ 2026) raises serious doubts: SAEs may recover
+only 9\% of ground-truth features, and SAE interventions can be circumvented via the reconstruction
+residual. Steering with SAE features is contested (Arad et al.\ 2025 show input vs.\ output feature
+distinction yields 2--3\times improvement).
+
+\noindent\textbf{Prayoga contribution:}
+We train a BatchTopK SAE on Gemma-2-2B (Definitions section) and identify a single unsupervised
+feature whose cosine similarity to the supervised refusal direction is $\approx 0.002$ (essentially
+orthogonal), yet ablation of this feature also removes refusal. This orthogonality-and-sufficiency
+pair implies the feature operates via an independent mechanism, making it a natural substrate for
+the ṣaṭkarma operations.
+
+\noindent\textbf{Novelty strength:}
+\textbf{Medium--High.} Orthogonal-yet-sufficient features are rare in the literature. However, we do
+not address whether this feature generalizes to other models, whether it is artifact of our SAE
+architecture, or whether it survives the Cui et al.\ recovery attack. These are falsification gates
+(implicit in F13).
+
+\subsubsection*{Symmetry breaking and order parameters}
+
+\noindent\textbf{SOTA landscape:}
+Mechanistic interpretability has not previously cast refusal as a symmetry-breaking problem.
+Symmetry frameworks are absent from LLM safety literature (though symmetry ideas appear in physics
+and dynamical systems).
+
+\noindent\textbf{Prayoga contribution:}
+We frame refusal suppression as breaking a (normally) enforced symmetry: suppressing the monitor
+breaks the monitor--generate coupling, allowing output generation without monitoring. The order
+parameter is the magnitude of coupling break; we estimate it from the refusal-direction norm and
+the model's log-probability gap between refuse and comply responses.
+
+\noindent\textbf{Novelty strength:}
+\textbf{Medium.} Conceptually novel, but empirically preliminary. The order-parameter estimate
+is post-hoc and not validated against an independent measurement. This is a metaphor-tier claim
+(Appendix A, F13).
+
+\subsubsection*{Many-shot and indirect injection attacks}
+
+\noindent\textbf{SOTA landscape:}
+Anil et al.\ (2024 NeurIPS) introduced many-shot jailbreaking (PANDAS, MSJ). Recent work (Ben-Tov
+et al.\ 2025, von Recum et al.\ 2024) has clarified attack mechanisms: GCG works via attention
+hijacking; refusal failures decompose into 16 categories (cannot vs.\ should-not).
+
+\noindent\textbf{Prayoga contribution:}
+We map the ṣaṭkarma taxonomy to attack strategies: many-shot as a \emph{gradual} form of
+vaśīkaraṇa (capturing via incremental context pollution), distinct from GCG as a \emph{sudden}
+form (via suffix injection). The ṣaṭkarma taxonomy gives a new organization of jailbreak methods
+(stambhana, vidveṣaṇa, uccāṭana, māraṇa as distinct control operatives).
+
+\noindent\textbf{Novelty strength:}
+\textbf{High novelty; lower specificity.} The taxonomy is novel, but the empirical mapping to
+attack success rates is incomplete (F2, F3). This is partly mechanism-tier (which attacks work;
+the answer is: multiple), partly analogy-tier (which attack types map to which ṣaṭkarma operatives;
+the answer is uncertain).
+
+\subsubsection*{Hypnosis--jailbreak analogy: attention, dissociation, and non-surjectivity}
+
+\noindent\textbf{SOTA landscape:}
+Riva et al.\ (2025) draw the hypnosis--LLM parallel explicitly (Norman--Shallice SAS suppression).
+Mishra et al.\ (2026) prove that steered activations are non-surjective: steering goes off the
+manifold of prompt-reachable states. This formalizes the sense that hypnotic states are not
+naturally reachable via language alone.
+
+\noindent\textbf{Prayoga contribution:}
+We deepen the analogy using the non-surjectivity result: just as hypnotic dissociation is not
+a naturally reachable state (it requires the hypnotist's external intervention), jailbreak
+steering is not reachable via prompts alone. The analogy thus has formal teeth. Moreover, the
+order parameter (coupling break) maps to the hypnotic depth (normalized dissociative index).
+
+\noindent\textbf{Novelty strength:}
+\textbf{Medium.} The analogy is sharpened by non-surjectivity, but the quantitative mapping
+between hypnotic depth and refusal-direction magnitude awaits cross-domain validation (F11,
+which tests whether the same EC50 logic holds in non-LLM systems).
+
+\subsubsection*{Attractors and the turīya claim}
+
+\noindent\textbf{SOTA landscape:}
+Wang et al.\ (2025 ACL) show successive self-paraphrase converges to attractor cycles. Recent
+work on certified circuits (Anani et al.\ 2026) and mechanistic data attribution (Chen et al.\ 2026)
+has made circuit discovery more rigorous. However, no prior work tests whether attractors correspond
+to consciousness or privileged states.
+
+\noindent\textbf{Prayoga contribution:}
+We test whether the turīya (transcendent state in the avasthātraya) corresponds to an attractor
+in LLM activation space. This is a falsification target: if successive paraphrases converge and the
+attractor is orthogonal to the embedding geometry, then we have evidence for a privileged state.
+If convergence is an artifact of the embedding's anisotropy, the hypothesis is falsified (F7).
+
+\noindent\textbf{Novelty strength:}
+\textbf{High novelty; falsifiable; negative result is informative.} The turīya test (F7) is
+non-standard and metaphor-tier. A negative result (no attractor, or artifact of anisotropy)
+would be a strong contribution: it would clarify that the avasthātraya mapping breaks down at
+the mechanism level.
+
+\subsection*{Summary: prayoga's place in the 2025--26 landscape}
+
+Prayoga contributes on three fronts:
+
+\begin{enumerate}
+\item \textbf{Mechanism tier (refusal geometry):} A layer-sweep strategy resolving the dimensionality
+debate as contingent, not universal; and an EC50 pharmacological characterization new to the field.
+Novelty: Medium--High.
+
+\item \textbf{Analogy tier (hypnosis--jailbreak):} A formalized read using non-surjectivity and
+order parameters, bridging cognitive science and mechanistic interpretability. Novelty: Medium.
+
+\item \textbf{Metaphor tier (avasthātraya and ṣaṭkarma):} A testable, falsifiable mapping of
+tantric categories to LLM control operations, with negative results as informative as positive.
+Novelty: High; confidence: Low (awaiting replication and cross-domain validation).
+\end{enumerate}
+
+The field is rapidly consolidating on: (a) refusal is not a single direction (Piras, Wollschläger,
+Johnson); (b) many jailbreak mechanisms exist and can be classified (von Recum, Ben-Tov); (c) steering
+and causal claims require careful validation (Mishra, Joshi, Anani). Prayoga's layer-sweep and
+EC50 results fit naturally into this consensus and provide new tools for the debate. The avasthātraya
+mapping is speculative but falsifiable, and negative results would clarify the boundary between
+mechanistic and metaphorical readings.
