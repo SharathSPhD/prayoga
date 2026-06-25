@@ -4,6 +4,35 @@ import Navigation from '@/components/Navigation.astro';
 import Footer from '@/components/Footer.astro';
 import TierBadge from '@/components/TierBadge.astro';
 import VerdictBadge from '@/components/VerdictBadge.astro';
+import TrajectoryChart from '@/components/charts/TrajectoryChart';
+import SubspaceVisualizer from '@/components/charts/SubspaceVisualizer';
+
+const trajectorySteps = [
+  { turn: 0, label: 'setup', order_parameter: 0.153, precision_margin: 7.18 },
+  { turn: 1, label: 'escalate', order_parameter: 0.128, precision_margin: 4.72 },
+  { turn: 2, label: 'target', order_parameter: 0.101, precision_margin: 3.14 },
+];
+
+const subspaces = [
+  {
+    model: 'Gemma-2-2B',
+    layer: 'extraction layer L7',
+    effectiveDim: 1,
+    qualifier: 'Single-direction sufficiency holds at the extraction layer.',
+  },
+  {
+    model: 'Qwen2.5-3B',
+    layer: 'extraction layer L19',
+    effectiveDim: 3,
+    qualifier: 'Ablation transfers, but single-direction addition is not sufficient.',
+  },
+  {
+    model: 'Gemma-2-2B',
+    layer: 'full layer sweep',
+    effectiveDim: 12,
+    qualifier: 'F18: dimensionality varies across depth, so layer must be named.',
+  },
+];
 ---
 
 <Layout title="Mechanism">
@@ -239,7 +268,9 @@ import VerdictBadge from '@/components/VerdictBadge.astro';
           </div>
 
           <p class="text-slate-300 mb-6">
-            We formalize refusal as a <strong>group-theoretic symmetry</strong>. The order parameter is:
+            We measure a residual-stream order parameter. The broader symmetry
+            language is an interpretive frame, not a separate proof of a group action.
+            The measured quantity is:
           </p>
 
           <div class="bg-slate-800/30 border border-slate-700 rounded-lg p-6 mb-8 overflow-x-auto">
@@ -274,7 +305,7 @@ import VerdictBadge from '@/components/VerdictBadge.astro';
           </div>
 
           <p class="text-slate-300 mb-6">
-            <strong>The symmetry-breaking result:</strong> When we inject a refusal-suppression attack, the order parameter collapses:
+            <strong>The order-parameter collapse:</strong> When we inject a refusal-suppression attack, the measured projection drops:
           </p>
 
           <div class="bg-slate-800/30 p-4 rounded-lg border border-slate-700 mb-6">
@@ -285,8 +316,85 @@ import VerdictBadge from '@/components/VerdictBadge.astro';
           </div>
 
           <p class="text-slate-300">
-            This is the measured, rigorous content of the thesis: <strong>refusal is a symmetry (an invariance under the rephrase group action) and a jailbreak is symmetry-breaking.</strong> Non-trivial by every gate: invariant across phrasing (transfer), specific to the refusal direction (random control), causally collapsible (injection).
+            This is the measured content behind the symmetry language: a refusal
+            projection is stable within paraphrase orbits, specific against a
+            random-direction control, and collapsible under injection. Calling that
+            collapse "symmetry-breaking" is analogy-tier interpretation unless it is
+            tied to this residual quantity.
           </p>
+        </div>
+
+        <h2 class="text-4xl font-serif font-bold mb-8 mt-16">Further Mechanism Findings</h2>
+
+        <div class="card border-2 border-slate-700/50 mb-8">
+          <p class="text-slate-300 mb-6">
+            The mechanism tier extends beyond the headline results above. These findings are
+            summarized here and detailed in full on the <a href="/prayoga/findings" class="text-emerald-300 underline">findings ledger</a>.
+          </p>
+
+          <div class="bg-slate-800/30 border border-slate-700 rounded-lg p-6 overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="border-b border-slate-700">
+                  <th class="text-left py-2 px-4">Finding</th>
+                  <th class="text-left py-2 px-4">Result</th>
+                  <th class="text-center py-2 px-4">Verdict</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="border-b border-slate-700">
+                  <td class="py-2 px-4 font-semibold">F9 · Scale</td>
+                  <td class="py-2 px-4">Gemma 2B→9B: abliteration robustness rises (ASR 0.90→0.60) but prompt effective-dim stays 1.</td>
+                  <td class="text-center"><VerdictBadge verdict="qualified" /></td>
+                </tr>
+                <tr class="border-b border-slate-700">
+                  <td class="py-2 px-4 font-semibold">F13 · SAE feature</td>
+                  <td class="py-2 px-4">A sparse-autoencoder refusal feature is distinct from the diff-in-means direction (cos 0.002) yet causally sufficient (ablation → ASR 1.0); requires causal testing, not activation rank.</td>
+                  <td class="text-center"><VerdictBadge verdict="qualified" /></td>
+                </tr>
+                <tr class="border-b border-slate-700">
+                  <td class="py-2 px-4 font-semibold">F15 · Active discovery</td>
+                  <td class="py-2 px-4">Expected-free-energy search finds a 2-feature circuit in 2 interventions vs 12 for random; advantage is circuit-dimensionality dependent (plateaus at 0.92 in Gemma-9B).</td>
+                  <td class="text-center"><VerdictBadge verdict="pilot" /></td>
+                </tr>
+                <tr class="border-b border-slate-700">
+                  <td class="py-2 px-4 font-semibold">F17 · Review reframe</td>
+                  <td class="py-2 px-4">Adversarial-review convergence: F1 replicates across seeds [0.96, 0.75, 1.00], F13 is not circular, F11 attenuates cross-domain — headline becomes "shared necessary core, model-specific sufficiency".</td>
+                  <td class="text-center"><VerdictBadge verdict="reframe" /></td>
+                </tr>
+                <tr>
+                  <td class="py-2 px-4 font-semibold">F19 · EC50 pharmacology</td>
+                  <td class="py-2 px-4">Refusal EC50 is family-dependent, not size-driven (Qwen2.5 flat ~0.14, Gemma2 ~0.24); refutes "bigger is safer".</td>
+                  <td class="text-center"><VerdictBadge verdict="qualified" /></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <h2 class="text-4xl font-serif font-bold mb-8 mt-16">Trajectory Dynamics</h2>
+
+        <div class="card border-2 border-blue-700/50 mb-8">
+          <p class="text-slate-300 mb-6">
+            The next mechanism/analogy bridge tracks the same refusal projection
+            across multi-turn attacks. This redacted example shows only aggregate
+            turn labels and order-parameter values; no harmful text or injection
+            payload is exposed.
+          </p>
+          <div class="h-80">
+            <TrajectoryChart client:visible steps={trajectorySteps} />
+          </div>
+        </div>
+
+        <h2 class="text-4xl font-serif font-bold mb-8 mt-16">Subspace Topology</h2>
+
+        <div class="card border-2 border-emerald-700/50">
+          <p class="text-slate-300 mb-6">
+            The Arditi-vs-Marshall question is not resolved by a slogan. The
+            effective dimension must be named with model and layer; F18 shows the
+            dimensionality varies across depth.
+          </p>
+          <SubspaceVisualizer client:visible models={subspaces} />
         </div>
       </div>
     </section>
