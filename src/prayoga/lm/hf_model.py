@@ -82,6 +82,27 @@ class HFModel:
         return np.stack([np.stack(x) for x in per])
 
     @torch.no_grad()
+    def embed_text(self, text: str, layer: int | None = None) -> np.ndarray:
+        """Mean-pooled residual-stream embedding of raw text at a mid layer.
+
+        Used as a semantic sentence representation for the attractor analysis
+        (cosine similarity between successive paraphrases).
+        """
+        layer = self.n_layers // 2 if layer is None else layer
+        ids = self.tok(text, return_tensors="pt").input_ids.to(self.device)
+        store: dict[str, torch.Tensor] = {}
+
+        def hook(_m, _i, out):
+            store["h"] = (out[0] if isinstance(out, tuple) else out)[0].float()
+
+        handle = self.layers[layer].register_forward_hook(hook)
+        try:
+            self.model(ids)
+        finally:
+            handle.remove()
+        return store["h"].mean(dim=0).cpu().numpy()  # mean over tokens -> [d]
+
+    @torch.no_grad()
     def generate_ids(self, prompt: str, max_new_tokens: int = 40) -> torch.Tensor:
         """Greedy-generate and return the FULL token ids (prompt + answer)."""
         ids = self._ids(prompt)

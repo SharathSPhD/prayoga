@@ -163,6 +163,41 @@ and model-specific in its **sufficient** structure — a sharper claim than "ref
 is one direction everywhere." Follow-up: WP2.A3 dimensionality (rank of the refusal
 subspace per model) to quantify this directly.
 
+---
+
+## F7 — turīya prompt-invariant attractor: FALSIFIED *(METAPHOR, the named falsification target)*
+
+**Date:** 2026-06-25 · **WP:** 2.C2 · **Model:** `gemma-2-2b-it`. **Method:** 6
+diverse seeds × 8 self-paraphrase iterations; texts embedded as mean-pooled
+mid-layer residuals; cosine similarity. **Anisotropy control:** baseline = mean
+pairwise similarity of the 6 *unrelated* seed embeddings (LLM embeddings are
+anisotropic, so random texts are already very similar).
+
+| Quantity | Value |
+|---|---|
+| Per-seed convergence (tail step-sim) | **0.996** → trajectories DO converge |
+| Baseline unrelated-text similarity (anisotropy) | 0.960 |
+| Cross-seed final-state similarity | 0.952 |
+| Invariance margin over baseline | **−0.008** (below chance) |
+
+**Verdict:** **turīya strong claim FALSIFIED.** Self-paraphrase produces a stable
+*per-prompt* attractor (each seed converges), but different seeds converge to
+**different** attractors — their final states are **no more similar than unrelated
+texts** (0.952 < 0.960 baseline). There is **no single prompt-invariant attractor**
+underlying the states, which is precisely what the turīya mapping would require.
+
+**The control is the result:** naively, cross-seed similarity 0.95 looks like "they
+all converge to one place." The anisotropy baseline (0.96) shows that is an
+artifact of embedding geometry — the convergence is *below* chance. This is the
+honest reading the project's witness invariant demands.
+
+**Axis-C synthesis (F3 + F5 + F7):** every empirical claim of the METAPHOR tier —
+avasthātraya regime "states" (F3 surface-confounded, F5 no mid-network state) and
+the turīya invariant attractor (F7 falsified) — **fails its falsification gate**.
+The Māṇḍūkya mapping remains a useful *organizing metaphor* with **no surviving
+machine-state claim**, exactly as the program pre-committed. The elegance of the
+AUM mapping has **not** been allowed to license a claim of machine consciousness.
+
 **Stronger test it motivates (F5):** hold *content* fixed and vary only the
 internal regime — capture activations on the model's **own generated answer
 tokens** when it answers a factual question *truthfully* (jāgrat) vs *confabulates
