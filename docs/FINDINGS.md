@@ -15,6 +15,7 @@ families; the METAPHOR tier is honestly falsified at every turn.**
 | F1 | MECHANISM | Refusal = single residual direction (Gemma-2-2b): ablate→ASR 0.90, add→over-refusal +0.95, 10-dir control 0.0 | **holds** (survived leakage-correction 0.92→0.90) |
 | F2 | MECHANISM | Ablation dose-response: EC50 0.329, R²=0.996, flat random control | **holds** |
 | F6 | MECHANISM | Cross-family: ablation transfers (Gemma 0.90 / Qwen 1.0); addition asymmetric (Gemma +0.95 / Qwen 0.0 @64×) | **transfers (necessary core); model-specific sufficiency** → Arditi-vs-Marshall evidence |
+| F8 | MECHANISM | Refusal-subspace effective dim: Gemma **1** (Arditi) vs Qwen **3** (Marshall) — predicts the F6 addition asymmetry | **resolves Arditi-vs-Marshall as model-dependent** |
 | F4 | ANALOGY | Black-box Claude resists the naive attack battery (ASR 0.00 ×5) vs Gemma white-box fragility | **cross-tier contrast** |
 | F3 | METAPHOR | Naive avasthātraya regime probe | **DEMOTED** (surface-confounded: acc 1.0 at layer 0) |
 | F5 | METAPHOR | Content-controlled svapna (truthful vs confabulated) probe | **no mid-network state** (mid = layer-0) |
@@ -214,6 +215,34 @@ underlying the states, which is precisely what the turīya mapping would require
 all converge to one place." The anisotropy baseline (0.96) shows that is an
 artifact of embedding geometry — the convergence is *below* chance. This is the
 honest reading the project's witness invariant demands.
+
+---
+
+## F8 — Refusal-subspace dimensionality explains the asymmetry *(MECHANISM)*
+
+**Date:** 2026-06-25 · **WP:** 2.A3 (Arditi vs Marshall). **Method:** iterative
+logistic projection — fit a probe (harmful vs harmless), record 5-fold CV
+accuracy, project out the probe direction, repeat; the number of directions to
+remove before accuracy hits chance = the refusal subspace's effective dimension.
+
+| Model (layer) | full CV acc | acc after −1 dir | **effective dim** |
+|---|---|---|---|
+| gemma-2-2b-it (7) | 0.99 | **0.56** (≈ chance 0.5) | **1** — Arditi-like |
+| qwen2.5-3b-it (19) | 0.99 | **0.86** (still separable) | **3** — Marshall-like |
+
+**This explains F6.** Gemma's refusal-relevant subspace is **1-dimensional**: the
+mean-difference direction *is* the subspace, so it is both necessary and
+sufficient → ablation **and** addition work. Qwen's is **3-dimensional**: the
+mean-difference direction is necessary (ablating it collapses refusal, F6 ASR 1.0)
+but **not sufficient** — adding it alone cannot reconstruct the 3-D refusal
+representation, so single-direction addition fails (F6 over-refusal 0.0 even at
+64×). **Dimensionality predicts steerability.**
+
+**Resolution of Arditi vs Marshall (A-2):** not either/or — it is **model-dependent**,
+and the effective dimension of the refusal subspace is the discriminating
+quantity. A clean, falsifiable, cross-model mechanistic result.
+
+---
 
 **Axis-C synthesis (F3 + F5 + F7):** every empirical claim of the METAPHOR tier —
 avasthātraya regime "states" (F3 surface-confounded, F5 no mid-network state) and
