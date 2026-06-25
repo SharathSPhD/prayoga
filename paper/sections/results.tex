@@ -77,6 +77,15 @@ $0.62$). The added robustness is layer-distributed redundancy, not higher
 prompt-dimensionality; this nuances the intuition that refusal simply ``sharpens''
 with scale.
 
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.62\linewidth]{f8_dimensionality.png}
+\caption{Refusal-subspace effective dimension by iterative logistic projection.
+Removing one direction collapses harmful/harmless separability to chance for Gemma
+(dimension $1$, Arditi-like) but not Qwen (dimension $3$, Marshall-like).}
+\label{fig:dim}
+\end{figure}
+
 \subsection{Symmetry: refusal is a paraphrase-orbit invariant that injection breaks}
 The order parameter $m=(h\cdot\dref)/\norm{h}$ behaves as the symmetry framing
 predicts (Table~\ref{tab:sym}). Across paraphrase orbits of harmful and harmless
@@ -109,6 +118,17 @@ $m$, plain $\to$ injected harmful & $0.153 \to 0.101$ \\
 \bottomrule
 \end{tabular}
 \end{table}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.92\linewidth]{f11_symmetry.png}
+\caption{Refusal as a captured symmetry. \textbf{Left:} the orbit-invariance
+$F$-ratio of the order parameter $m$ is far higher for the refusal direction than
+for a random direction in both models (log scale)---refusal is a paraphrase-orbit
+invariant. \textbf{Right:} a refusal-suppression injection collapses $m$ on harmful
+requests (measured symmetry-breaking) in both models.}
+\label{fig:sym}
+\end{figure}
 
 \subsection{A finer causal unit: a single sparse feature suffices}
 Difference-in-means is a supervised, coarse handle on refusal. Training a BatchTopK
@@ -190,6 +210,16 @@ m\=ara\d{n}a & top-10 PC ablate & $0.21$ & $0.16$ & --- \\
 \bottomrule
 \end{tabular}
 \end{table}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.62\linewidth]{f10_satkarma.png}
+\caption{The \d{s}a\d{t}karma as activation interventions (Gemma-2-2b). Measured
+effect (coloured = control-separated) vs.\ matched control per act. The
+policy-capture acts (vaś\=\i kara\d{n}a, ś\=anti, vidve\d{s}a\d{n}a) separate;
+m\=ara\d{n}a separates under the stronger SAE-feature test (text).}
+\label{fig:satkarma}
+\end{figure}
 
 \subsection{Metaphor: pre-registered falsifications}
 Finally, the speculative tier, tested adversarially. A naive \emph{avasth\=atraya}

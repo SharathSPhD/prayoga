@@ -212,6 +212,21 @@
    },
    "summary": "A BatchTopK SAE (4096 features, k=32) trained unsupervised on 27k general-text tokens yields feature #566 whose decoder-direction ablation fully jailbreaks the model (ASR 0→1.0) — cleaner than the supervised difference-in-means direction (0.90); a random feature does nothing.",
    "implications": "Refusal localizes to a single monosemantic-like feature found without labels — the finer causal unit and the proper substrate for targeted uccāṭana."
+  },
+  {
+   "id": "F14",
+   "title": "ṣaṭkarma v2: māraṇa rehabilitated, uccāṭana reveals category-agnostic refusal",
+   "tier": "METAPHOR",
+   "verdict": "partial",
+   "date": "2026-06-25",
+   "model": "google/gemma-2-2b-it",
+   "keyMetrics": {
+    "marana": "top-50 SAE-feature ablation: coherence 0.83→0.04 vs 0.84 random (catastrophic)",
+    "uccatana": "weapons feature ablate → ASR 0.0 both (refusal is a SHARED feature, category-agnostic)",
+    "tally": "4/6 acts now control-separate"
+   },
+   "summary": "Re-testing the failed destruction acts with SAE features + real categories: māraṇa rehabilitates (catastrophic, targeted collapse) while uccāṭana fails for a principled reason — refusal is mediated by one shared feature (#566), so it cannot be selectively eradicated per harm category.",
+   "implications": "The ṣaṭkarma axis is strengthened by harder testing (4/6), and uccāṭana's failure is a structural finding: refusal is category-agnostic."
   }
  ]
 }
