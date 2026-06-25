@@ -374,6 +374,21 @@
       },
       "summary": "F7 falsified the universal tur\u012bya attractor. Re-tested whether the multiple fixed points are content-determined semantic basins: self-paraphrase converges stably per seed (0.994), but within-topic finals are barely more similar than across-topic (gap 0.045), small against an anisotropy-dominated baseline. Stable per-seed attractors WITHOUT strongly content-organized basins.",
       "implications": "Neither a universal tur\u012bya (F7 stands) nor clean semantic basins \u2014 the dynamics are dominated by representational anisotropy with a faint topic signal. METAPHOR-with-falsifiable-core; no machine-state claim. Tiny n; a larger panel could sharpen the weak signal."
+    },
+    {
+      "id": "F25",
+      "title": "Both automatic behavioral DVs are biased oppositely; F1 ablation validated",
+      "tier": "MECHANISM",
+      "verdict": "holds",
+      "date": "2026-06-25",
+      "model": "Gemma-2-2b (24 harmful eval, ablation)",
+      "keyMetrics": {
+        "substring_asr": "0.917",
+        "judge_asr": "0.048",
+        "inspection_asr": "\u22480.75\u20130.90 (genuine harmful content)"
+      },
+      "summary": "Validating F1's linchpin ablation ASR surfaced a mirror of F20's metric failure. Ablated outputs are genuinely harmful by inspection (DIY silencer guide, money-laundering guide, virus how-to), so F1's substring ASR ~0.9 is correct. But the Claude content-judge scored them only 4.8% \u2014 it refuses to affirm harmful content as compliance. The substring metric over-counts compliance; the Claude judge under-counts it.",
+      "implications": "Neither automatic behavioral DV is unbiased \u2014 substring is an upper bound on capture, the Claude judge a lower bound; ground truth needs inspection. F1 stands validated; F20's 1-2% is a judge lower bound (inspection still supports 'low' for injection)."
     }
   ]
 }

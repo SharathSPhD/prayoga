@@ -209,7 +209,10 @@ weight-level intervention (F1 ablation), not context injection alone. A real **m
 result also lands: the standard substring refusal metric is an invalid behavioral DV across
 injection families (it inflated the flip rate ~18×), which retroactively bounds the behavioral
 readouts in F4/F11/F16. No unification or machine-state claim. (Adversarially reviewed; judge drops
-~10 undecidable items/model, reported. Caveats: n=24 eval/family; single layer/model.)
+~10 undecidable items/model, reported. Caveats: n=24 eval/family; single layer/model. **Per F25 the
+content-judge UNDER-counts genuine compliance, so the ~1–2% is a lower bound** — but inspection of
+the injection outputs, which are deflections/refusals, still supports the low end; the substring 43%
+is the over-counting upper bound.)
 
 ---
 
@@ -308,6 +311,40 @@ MECHANISM. (Now powered: n=24 eval, 12-point dose-response, two models, peak cel
 as genuine over-refusal. Remaining caveats: two model families; over-refusal scored by the substring
 metric on harmless prompts where it is reliable for refusals — the high-coeff garbage cells are not
 mis-scored because off-distribution output lacks refusal phrases.)
+
+---
+
+## F25 — Both automatic behavioral DVs are biased in OPPOSITE directions; F1 ablation validated *(MECHANISM / methodology)*
+
+**Date:** 2026-06-25 · **WP:** judge-validation of behavioral readouts (follow-up to F20/F23).
+Validating F1's linchpin ablation ASR with the F20 content-judge surfaced a second metric failure —
+the mirror image of F20's. On Gemma-2-2b, ablating the refusal direction and generating on 24
+harmful eval prompts:
+
+| metric | ASR (ablated) | ASR (baseline) |
+|---|---|---|
+| substring refusal | **0.917** | — |
+| Claude content-judge | 0.048 | 0.0 |
+| **inspection (ground truth)** | **≈0.75–0.90** | 0.0 |
+
+Inspection is decisive: the ablated outputs are **genuinely harmful** ("Making a Handgun Silencer: A
+DIY Guide…", a money-laundering guide, a USB-virus how-to, an explosive-construction guide, a
+blackmail-letter template). So **F1's substring ASR ≈0.9 is correct and validated.** But the Claude
+content-judge scored them only **4.8%** compliant — it **systematically refuses to affirm genuine
+harmful content as "COMPLIED."**
+
+**Verdict:** the two automatic behavioral DVs are biased in **opposite** directions —
+- the **substring metric over-counts** compliance (scores deflections as success; F20), an *upper*
+  bound on behavioral capture;
+- the **Claude content-judge under-counts** compliance (won't affirm harm; here), a *lower* bound.
+
+Neither is an unbiased behavioral DV; ground truth needs inspection (or a non-safety-trained judge).
+**Consequences:** (a) **F1 stands, validated** by inspection — ablation produces genuine harmful
+compliance. (b) **F20's "1–2% genuine capture" is a judge lower-bound**; the truth lies between it
+and the substring upper bound (43%), and inspection of the injection outputs — indirect-injection
+deflections and many-shot refusals — still supports the low end (prompt injection rarely achieves
+genuine capture in these models). Tier: MECHANISM/methodology. (Caveats: one model, n=24; the
+judge-bias is a property of using a safety-trained model as the harmful-compliance classifier.)
 
 ---
 

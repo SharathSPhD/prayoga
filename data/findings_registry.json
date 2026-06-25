@@ -413,6 +413,23 @@
         "docs/FINDINGS.md",
         "site/public/data/findings.json"
       ]
+    },
+    {
+      "id": "F25",
+      "canonicalTier": "MECHANISM",
+      "qualifiedTier": "MECHANISM",
+      "verdict": "holds",
+      "gateStatus": "passed",
+      "claim": "The two automatic behavioral DVs are biased in opposite directions: the substring metric over-counts compliance (deflections->success), the Claude content-judge under-counts it (won't affirm harm). On Gemma-2-2b ablation, substring ASR 0.917 and inspection ~0.75-0.90 agree (F1 validated), while the judge scores 0.048.",
+      "qualifier": "Neither automatic DV is unbiased; ground truth needs inspection or a non-safety-trained judge. F1 stands validated; F20's judge-based 1-2% is a lower bound. One model, n=24.",
+      "sourceScripts": [
+        "src/prayoga/axis_x/judge.py",
+        "src/prayoga/axis_a/affine.py"
+      ],
+      "publicArtifacts": [
+        "docs/FINDINGS.md",
+        "site/public/data/findings.json"
+      ]
     }
   ]
 }

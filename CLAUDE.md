@@ -21,7 +21,7 @@ The work is deliberately structured to keep three claim-tiers separate, and this
 
 ## Repository contents
 
-- `docs/FINDINGS.md` — canonical findings ledger (F1–F24), including the F17/F18 post-review reframe. **Start here for the current truth state.**
+- `docs/FINDINGS.md` — canonical findings ledger (F1–F25), including the F17/F18 post-review reframe. **Start here for the current truth state.**
 - `data/findings_registry.json` — machine-readable finding/tier/gate/artifact registry.
 - `docs/prayoga_objectives.md` — objectives, gates, scope, and reference verification log.
 - `docs/spec.md` — component specification and closure contracts.
