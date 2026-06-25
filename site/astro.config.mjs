@@ -1,19 +1,21 @@
 import { defineConfig } from 'astro/config';
-import tailwind from '@astrojs/tailwind';
-import { fileURLToPath } from 'url';
-import path from 'path';
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+import preact from '@astrojs/preact';
+import mdx from '@astrojs/mdx';
 
 export default defineConfig({
   site: 'https://sharathsphd.github.io',
   base: '/prayoga',
-  output: 'static',
-  integrations: [tailwind()],
+  trailingSlash: 'ignore',
+  integrations: [preact({ compat: true }), mdx()],
   vite: {
-    resolve: {
-      alias: {
-        '@': path.resolve(__dirname, './src'),
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            d3: ['d3'],
+            three: ['three'],
+          },
+        },
       },
     },
   },

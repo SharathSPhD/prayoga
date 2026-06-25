@@ -1,0 +1,56 @@
+---
+interface Props {
+  verdict: 'holds' | 'supported' | 'falsified' | 'partial' | 'qualified';
+}
+
+const { verdict } = Astro.props;
+
+const verdictMap = {
+  holds: 'Holds',
+  supported: 'Supported',
+  falsified: 'Falsified',
+  partial: 'Partial',
+  qualified: 'Qualified',
+};
+---
+
+<span class={`verdict-badge verdict-${verdict}`}>
+  {verdictMap[verdict]}
+</span>
+
+<style>
+  .verdict-badge {
+    display: inline-block;
+    padding: 0.2rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+
+  .verdict-holds {
+    background: var(--emerald);
+    color: var(--bg);
+  }
+
+  .verdict-supported {
+    background: var(--cyan);
+    color: var(--bg);
+  }
+
+  .verdict-falsified {
+    background: var(--rose);
+    color: var(--bg);
+  }
+
+  .verdict-partial {
+    background: var(--amber);
+    color: var(--bg);
+  }
+
+  .verdict-qualified {
+    background: var(--violet);
+    color: var(--bg);
+  }
+</style>

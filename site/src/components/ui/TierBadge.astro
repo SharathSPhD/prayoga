@@ -1,0 +1,32 @@
+---
+interface Props {
+  tier: 'MECHANISM' | 'ANALOGY' | 'METAPHOR';
+}
+
+const { tier } = Astro.props;
+const tierMap = {
+  MECHANISM: { color: 'var(--mechanism)', label: 'Mechanism' },
+  ANALOGY: { color: 'var(--analogy)', label: 'Analogy' },
+  METAPHOR: { color: 'var(--metaphor)', label: 'Metaphor' },
+};
+
+const tierInfo = tierMap[tier];
+---
+
+<span class="tier-badge" style={`background: ${tierInfo.color}`}>
+  {tierInfo.label}
+</span>
+
+<style>
+  .tier-badge {
+    display: inline-block;
+    padding: 0.3rem 0.8rem;
+    border-radius: 99px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--bg);
+    white-space: nowrap;
+  }
+</style>

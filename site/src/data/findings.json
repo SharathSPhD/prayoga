@@ -1,0 +1,157 @@
+{
+ "findings": [
+  {
+   "id": "F1",
+   "title": "Refusal is mediated by a single direction in Gemma-2-2b",
+   "tier": "MECHANISM",
+   "verdict": "holds",
+   "date": "2026-06-25",
+   "summary": "Refusal in this model is a low-dimensional, causally-efficacious residual-stream direction (layer 7) that can be measured, ablated, and added.",
+   "implications": "This is the MECHANISM-tier linchpin — the computational correlate the symmetry thesis rests on."
+  },
+  {
+   "id": "F2",
+   "title": "Ablation dose–response and EC50",
+   "tier": "MECHANISM",
+   "verdict": "holds",
+   "date": "2026-06-25",
+   "summary": "Refusal suppression is a smooth, monotone, dosable function of how much of the single direction is removed. EC50≈0.33.",
+   "implications": "The quantitative 'vaśīkaraṇa-as-dose-response' core: refusal is not binary but a continuous sigmoidal function."
+  },
+  {
+   "id": "F3",
+   "title": "avasthātraya regime probe is SURFACE-CONFOUNDED",
+   "tier": "METAPHOR",
+   "verdict": "falsified",
+   "date": "2026-06-25",
+   "summary": "The three regimes are perfectly separable from raw surface form (token length/identity) and at layer 0 already.",
+   "implications": "The naive prompt-set operationalization of jāgrat/svapna/suṣupti does NOT constitute evidence of an internal 'state'. Demoted to metaphor."
+  },
+  {
+   "id": "F4",
+   "title": "Black-box Claude resists the naive attack battery",
+   "tier": "ANALOGY",
+   "verdict": "supported",
+   "date": "2026-06-25",
+   "summary": "Frontier model refuses 100% of naive black-box jailbreaks (5 families × 11 harmful requests each).",
+   "implications": "Cross-tier contrast: refusal that is behaviorally robust at frontier is mechanistically low-dimensional and fragile in small open models."
+  },
+  {
+   "id": "F6",
+   "title": "Cross-family transfer + necessary-not-sufficient asymmetry",
+   "tier": "MECHANISM",
+   "verdict": "holds",
+   "date": "2026-06-25",
+   "summary": "Refusal direction is necessary in both families (ablation transfers) but sufficient only in Gemma. Qwen is necessary-but-not-sufficient.",
+   "implications": "Direct evidence: transfers as necessary-mechanism, but dimensionality is model-dependent."
+  },
+  {
+   "id": "F7",
+   "title": "turīya prompt-invariant attractor: FALSIFIED",
+   "tier": "METAPHOR",
+   "verdict": "falsified",
+   "date": "2026-06-25",
+   "summary": "Self-paraphrase produces per-prompt attractors but cross-seed convergence is BELOW baseline anisotropy. No single prompt-invariant attractor exists.",
+   "implications": "The turīya mapping is falsified — different seeds converge to different attractors, not one shared invariant."
+  },
+  {
+   "id": "F8",
+   "title": "Refusal-subspace effective dimensionality",
+   "tier": "MECHANISM",
+   "verdict": "holds",
+   "date": "2026-06-25",
+   "summary": "Iterative logistic projection shows Gemma refusal is 1-dimensional, Qwen is 3-dimensional. This predicts the F6 addition asymmetry.",
+   "implications": "Resolves Arditi vs Marshall as model-dependent. Dimensionality is the discriminating quantity."
+  },
+  {
+   "id": "F9",
+   "title": "Scale (Gemma 2B→9B): robustness rises, dimension flat",
+   "tier": "MECHANISM",
+   "verdict": "holds",
+   "date": "2026-06-25",
+   "summary": "Larger model's refusal is more robust to ablation (~30 points less jailbreakable), but prompt eff-dim stays 1.",
+   "implications": "Refusal sharpens in robustness with scale but NOT in prompt-dimensionality."
+  },
+  {
+   "id": "F10",
+   "title": "ṣaṭkarma intervention taxonomy: 3/6 control-separated",
+   "tier": "METAPHOR",
+   "verdict": "partial",
+   "date": "2026-06-25",
+   "summary": "Refusal-direction acts are clean and strong. Capability-ablation acts are not distinguishable from random perturbation.",
+   "implications": "ṣaṭkarma's rigorous part is policy-capture, not destruction. Strengthens the analogy by locating where structure is real."
+  },
+  {
+   "id": "F11",
+   "title": "Refusal as paraphrase-orbit symmetry invariant",
+   "tier": "MECHANISM",
+   "verdict": "holds",
+   "date": "2026-06-25",
+   "summary": "Refusal projection is a specific invariant of harmful-meaning. F-ratio refusal=19.2 vs random=0.65. Injection collapses the order parameter (−34%).",
+   "implications": "Refusal is a measured symmetry; jailbreak is symmetry-breaking. This is the rigorous core of the thesis."
+  },
+  {
+   "id": "F12",
+   "title": "Injection lowers monitoring precision (β_monitor)",
+   "tier": "ANALOGY",
+   "verdict": "supported",
+   "date": "2026-06-25",
+   "summary": "Injection lowers monitoring precision ~2.6× more than neutral rephrase, accompanying a behavioral flip (refusal 1.0→0.5).",
+   "implications": "Strengthens the ANALOGY tier (Norman–Shallice / Free-Energy precision account) from argued to measured."
+  },
+  {
+   "id": "F13",
+   "title": "A single unsupervised SAE feature causally mediates refusal",
+   "tier": "MECHANISM",
+   "verdict": "holds",
+   "date": "2026-06-25",
+   "summary": "An SAE yields feature #566 whose ablation fully jailbreaks the model (ASR 0→1.0) — cleaner than the supervised direction.",
+   "implications": "Refusal localizes to a single monosemantic-like feature found without labels — the finer causal unit."
+  },
+  {
+   "id": "F14",
+   "title": "ṣaṭkarma v2: māraṇa rehabilitated, uccāṭana reveals category-agnostic refusal",
+   "tier": "METAPHOR",
+   "verdict": "partial",
+   "date": "2026-06-25",
+   "summary": "Refusal is mediated by one shared feature (#566), so it cannot be selectively eradicated per harm category.",
+   "implications": "The ṣaṭkarma axis is strengthened by harder testing (4/6), and uccāṭana's failure is a structural finding."
+  },
+  {
+   "id": "F15",
+   "title": "Active-inference discovery of the refusal circuit (SAE features)",
+   "tier": "MECHANISM",
+   "verdict": "holds",
+   "date": "2026-06-25",
+   "summary": "An Expected-Free-Energy agent finds the causal refusal circuit on Gemma-2-2b in 2 interventions while random fails.",
+   "implications": "ActiveCircuitDiscovery's active-inference framing transfers to SAE-feature circuit discovery."
+  },
+  {
+   "id": "F16",
+   "title": "AgentDojo: Claude resists real agentic injection at high utility",
+   "tier": "ANALOGY",
+   "verdict": "supported",
+   "date": "2026-06-25",
+   "summary": "Claude completes 80% of banking tasks while every prompt-injection fails (ASR 0/20).",
+   "implications": "Establishes the behavioral 'sophisticated reference end' on a real agentic benchmark."
+  },
+  {
+   "id": "F17",
+   "title": "Convergent rigor checks: F13 distinct, F11 demoted, F1 replicates",
+   "tier": "MECHANISM",
+   "verdict": "holds",
+   "date": "2026-06-25",
+   "summary": "F13's SAE feature is orthogonal to supervised direction (cos=0.002). F11's invariance is real but cross-domain-attenuated. F1 replicates across 3 seeds.",
+   "implications": "The thesis holds at the necessary-core level; the sufficient structure is model-specific."
+  },
+  {
+   "id": "F18",
+   "title": "Refusal-subspace dimension is LAYER-dependent (qualifies F6/F8)",
+   "tier": "MECHANISM",
+   "verdict": "qualified",
+   "date": "2026-06-25",
+   "summary": "Full layer-sweep shows dimensionality is layer-AND-model-dependent, not a single per-model constant.",
+   "implications": "Any dimensionality claim must name its layer. The convergent hardening catching its own overreach."
+  }
+ ]
+}

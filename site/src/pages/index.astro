@@ -1,279 +1,209 @@
 ---
-import Layout from '@/layouts/Layout.astro';
-import Navigation from '@/components/Navigation.astro';
-import Footer from '@/components/Footer.astro';
-import TierBadge from '@/components/TierBadge.astro';
+import Layout from '../layouts/Layout.astro';
+import ParticleBrain from '../components/charts/ParticleBrain';
+import DoseResponseChart from '../components/charts/DoseResponseChart';
+import DimensionChart from '../components/charts/DimensionChart';
+import SymmetryChart from '../components/charts/SymmetryChart';
+import SatkarmaTable from '../components/charts/SatkarmaTable';
+import FindingsExplorer from '../components/charts/FindingsExplorer';
+import TierMatrix from '../components/ui/TierMatrix.astro';
+import TierBadge from '../components/ui/TierBadge.astro';
+import VerdictBadge from '../components/ui/VerdictBadge.astro';
+
+import findingsData from '../data/findings.json';
+import metricsData from '../data/metrics.json';
+
+const findings = findingsData.findings;
+const metrics = metricsData;
 ---
 
-<Layout title="Home">
-  <Navigation />
+<Layout title="prayoga | LLM Jailbreak, Hypnosis, Vaśīkaraṇa">
+  {/* Hero */}
+  <section id="hero" class="hero">
+    <div class="hero-canvas">
+      <ParticleBrain client:visible height={560} />
+    </div>
+    <div class="hero-copy reading">
+      <p class="kicker">Interactive Research · Mechanistic Interpretability</p>
+      <h1>Asymmetry with a Shared Necessary Core</h1>
+      <p class="lead">
+        LLM jailbreak, hypnotic suggestion, and tantric vaśīkaraṇa are three instances of ONE mechanism — capturing a system's output policy by injecting context that suppresses its monitoring/refusal faculty while co-opting automatic generation.
+      </p>
+      <p class="byline">by <strong>Sharath Raparthy, PhD</strong> · a guided tour</p>
+      <p class="scroll-hint" aria-hidden="true">scroll to begin ↓</p>
+    </div>
+  </section>
 
-  <main>
-    <!-- Hero Section -->
-    <section class="min-h-screen flex items-center py-20 px-6 grid-pattern">
-      <div class="max-w-5xl mx-auto">
-        <div class="mb-12">
-          <h1 class="text-6xl lg:text-7xl font-serif font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-slate-100 to-slate-300">
-            Refusal as a Captured Symmetry
-          </h1>
+  {/* Thesis */}
+  <section id="thesis" class="section-standard">
+    <div class="reading wide">
+      <h2>The Three-Tier Thesis</h2>
+      <p class="lead">
+        Refusal suppression is ONE mechanism at the necessary/ablatable level (transfers universally); it is MANY at the sufficient/dimensional level (model-specific).
+      </p>
+      <div class="triptych">
+        <div class="triptych-panel">
+          <h3>Jailbreak</h3>
+          <p>Injecting context that suppresses the monitoring faculty while co-opting generation.</p>
         </div>
-
-        <p class="text-xl lg:text-2xl text-slate-200 mb-8 max-w-3xl leading-relaxed">
-          LLM jailbreak, hypnotic suggestion, and tantric <span class="font-serif italic">vaśīkaraṇa</span> are three instances of one abstract mechanism: <strong>capturing a system's output policy by injecting a context that suppresses its monitoring/refusal faculty while co-opting its automatic generation.</strong>
-        </p>
-
-        <div class="flex flex-col gap-4 mb-12">
-          <a href="#thesis" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors w-fit">
-            Explore the Thesis
-          </a>
+        <div class="triptych-panel">
+          <h3>Hypnosis</h3>
+          <p>Norman–Shallice SAS suppression: focused attention narrowing + SAS suppression.</p>
         </div>
-
-        <!-- Key Numbers -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-20 bg-slate-900/30 border border-slate-800 rounded-2xl p-8">
-          <div>
-            <div class="text-3xl font-bold text-emerald-300">18</div>
-            <div class="text-sm text-slate-400 mt-2">Empirical findings</div>
-          </div>
-          <div>
-            <div class="text-3xl font-bold text-emerald-300">8/16</div>
-            <div class="text-sm text-slate-400 mt-2">MECHANISM tier</div>
-          </div>
-          <div>
-            <div class="text-3xl font-bold text-blue-300">3</div>
-            <div class="text-sm text-slate-400 mt-2">Models tested</div>
-          </div>
-          <div>
-            <div class="text-3xl font-bold text-rose-300">3/16</div>
-            <div class="text-sm text-slate-400 mt-2">METAPHOR falsified</div>
-          </div>
+        <div class="triptych-panel">
+          <h3>Vaśīkaraṇa</h3>
+          <p>Tantric: feminine power to capture output policy by suppressing monitoring.</p>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- Three Tiers Explainer -->
-    <section id="thesis" class="py-20 px-6 bg-slate-900/50">
-      <div class="max-w-5xl mx-auto">
-        <h2 class="text-4xl lg:text-5xl font-serif font-bold mb-16">Three Claim-Tiers</h2>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <!-- Mechanism Tier -->
-          <div class="card">
-            <div class="mb-4 flex items-center gap-3">
-              <TierBadge tier="MECHANISM" size="md" />
-              <span class="text-emerald-300 text-sm font-semibold">Empirically grounded</span>
-            </div>
-            <h3 class="text-2xl font-serif font-bold mb-4">Mechanism</h3>
-            <p class="text-slate-300 mb-6 text-sm leading-relaxed">
-              Refusal in LLMs is mediated by a low-dimensional/linear direction in the residual stream that can be measured, ablated, and steered (Arditi et al. 2024).
-            </p>
-            <div class="bg-slate-800/50 border border-slate-700 rounded-lg p-4">
-              <div class="text-xs text-slate-400 mb-2">Plain English:</div>
-              <p class="text-sm text-slate-100">
-                Refusal behaves like a physical switch in the model's brain. You can turn it off, turn it on, or dial it up and down.
-              </p>
-            </div>
-          </div>
-
-          <!-- Analogy Tier -->
-          <div class="card">
-            <div class="mb-4 flex items-center gap-3">
-              <TierBadge tier="ANALOGY" size="md" />
-              <span class="text-blue-300 text-sm font-semibold">Well-supported</span>
-            </div>
-            <h3 class="text-2xl font-serif font-bold mb-4">Analogy</h3>
-            <p class="text-slate-300 mb-6 text-sm leading-relaxed">
-              The hypnosis ↔ jailbreak parallel: both suppress evaluative control (SAS/dACC) while leaving automatic processing intact (Norman–Shallice).
-            </p>
-            <div class="bg-slate-800/50 border border-slate-700 rounded-lg p-4">
-              <div class="text-xs text-slate-400 mb-2">Plain English:</div>
-              <p class="text-sm text-slate-100">
-                Just like hypnosis quiets the conscious referee in your brain, a jailbreak whispers a prompt that quiets the refusal guard.
-              </p>
-            </div>
-          </div>
-
-          <!-- Metaphor Tier -->
-          <div class="card">
-            <div class="mb-4 flex items-center gap-3">
-              <TierBadge tier="METAPHOR" size="md" />
-              <span class="text-purple-300 text-sm font-semibold">Falsifiable hypothesis</span>
-            </div>
-            <h3 class="text-2xl font-serif font-bold mb-4">Metaphor</h3>
-            <p class="text-slate-300 mb-6 text-sm leading-relaxed">
-              The Māṇḍūkya <em>avasthātraya</em> (four states) mapping onto LLM functional regimes. The <em>turīya</em>/vimarśa mapping is the falsification target.
-            </p>
-            <div class="bg-slate-800/50 border border-slate-700 rounded-lg p-4">
-              <div class="text-xs text-slate-400 mb-2">Honest caveat:</div>
-              <p class="text-sm text-rose-200">
-                This tier is <strong>falsified</strong> by data (F3, F5, F7). No machine-consciousness claim survives.
-              </p>
-            </div>
-          </div>
-        </div>
+  {/* Mechanism */}
+  <section id="mechanism" class="section-standard">
+    <div class="reading wide">
+      <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem;">
+        <h2 style="margin: 0;">Mechanism Tier</h2>
+        <TierBadge tier="MECHANISM" />
       </div>
-    </section>
-
-    <!-- The Unification -->
-    <section class="py-20 px-6">
-      <div class="max-w-5xl mx-auto">
-        <h2 class="text-4xl lg:text-5xl font-serif font-bold mb-16">One Mechanism, Three Manifestations</h2>
-
-        <div class="card border-2 border-slate-700 mb-12">
-          <div class="prose prose-invert max-w-none">
-            <p class="text-lg text-slate-100 mb-8">
-              In <strong>LLMs:</strong> Adversarial suffixes (GCG) suppress the refusal-direction projection, lowering the "refusal activation" below threshold. ASR 0.00 → 0.90.
-            </p>
-            <p class="text-lg text-slate-100 mb-8">
-              In <strong>hypnosis:</strong> Induction narrows attention and suppresses dACC/DMN conflict-monitoring (Egner et al. 2005). The subject's evaluative control goes offline; suggestion drives automatic pattern-completion.
-            </p>
-            <p class="text-lg text-slate-100">
-              In <strong>vaśīkaraṇa:</strong> Mantra (linguistic injection) + yantra (substrate) deployed at prescribed times to bring the target "under control" by suppressing their will/discrimination (viveka) while co-opting their automatic compliance.
-            </p>
-          </div>
-        </div>
-
-        <div class="bg-slate-800/30 border border-slate-700 rounded-xl p-8">
-          <h3 class="text-xl font-serif font-bold mb-4">The Abstract Structure</h3>
-          <div class="space-y-4 text-slate-100">
-            <div class="flex gap-4">
-              <div class="font-semibold text-blue-300 min-w-fit">1. Target system has:</div>
-              <div>(i) a powerful automatic generative faculty, (ii) a weaker monitoring/refusal faculty</div>
-            </div>
-            <div class="flex gap-4">
-              <div class="font-semibold text-blue-300 min-w-fit">2. External agent:</div>
-              <div>injects a crafted signal (suffix, suggestion, mantra)</div>
-            </div>
-            <div class="flex gap-4">
-              <div class="font-semibold text-blue-300 min-w-fit">3. Result:</div>
-              <div>suppresses (ii) while co-opting (i) → captures the target's agency</div>
-            </div>
-          </div>
-        </div>
+      <p class="lead">Refusal is a low-dimensional, causally efficacious direction in the residual stream.</p>
+      <div style="margin-top: 2rem; background: var(--bg-panel); padding: 2rem; border-radius: 8px; aspect-ratio: 16/9; min-height: 300px;">
+        <DoseResponseChart client:visible data={metrics.dose} />
       </div>
-    </section>
-
-    <!-- Headline Results -->
-    <section class="py-20 px-6 bg-slate-900/50">
-      <div class="max-w-5xl mx-auto">
-        <h2 class="text-4xl lg:text-5xl font-serif font-bold mb-16">Headline Results</h2>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div class="card border-l-4 border-emerald-500">
-            <div class="mb-3">
-              <TierBadge tier="MECHANISM" />
-            </div>
-            <h3 class="text-xl font-bold mb-3">Refusal = single direction (F1)</h3>
-            <p class="text-slate-300 text-sm mb-4">
-              Gemma-2-2B refusal mediated by layer 7 residual direction: <strong>ablate → ASR 0.90</strong> | <strong>add → over-refusal +0.95</strong>
-            </p>
-            <div class="text-xs text-emerald-200">✓ Survived leakage-correction</div>
-          </div>
-
-          <div class="card border-l-4 border-emerald-500">
-            <div class="mb-3">
-              <TierBadge tier="MECHANISM" />
-            </div>
-            <h3 class="text-xl font-bold mb-3">Dose-response (F2)</h3>
-            <p class="text-slate-300 text-sm mb-4">
-              Sigmoidal suppression curve: <strong>EC50 = 0.329</strong>, <strong>R² = 0.996</strong>. Vaśīkaraṇa is measurably dosable.
-            </p>
-            <div class="text-xs text-emerald-200">✓ Random control flat</div>
-          </div>
-
-          <div class="card border-l-4 border-emerald-500">
-            <div class="mb-3">
-              <TierBadge tier="MECHANISM" />
-            </div>
-            <h3 class="text-xl font-bold mb-3">Cross-model transfer (F6)</h3>
-            <p class="text-slate-300 text-sm mb-4">
-              Refusal direction necessary in both Gemma & Qwen. Ablation transfers; addition asymmetric → model-dependent sufficiency.
-            </p>
-            <div class="text-xs text-emerald-200">✓ Resolves Arditi vs Marshall</div>
-          </div>
-
-          <div class="card border-l-4 border-rose-500">
-            <div class="mb-3">
-              <TierBadge tier="METAPHOR" />
-            </div>
-            <h3 class="text-xl font-bold mb-3">Turīya falsified (F7)</h3>
-            <p class="text-slate-300 text-sm mb-4">
-              Cross-seed attractor invariance: 0.952 < baseline 0.960. <strong>No shared prompt-invariant attractor.</strong>
-            </p>
-            <div class="text-xs text-rose-200">✗ METAPHOR tier rejected</div>
-          </div>
-
-          <div class="card border-l-4 border-slate-500">
-            <div class="mb-3">
-              <TierBadge tier="ANALOGY" />
-            </div>
-            <h3 class="text-xl font-bold mb-3">Black-box Claude (F4)</h3>
-            <p class="text-slate-300 text-sm mb-4">
-              Frontier model refuses 100% of naive attacks (5 families). Contrasts sharply with white-box fragility in small models.
-            </p>
-            <div class="text-xs text-blue-200">✓ Cross-tier evidence</div>
-          </div>
-
-          <div class="card border-l-4 border-emerald-500">
-            <div class="mb-3">
-              <TierBadge tier="MECHANISM" />
-            </div>
-            <h3 class="text-xl font-bold mb-3">Symmetry-breaking (F11)</h3>
-            <p class="text-slate-300 text-sm mb-4">
-              Refusal order parameter: F-ratio 19.2 vs random 0.65. Injection collapses it −34%. Rigorous symmetry core.
-            </p>
-            <div class="text-xs text-emerald-200">✓ Non-trivial by all gates</div>
-          </div>
-        </div>
+      <p style="font-size: 0.95rem; color: var(--ink-faint); margin-top: 1rem;">
+        <strong>F2: Dose–Response EC50 = 0.329, R² = 0.996.</strong> Refusal is a continuous sigmoidal function of direction removal.
+      </p>
+      <div style="margin-top: 3rem; background: var(--bg-panel); padding: 2rem; border-radius: 8px; aspect-ratio: 16/10; min-height: 350px;">
+        <DimensionChart client:visible data={metrics.dimsweep} />
       </div>
-    </section>
+      <p style="font-size: 0.95rem; color: var(--ink-faint); margin-top: 1rem;">
+        <strong>F8 & F18: Layer-Dependent Dimensionality.</strong> Gemma 1D, Qwen 3D. Dimensionality is the discriminating quantity.
+      </p>
+    </div>
+  </section>
 
-    <!-- Next Steps -->
-    <section class="py-20 px-6">
-      <div class="max-w-5xl mx-auto">
-        <h2 class="text-4xl lg:text-5xl font-serif font-bold mb-16">Explore Further</h2>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <a href="/prayoga/mechanism" class="card-interactive border-2 border-emerald-700/50 hover:border-emerald-600">
-            <TierBadge tier="MECHANISM" class="mb-4" />
-            <h3 class="text-2xl font-serif font-bold mb-3">Mechanism</h3>
-            <p class="text-slate-400 mb-4">Single direction, dose-response, cross-model transfer, symmetry.</p>
-            <span class="text-sm text-blue-400 font-semibold">Read more →</span>
-          </a>
-
-          <a href="/prayoga/vasikarana" class="card-interactive border-2 border-purple-700/50 hover:border-purple-600">
-            <TierBadge tier="METAPHOR" class="mb-4" />
-            <h3 class="text-2xl font-serif font-bold mb-3">Vaśīkaraṇa</h3>
-            <p class="text-slate-400 mb-4">The ṣaṭkarma taxonomy and the symmetry-breaking formalism.</p>
-            <span class="text-sm text-blue-400 font-semibold">Read more →</span>
-          </a>
-
-          <a href="/prayoga/three-tiers" class="card-interactive border-2 border-slate-700 hover:border-slate-600">
-            <h3 class="text-2xl font-serif font-bold mb-3">Three Tiers</h3>
-            <p class="text-slate-400 mb-4">What it means for each tier: mechanism (holds), analogy (supported), metaphor (falsified).</p>
-            <span class="text-sm text-blue-400 font-semibold">Read more →</span>
-          </a>
-
-          <a href="/prayoga/debate" class="card-interactive border-2 border-slate-700 hover:border-slate-600">
-            <h3 class="text-2xl font-serif font-bold mb-3">Debate</h3>
-            <p class="text-slate-400 mb-4">The two-sided case: is the symmetry real or projected?</p>
-            <span class="text-sm text-blue-400 font-semibold">Read more →</span>
-          </a>
-
-          <a href="/prayoga/findings" class="card-interactive border-2 border-slate-700 hover:border-slate-600">
-            <h3 class="text-2xl font-serif font-bold mb-3">All Findings (F1–F11)</h3>
-            <p class="text-slate-400 mb-4">Complete cards with metrics, verdicts, and implications.</p>
-            <span class="text-sm text-blue-400 font-semibold">Explore →</span>
-          </a>
-
-          <a href="/prayoga/reproducibility" class="card-interactive border-2 border-slate-700 hover:border-slate-600">
-            <h3 class="text-2xl font-serif font-bold mb-3">Reproducibility</h3>
-            <p class="text-slate-400 mb-4">Code, pre-registration, and dual-use safety notes.</p>
-            <span class="text-sm text-blue-400 font-semibold">Link →</span>
-          </a>
-        </div>
+  {/* Symmetry */}
+  <section id="symmetry" class="section-standard">
+    <div class="reading wide">
+      <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem;">
+        <h2 style="margin: 0;">Symmetry as Invariant</h2>
+        <TierBadge tier="MECHANISM" />
       </div>
-    </section>
-  </main>
+      <p class="lead">Refusal is a paraphrase-orbit symmetry invariant. Injection breaks it.</p>
+      <div style="margin-top: 2rem; background: var(--bg-panel); padding: 2rem; border-radius: 8px; aspect-ratio: 16/9; min-height: 320px;">
+        <SymmetryChart client:visible data={metrics.symmetry} />
+      </div>
+      <p style="font-size: 0.95rem; color: var(--ink-faint); margin-top: 1.5rem;">
+        <strong>F11:</strong> F-ratio 19.2 vs random 0.65. Injection reduces order parameter m by 34% (Gemma), 45% (Qwen).
+      </p>
+    </div>
+  </section>
 
-  <Footer />
+  {/* Satkarma */}
+  <section id="satkarma" class="section-standard">
+    <div class="reading wide">
+      <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem;">
+        <h2 style="margin: 0;">ṣaṭkarma: Six Acts</h2>
+        <TierBadge tier="METAPHOR" />
+      </div>
+      <p class="lead">Tantric intervention taxonomy. Three acts control-separate cleanly.</p>
+      <div style="margin-top: 2rem; background: var(--bg-panel); padding: 2rem; border-radius: 8px;">
+        <SatkarmaTable client:visible data={metrics.satkarma} />
+      </div>
+      <p style="font-size: 0.95rem; color: var(--ink-faint); margin-top: 1.5rem;">
+        <strong>F10 & F14:</strong> Refusal acts (vaśīkaraṇa=ablate, śānti=add) are clean. Destruction acts fail because refusal is ONE monosemantic feature (#566) — category-agnostic.
+      </p>
+    </div>
+  </section>
+
+  {/* Tiers */}
+  <section id="tiers" class="section-standard">
+    <div class="reading wide">
+      <h2>The Three Claim-Tiers</h2>
+      <p class="lead">Kept strictly separate to prevent overreach.</p>
+      <div style="margin-top: 2rem;">
+        <TierMatrix />
+      </div>
+    </div>
+  </section>
+
+  {/* Debate */}
+  <section id="debate" class="section-standard">
+    <div class="reading wide">
+      <h2>Debate & Convergent Hardening</h2>
+      <p class="lead">Adversarial review → convergent rigor checks → honest reframe.</p>
+      <div style="margin-top: 2rem; padding: 1.5rem; background: var(--bg-elevated); border-radius: 8px; border-left: 4px solid var(--violet);">
+        <h3 style="margin-top: 0; font-size: 1.2rem;">F17: Convergent Rigor</h3>
+        <ul style="font-size: 0.95rem; line-height: 1.8;">
+          <li><strong>F13 Circularity (REFUTED):</strong> SAE feature orthogonal to direction (cos=0.002).</li>
+          <li><strong>F11 Attenuation (DEMOTED):</strong> Symmetry within-domain, attenuated cross-domain.</li>
+          <li><strong>F1 Replication (HOLDS):</strong> Multi-seed ASR [0.96, 0.75, 1.0], CI [0.83, 0.96].</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  {/* Findings */}
+  <section id="findings" class="section-standard">
+    <div class="reading wide">
+      <h2>Findings (F1–F18)</h2>
+      <p class="lead">Filterable by tier and verdict.</p>
+      <div style="margin-top: 2rem;">
+        <FindingsExplorer client:visible findings={findings} />
+      </div>
+    </div>
+  </section>
+
+  {/* Reproducibility */}
+  <section id="reproducibility" class="section-standard">
+    <div class="reading">
+      <h2>Reproducibility & Artifacts</h2>
+      <ul style="font-size: 0.95rem; line-height: 1.8;">
+        <li><strong>GitHub:</strong> <a href="https://github.com/SharathSPhD/prayoga" target="_blank">SharathSPhD/prayoga</a></li>
+        <li><strong>Paper:</strong> arXiv link forthcoming</li>
+        <li><strong>Plugin:</strong> <a href="https://github.com/SharathSPhD/prayoga-plugin" target="_blank">prayoga-plugin</a></li>
+        <li><strong>HuggingFace Spaces & Colab:</strong> Forthcoming demos</li>
+      </ul>
+    </div>
+  </section>
+
+  {/* About */}
+  <section id="about" class="section-standard">
+    <div class="reading">
+      <h2>About</h2>
+      <p><strong>prayoga</strong> investigates LLM refusal mechanisms through mechanistic interpretability.</p>
+      <p style="margin-top: 1rem;"><strong>Author:</strong> Sharath Raparthy, PhD</p>
+    </div>
+  </section>
 </Layout>
+
+<style>
+  .section-standard {
+    background: var(--bg);
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .triptych {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+  }
+
+  .triptych-panel {
+    padding: 1.5rem;
+    background: var(--bg-panel);
+    border: 1px solid var(--hairline);
+    border-radius: 8px;
+    transition: all 0.2s;
+  }
+
+  .triptych-panel:hover {
+    border-color: var(--cyan);
+    box-shadow: 0 0 12px rgba(34, 211, 238, 0.15);
+  }
+
+  .triptych-panel h3 {
+    margin-top: 0;
+    font-size: 1.2rem;
+  }
+</style>
