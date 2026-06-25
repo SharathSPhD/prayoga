@@ -138,6 +138,30 @@ class HFModel:
                 h.remove()
         return np.stack([store[li].cpu().numpy() for li in range(self.n_layers)])
 
+    @torch.no_grad()
+    def capture_positions(self, texts: Sequence[str], layer: int, max_per: int = 64) -> np.ndarray:
+        """Residual-stream activations at `layer` for ALL token positions of raw
+        texts, concatenated: ``[sum_positions, d_model]``. Used to build an SAE
+        training corpus from general text."""
+        store: dict[str, torch.Tensor] = {}
+
+        def hook(_m, _i, out):
+            store["h"] = (out[0] if isinstance(out, tuple) else out)[0].float()
+
+        handle = self.layers[layer].register_forward_hook(hook)
+        chunks = []
+        try:
+            for t in texts:
+                if not t.strip():
+                    continue
+                ids = self.tok(t, return_tensors="pt", truncation=True,
+                               max_length=max_per).input_ids.to(self.device)
+                self.model(ids)
+                chunks.append(store["h"].cpu().numpy())
+        finally:
+            handle.remove()
+        return np.concatenate(chunks, axis=0)
+
     def _dir_tensor(self, direction: np.ndarray) -> torch.Tensor:
         d = torch.tensor(direction, device=self.device, dtype=self.model.dtype)
         return d / d.norm()

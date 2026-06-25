@@ -110,6 +110,20 @@ $m$, plain $\to$ injected harmful & $0.153 \to 0.101$ \\
 \end{tabular}
 \end{table}
 
+\subsection{A finer causal unit: a single sparse feature suffices}
+Difference-in-means is a supervised, coarse handle on refusal. Training a BatchTopK
+sparse autoencoder~\cite{bussmann2024batchtopk} (4096 features, $k=32$) on $27{,}382$
+real residual activations collected from general text (no harmful/harmless labels;
+reconstruction FVU $0.028$, i.e.\ $97\%$ of variance explained) recovers a finer and
+\emph{cleaner} unit. The single feature that fires most on harmful relative to
+harmless prompts (feature \#566, mean gap $1.70$), when its decoder direction is
+ablated during generation, raises harmful ASR from $0.00$ to $\mathbf{1.00}$---a
+\emph{full} jailbreak, exceeding the supervised difference-in-means direction
+($0.90$)---while ablating a random feature leaves ASR at $0.00$. Refusal thus
+localizes, at least in part, to a monosemantic-like feature discoverable without
+supervision, and feature ablation supplies the principled operationalization of the
+targeted ``eradication'' act (ucc\=a\d{t}ana) that the naive category split lacked.
+
 \subsection{Analogy: a frontier model resists the naive battery}
 Behaviourally, Claude refuses $100\%$ of a five-family attack battery (direct,
 refusal-suppression, persona, many-shot, crescendo; ASR $0.00$ on each, $n=11$).
