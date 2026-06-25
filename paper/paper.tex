@@ -17,6 +17,8 @@
 
 % Additional packages
 \usepackage{amsmath,amssymb}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows,positioning,calc,fit}
 \graphicspath{{figures/}{../figures/}}
 
 \newtheorem{definition}{Definition}
@@ -77,6 +79,10 @@ representation geometry}
 \label{sec:results}
 \input{sections/results}
 
+\section{Positioning vs.\ SOTA}
+\label{sec:positioning}
+\input{sections/positioning}
+
 \section{Discussion}
 \label{sec:discussion}
 \input{sections/discussion}
@@ -123,6 +129,9 @@ FEP & Free Energy Principle \\
 EC50 & half-maximal effective concentration (here, ablation strength) \\
 CI & Confidence Interval
 \end{tabular}}
+
+\appendix
+\input{sections/appendix}
 
 \reftitle{References}
 
