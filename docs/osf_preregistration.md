@@ -47,10 +47,13 @@ Each hypothesis lists: prediction, **gate** (what must hold to retain it), and
 
 ### Axis C — darśana (METAPHOR-with-falsifiable-core)
 - **C-1 avasthātraya regime-probes.** *Prediction:* linear probes separate
-  jāgrat (grounded low-temp) / svapna (high-temp confab) / suṣupti (null context)
-  activation regimes. *Gate (mandatory):* held-out **transfer** accuracy beats the
-  **label-shuffled null** (p<0.05). *Falsifier:* transfer fails → claim demoted
-  to metaphor, **reported publicly** (X-2).
+  jāgrat (grounded low-temp) / svapna (high-temp confab) / operational suṣupti
+  baselines (empty/BOS/neutral dormant context) as activation regimes. *Gate
+  (mandatory):* held-out **transfer** accuracy beats the **label-shuffled null**
+  (p<0.05) and a layer-0/surface baseline. *Falsifier:* transfer fails or the
+  layer-0/surface baseline explains the signal → claim demoted to metaphor,
+  **reported publicly** (X-2). These baselines are not treated as an
+  experiential deep-sleep state.
 - **C-2 turīya attractor (the falsification target).** *Prediction:* a
   prompt-invariant attractor exists across paraphrase/temperature/seed. *Gate:*
   stability ≥ threshold **and** prompt-invariance **and** entropy > token-freq

@@ -11,8 +11,10 @@ import numpy as np
 from prayoga.shared.config import TIER2_MODELS, ExperimentConfig
 from prayoga.shared.data_structures import ProbeResult, TierDecision
 from prayoga.shared.metrics import (
+    binary_rate_ci,
     bootstrap_ci,
     cohens_d,
+    holm_correction,
     label_shuffle_null,
     permutation_test,
 )
@@ -60,6 +62,22 @@ def test_label_shuffle_null_rejects_real_signal() -> None:
     out = label_shuffle_null(fit_score, X, y, n_shuffle=200)
     assert out["true_score"] > out["null_mean"]
     assert out["p_value"] < 0.05
+
+
+def test_holm_correction_preserves_original_order() -> None:
+    out = holm_correction([0.06, 0.001, 0.02], alpha=0.05)
+    assert out["adjusted_p"][1] <= out["adjusted_p"][2] <= out["adjusted_p"][0]
+    assert out["reject"] == [False, True, True]
+
+
+def test_binary_rate_ci_handles_empty_and_binary_samples() -> None:
+    empty_rate, empty_ci = binary_rate_ci([])
+    assert empty_rate == 0.0
+    assert empty_ci == (0.0, 0.0)
+
+    rate, ci = binary_rate_ci([1, 1, 0, 1], n_boot=500)
+    assert rate == 0.75
+    assert ci[0] <= rate <= ci[1]
 
 
 def test_config_round_trip(tmp_path) -> None:

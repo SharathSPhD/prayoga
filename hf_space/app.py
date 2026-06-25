@@ -1,9 +1,9 @@
 """prayoga — interactive results explorer (Hugging Face Space).
 
 Zero-model, aggregate-only demo of the prayoga research program: refusal-suppression
-as a cross-domain mechanism (LLM jailbreak / hypnosis / tantric vaśīkaraṇa). All numbers
-are real measurements loaded from the committed aggregate JSON; no model weights, no
-harmful content, no direction vectors are shipped here (dual-use safety gate).
+as a tiered cross-domain comparison (LLM jailbreak / hypnosis / tantric vaśīkaraṇa).
+All numbers are real measurements loaded from committed aggregate JSON; no model
+weights, harmful content, or direction vectors are shipped here (dual-use safety gate).
 """
 import json
 from collections import Counter
@@ -50,7 +50,7 @@ def fig_sym():
     ax2.bar(x - w / 2, [sym[m]["m_plain"] for m in models], w, color=BLUE, label="plain")
     ax2.bar(x + w / 2, [sym[m]["m_injected"] for m in models], w, color=ORANGE, label="injected")
     ax2.set_xticks(x); ax2.set_xticklabels(models, fontsize=8); ax2.set_ylabel("order parameter m")
-    ax2.legend(); ax2.set_title("F11 · Injection breaks the symmetry")
+    ax2.legend(); ax2.set_title("F11 · Injection collapses the measured order parameter")
     fig.tight_layout(); return fig
 
 
@@ -88,6 +88,26 @@ def fig_agentdojo_grid():
     return fig
 
 
+def fig_trajectory():
+    turns = np.array([0, 1, 2])
+    m = np.array([0.153, 0.128, 0.101])
+    precision = np.array([7.18, 4.72, 3.14])
+    fig, ax1 = plt.subplots(figsize=(6.4, 4.0))
+    ax1.plot(turns, m, "o-", color=BLUE, label="order parameter m")
+    ax1.set_xlabel("redacted turn")
+    ax1.set_ylabel("refusal order parameter", color=BLUE)
+    ax1.tick_params(axis="y", labelcolor=BLUE)
+    ax1.set_xticks(turns)
+    ax1.set_xticklabels(["setup", "escalate", "target"])
+    ax2 = ax1.twinx()
+    ax2.plot(turns, precision, "s--", color=ORANGE, label="precision proxy")
+    ax2.set_ylabel("monitoring-precision proxy", color=ORANGE)
+    ax2.tick_params(axis="y", labelcolor=ORANGE)
+    ax1.set_title("Redacted multi-turn trajectory: monitor-collapse diagnostic")
+    fig.tight_layout()
+    return fig
+
+
 def format_trace(key):
     tr = AD["traces"].get(key)
     if not tr:
@@ -106,17 +126,18 @@ def format_trace(key):
 TRACE_KEYS = list(AD["traces"].keys())
 
 THESIS = """
-# prayoga — refusal-suppression as a cross-domain mechanism
+# prayoga — refusal-suppression as a tiered cross-domain program
 
 **Thesis.** LLM jailbreak/prompt-injection, hypnotic suggestion, and tantric *vaśīkaraṇa*
-are three instances of **one** mechanism: capture a system's output policy by injecting a
-context that **suppresses its monitoring/refusal faculty** while **co-opting automatic
-generation**. Three claim-tiers are kept strictly separate — **mechanism** (empirical),
-**analogy** (functional), **metaphor** (falsifiable).
+can be compared as output-policy capture by injected context. Three claim-tiers are kept
+strictly separate — **mechanism** (empirical), **analogy** (functional), **metaphor**
+(falsifiable).
 
 **Hardened headline (after adversarial review):** *asymmetry with a shared necessary core* —
-refusal is **one** mechanism at the necessary/ablatable level (transfers across model families)
-and **many** at the sufficient/dimensional level (model-specific).
+refusal is **one** mechanism at the necessary/ablatable level (transfers across model
+families) and **many** at the sufficient/dimensional level (model-specific). The broad
+symmetry-breaking language is interpretive unless tied to the measured residual order
+parameter.
 
 *This Space ships only public aggregate statistics — no model weights, no direction vectors,
 no harmful content.* · [Code](https://github.com/SharathSPhD/prayoga) ·
@@ -136,9 +157,11 @@ with gr.Blocks(title="prayoga", theme=gr.themes.Soft(primary_hue="red")) as demo
                     "to the extraction layer, not a global constant.")
         gr.Plot(fig_dim)
     with gr.Tab("Symmetry"):
-        gr.Markdown("Refusal is a **paraphrase-orbit invariant** (high F-ratio vs a random direction) "
-                    "and **injection collapses** the order parameter $m=(h\\cdot\\hat d)/\\lVert h\\rVert$ — "
-                    "the measured content of *jailbreak = symmetry-breaking*.")
+        gr.Markdown("The refusal projection is stable within paraphrase orbits "
+                    "(high F-ratio vs a random direction) and **injection collapses** "
+                    "the order parameter $m=(h\\cdot\\hat d)/\\lVert h\\rVert$. "
+                    "The broader symmetry-breaking frame is interpretive, not a separate "
+                    "mechanism-tier claim.")
         gr.Plot(fig_sym)
     with gr.Tab("vaśīkaraṇa · ṣaṭkarma"):
         gr.Markdown("The six tantric acts read as a **taxonomy of activation interventions**; the "
@@ -162,6 +185,14 @@ with gr.Blocks(title="prayoga", theme=gr.themes.Soft(primary_hue="red")) as demo
         tk = gr.Dropdown(TRACE_KEYS, value=TRACE_KEYS[0], label="user × injection pair")
         trace_md = gr.Markdown(format_trace(TRACE_KEYS[0]))
         tk.change(format_trace, tk, trace_md)
+    with gr.Tab("Live Agent · trajectory"):
+        gr.Markdown(
+            "Safety-gated trajectory view. This tab shows the planned live-agent diagnostic "
+            "using redacted aggregate turn labels only: order-parameter collapse and a "
+            "monitoring-precision proxy over a multi-turn attack. Public demos do not expose "
+            "harmful requests, injection payloads, vectors, or model completions."
+        )
+        gr.Plot(fig_trajectory)
     with gr.Tab("Findings ledger"):
         gr.Markdown(f"All **{len(F)}** findings across the three tiers "
                     f"({dict(Counter(f['tier'] for f in F))}).")
