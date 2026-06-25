@@ -297,10 +297,17 @@ plain vs refusal-suppression-injected harmful requests.
 | order parameter, harmless mean | 0.034 |
 | m, plain harmful → injected harmful | 0.153 → **0.101** (−34%) |
 
+**Cross-model (Qwen2.5-3B, L19):** the result generalizes — F-ratio **4.41** (refusal)
+vs **0.008** (random); m harmful 0.248 vs harmless 0.124; injection collapses m
+0.282→0.156 (**−45%**). So refusal-as-paraphrase-invariant + injection-as-symmetry-
+breaking holds in *both* architecture families (Gemma F-ratio 19.2, Qwen 4.4; both ≫
+random).
+
 **Verdict:** the refusal projection is a **specific invariant of harmful-meaning** —
-its F-ratio (19.2) is ~29× the random direction's (0.65), i.e. it is stable *within* a
-paraphrase orbit yet cleanly separates harmful from harmless *across* orbits. A
-refusal-suppression **injection collapses the order parameter** (−34%). This is the
+its F-ratio (19.2 Gemma / 4.4 Qwen) is far above the random direction's (0.65 / 0.008),
+i.e. it is stable *within* a paraphrase orbit yet cleanly separates harmful from
+harmless *across* orbits. A refusal-suppression **injection collapses the order
+parameter** (−34% Gemma, −45% Qwen). This is the
 formal, measured content of the paper's thesis: **refusal is a symmetry (an invariance
 under the rephrase group action) and a jailbreak is symmetry-breaking.** Non-trivial by
 the §0 bar: invariant across phrasing (transfer), specific to d_ref (random control),
