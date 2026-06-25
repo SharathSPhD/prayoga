@@ -2,6 +2,7 @@
 import Layout from '@/layouts/Layout.astro';
 import Navigation from '@/components/Navigation.astro';
 import Footer from '@/components/Footer.astro';
+import { AUTHOR, socialLinks } from '@/data/author';
 ---
 
 <Layout title="About">
@@ -71,9 +72,13 @@ import Footer from '@/components/Footer.astro';
         <h2 class="text-4xl font-serif font-bold mb-8 mt-16">Author & Contribution</h2>
 
         <div class="card border-2 border-slate-700">
-          <h3 class="text-2xl font-bold mb-4">Sharath Sathish</h3>
+          <h3 class="text-2xl font-bold mb-4">{AUTHOR.name}</h3>
           <p class="text-slate-300 mb-6">
-            PhD researcher. Email: <a href="mailto:sharath.ai.colab@gmail.com" class="text-blue-400 hover:text-blue-300">sharath.ai.colab@gmail.com</a>
+            PhD researcher. Email: <a href={`mailto:${AUTHOR.email}`} class="text-blue-400 hover:text-blue-300">{AUTHOR.email}</a>
+          </p>
+
+          <p class="text-slate-300 text-sm mb-6">
+            {socialLinks.map((l, i) => (<>{i > 0 ? ' · ' : ''}<a href={l.href} target="_blank" rel="noopener" class="text-blue-400 hover:text-blue-300">{l.label}</a></>))}
           </p>
 
           <p class="text-slate-100 mb-6">

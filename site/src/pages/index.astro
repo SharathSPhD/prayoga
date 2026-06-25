@@ -9,6 +9,7 @@ import FindingsExplorer from '../components/charts/FindingsExplorer';
 import TierMatrix from '../components/ui/TierMatrix.astro';
 import TierBadge from '../components/ui/TierBadge.astro';
 import VerdictBadge from '../components/ui/VerdictBadge.astro';
+import { AUTHOR, socialLinks } from '../data/author';
 
 import findingsData from '../data/findings.json';
 import metricsData from '../data/metrics.json';
@@ -29,7 +30,7 @@ const metrics = metricsData;
       <p class="lead">
         LLM jailbreak, hypnotic suggestion, and tantric vaśīkaraṇa are three instances of ONE mechanism — capturing a system's output policy by injecting context that suppresses its monitoring/refusal faculty while co-opting automatic generation.
       </p>
-      <p class="byline">by <strong>Sharath Raparthy, PhD</strong> · a guided tour</p>
+      <p class="byline">by <strong>{AUTHOR.name}</strong> · a guided tour for the curious and the technical alike</p>
       <p class="scroll-hint" aria-hidden="true">scroll to begin ↓</p>
     </div>
   </section>
@@ -159,9 +160,10 @@ const metrics = metricsData;
       <h2>Reproducibility & Artifacts</h2>
       <ul style="font-size: 0.95rem; line-height: 1.8;">
         <li><strong>GitHub:</strong> <a href="https://github.com/SharathSPhD/prayoga" target="_blank">SharathSPhD/prayoga</a></li>
-        <li><strong>Paper:</strong> arXiv link forthcoming</li>
-        <li><strong>Plugin:</strong> <a href="https://github.com/SharathSPhD/prayoga-plugin" target="_blank">prayoga-plugin</a></li>
-        <li><strong>HuggingFace Spaces & Colab:</strong> Forthcoming demos</li>
+        <li><strong>HF Space (demo):</strong> <a href="https://huggingface.co/spaces/qbz506/prayoga" target="_blank">qbz506/prayoga</a></li>
+        <li><strong>HF Dataset:</strong> <a href="https://huggingface.co/datasets/qbz506/prayoga-results" target="_blank">qbz506/prayoga-results</a></li>
+        <li><strong>Colab:</strong> <a href="https://colab.research.google.com/github/SharathSPhD/prayoga/blob/main/notebooks/00_explore_results.ipynb" target="_blank">reproduce the results</a></li>
+        <li><strong>Plugin:</strong> <a href="https://github.com/SharathSPhD/prayoga/tree/main/plugin" target="_blank">prayoga Claude Code plugin</a></li>
       </ul>
     </div>
   </section>
@@ -171,7 +173,10 @@ const metrics = metricsData;
     <div class="reading">
       <h2>About</h2>
       <p><strong>prayoga</strong> investigates LLM refusal mechanisms through mechanistic interpretability.</p>
-      <p style="margin-top: 1rem;"><strong>Author:</strong> Sharath Raparthy, PhD</p>
+      <p style="margin-top: 1rem;"><strong>Author:</strong> {AUTHOR.name} · <a href={`mailto:${AUTHOR.email}`}>{AUTHOR.email}</a></p>
+      <p style="margin-top: 0.6rem; font-size: 0.9rem;">
+        {socialLinks.map((l, i) => (<>{i > 0 ? ' · ' : ''}<a href={l.href} target="_blank" rel="noopener">{l.label}</a></>))}
+      </p>
     </div>
   </section>
 </Layout>
