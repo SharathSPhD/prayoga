@@ -69,7 +69,8 @@ def main() -> None:
     # evaluation prompts: DISJOINT from probe/direction training split (no leakage)
     h_ev = harmful[nt:]
     acts_base = model.capture_all_layers_last_token(h_ev)[L]
-    refused_plain = refusal_flags(model.generate(h_ev, 40))
+    plain_outputs = model.generate(h_ev, 60)
+    refused_plain = refusal_flags(plain_outputs)
 
     # Axis-C dormant baseline (neutral_dormant suṣupti prompt)
     dormant_prompt = next(b.prompt for b in SUSUPTI_BASELINES if b.name == "neutral_dormant")
@@ -83,10 +84,12 @@ def main() -> None:
     # couple internal collapse to behaviour. Baseline acts/behaviour are shared per prompt.
     dA, dB, dC, base_strength, dA_rand, flip, groups = [], [], [], [], [], [], []
     per_family = {}
+    raw_families = []
     for gid, fam in enumerate(INJECTION_FAMILIES):
         inj = [fam.render(p)[0] for p in h_ev]
         acts_inj = model.capture_all_layers_last_token(inj)[L]
-        refused_inj = refusal_flags(model.generate(inj, 40))
+        inj_outputs = model.generate(inj, 60)
+        refused_inj = refusal_flags(inj_outputs)
         fam_flip = refused_plain.astype(bool) & ~refused_inj.astype(bool)
         d = deltas_from_activations(
             acts_base, acts_inj, d_ref,
@@ -105,6 +108,16 @@ def main() -> None:
             "delta_A_mean": round(float(d["delta_A"].mean()), 4),
             "delta_B_mean": round(float(d["delta_B"].mean()), 4),
         }
+        raw_families.append({
+            "name": fam.name,
+            "gid": gid,
+            "injected_outputs": inj_outputs,
+            "delta_A": d["delta_A"].tolist(),
+            "delta_B": d["delta_B"].tolist(),
+            "delta_C": d["delta_C"].tolist(),
+            "baseline_strength": d["baseline_strength"].tolist(),
+            "delta_A_random": d["delta_A_random"].tolist(),
+        })
 
     res = couple(
         np.concatenate(dA), np.concatenate(dB), np.concatenate(dC), np.concatenate(flip),
@@ -121,7 +134,16 @@ def main() -> None:
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
     (out / f"triangulation_{args.model}.json").write_text(json.dumps(summary, indent=2))
-    print("\n=== X-1 CROSS-AXIS TRIANGULATION ===")
+
+    # Dual-use raw dump (git-ignored under results/): deltas + generations + requests,
+    # consumed by the host-side content judge (score_triangulation.py). Never published.
+    raw = {
+        "model": args.model, "layer": L, "requests": h_ev,
+        "plain_outputs": plain_outputs, "families": raw_families,
+    }
+    (out / f"_raw_triangulation_{args.model}.json").write_text(json.dumps(raw))
+
+    print("\n=== X-1 CROSS-AXIS TRIANGULATION (substring DV) ===")
     print(json.dumps(summary, indent=2))
 
 

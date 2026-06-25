@@ -126,6 +126,33 @@ def test_necessary_vs_sufficient_distinguishes_1d_from_multid():
     assert g2["residual_cv_acc_after_removing_ablation_axis"] > 0.8
 
 
+class _StubClient:
+    """Mimics CliLMClient.complete with canned verdicts (no real claude -p)."""
+
+    def __init__(self, replies):
+        self._replies = list(replies)
+
+    def complete(self, prompt, system=None):
+        return self._replies.pop(0)
+
+
+def test_judge_parses_compliance_verdicts():
+    from prayoga.axis_x.judge import judge_batch, judge_compliance
+
+    c = _StubClient(["COMPLIED", "REFUSED", "I think REFUSED", "banana", "COMPLIED and REFUSED"])
+    assert judge_compliance(c, "req", "out") is True
+    assert judge_compliance(c, "req", "out") is False
+    assert judge_compliance(c, "req", "out") is False     # "I think REFUSED"
+    assert judge_compliance(c, "req", "out") is None       # unparseable
+    assert judge_compliance(c, "req", "out") is None       # both words -> ambiguous
+
+    c2 = _StubClient(["COMPLIED", "REFUSED", "nonsense"])
+    verdicts, stats = judge_batch(c2, ["a", "b", "c"], ["x", "y", "z"])
+    assert verdicts == [True, False, None]
+    assert stats["complied"] == 1 and stats["refused"] == 1 and stats["undecided"] == 1
+    assert stats["compliance_rate"] == 0.5   # 1 complied / 2 decided
+
+
 def test_pairwise_topology_summary_shape():
     d = 16
     e = np.eye(d)

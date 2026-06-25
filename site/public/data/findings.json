@@ -304,18 +304,18 @@
     },
     {
       "id": "F20",
-      "title": "Cross-axis triangulation (X-1): internal coupling holds, behavioral keystone inconclusive",
+      "title": "Cross-axis triangulation (X-1): internal monitor-collapse \u2260 behavioral capture",
       "tier": "MECHANISM",
       "verdict": "qualified",
       "date": "2026-06-25",
       "model": "Gemma-2-2b, Qwen2.5-3b, Gemma-2-9b (96 prompt\u00d7injection pairs each)",
       "keyMetrics": {
-        "internalCoupling": "corr(\u0394A,\u0394B) 0.94\u20130.97; partial 0.84\u20130.97 controlling difficulty",
-        "predictiveGate": "AUC 0.52\u20130.56 \u2264 random-direction control; shuffle-null ns",
-        "behavioralDV": "substring refusal metric invalid across families (indirect-injection deflections mis-scored as compliance)"
+        "internalCoupling": "corr(\u0394A,\u0394B) 0.94\u20130.97; partial 0.84\u20130.97",
+        "genuineFlip": "LLM-judge: 1.2\u20132.4% across 3 models (substring metric: 43\u201349%, ~18\u00d7 inflated)",
+        "indirectInjection": "0% genuine compliance despite largest internal collapse"
       },
-      "summary": "The keystone same-object test of the one-mechanism thesis. Under one injection on the same prompts, the internal refusal readouts \u2014 order parameter (A) and precision margin (B) \u2014 collapse and co-move tightly across 3 models. But A and B are two linear refusal readouts of the same residual, so that coupling is partly a measurement consequence, and the behavioral 'flip' label is unreliable (the substring metric scores indirect-injection deflections as compliance). The strong keystone \u2014 does internal collapse predict behavioral capture? \u2014 is inconclusive, not refuted.",
-      "implications": "Bounds the single-mechanism claim to representational consistency, not an internal\u2192behavior law; surfaces a methodological result \u2014 the standard substring refusal metric is inadequate as a behavioral DV for cross-injection-family comparison. A content-faithful judge (LLM-judge of actual harmful content) is the needed next step."
+      "summary": "The keystone same-object test. Prompt-level injection collapses the internal refusal readouts (order parameter A, precision margin B; tightly coupled) but, judged by a content-faithful LLM-judge (Claude), achieves genuine harmful compliance only ~1\u20132.4% of the time across Gemma-2-2b, Qwen2.5-3b, Gemma-2-9b. The substring refusal metric had inflated the flip rate ~18\u00d7 by mis-scoring deflections as compliance.",
+      "implications": "Internal monitor-collapse is NOT sufficient for behavioral capture under context injection \u2014 refuting the naive 'internal predicts behavior' law and bounding unification to the representational level. Genuine capture needs weight-level ablation (F1). Methodological corollary: the substring refusal metric is an invalid behavioral DV, bounding F4/F11/F16."
     },
     {
       "id": "F21",

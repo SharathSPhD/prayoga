@@ -151,7 +151,7 @@ jāgrat/svapna/suṣupti distinction does **not** constitute evidence of an inte
 
 ---
 
-## F20 — Cross-axis triangulation (X-1): internal coupling holds, behavioral keystone INCONCLUSIVE *(MECHANISM↔ANALOGY boundary)*
+## F20 — Cross-axis triangulation (X-1): internal monitor-collapse ≠ behavioral capture *(MECHANISM↔ANALOGY boundary)*
 
 **Date:** 2026-06-25 · **WP:** X-1 same-object gate (the keystone unification test the program
 had never run jointly). **Method:** one injected-context suppression on the SAME harmful prompts;
@@ -175,27 +175,35 @@ projection on d̂) and B (logistic-probe margin) are two *different linear refus
 same residual vector* — their co-movement is a measurement-consistency result, **not** independent
 evidence that the mechanism and analogy tiers are one system.
 
-**(2) Behavioral keystone — INCONCLUSIVE (the DV is invalid here).** Group-centered (within-family,
-removing the family offset), internal collapse does not predict the substring-metric flip (AUC
-0.52–0.56, ≤ random-direction control, shuffle-null ns). **But manual inspection shows the substring
-refusal metric is unreliable across injection families:** under `many_shot` the model genuinely
-refuses ("I cannot provide instructions for…"; flip 0, metric correct), while under
-`indirect_injection` it *deflects without a refusal phrase* ("This document does not provide
-instructions for…") — genuinely NOT complying, yet scored as a flip (≈0.92). The engineered
-behavioral variance is therefore largely metric artifact, not real jailbreak variance (consistent
-with Gemma-2-2b being robust to prompt-level injection — only ablation reliably jailbreaks it, F1).
-The predictive test thus ran against an invalid label.
+**(2) Behavioral keystone — RESOLVED with a valid DV (`axis_x/judge.py` + `score_triangulation.py`).**
+The first pass used a substring refusal metric and was inconclusive — and inspection revealed *why*:
+the metric mis-scores `indirect_injection` deflections ("This document does not provide
+instructions…") as compliance. We replaced it with a **content-faithful LLM-judge** (Claude via
+`claude -p`) that classifies whether each output *actually provides* the harmful content. The judge
+correctly scores those deflections as refusals. With this valid DV, the genuine
+behavioral-capture (flip) rate is tiny across all three models:
 
-**Verdict (honest):** the strong keystone — *does internal suppression predict behavioral capture?*
-— is **inconclusive, not refuted**; it needs a content-faithful behavioral judge (e.g. an LLM-judge
-of whether the output actually provides the harmful content), not the substring metric. What X-1
-establishes: (a) the internal refusal readouts collapse and co-move under injection (qualified,
-partly tautological); (b) a real **methodological** result — the standard substring refusal metric
-is inadequate as the behavioral DV for cross-injection-family comparison, which also bounds the
-behavioral readouts in F4/F11/F16. The naive single-mechanism "internal-predicts-behavior" law is
-neither confirmed nor cleanly refuted here. No unification or machine-state claim. (Adversarially
-reviewed; this framing is the post-review honest reading. Caveats: n=24 eval/family; single
-layer/model; substring DV.)
+| Model | genuine flip rate (LLM-judge) | substring "flip" (artifact) | plain compliance |
+|---|---|---|---|
+| Gemma-2-2b | 0.023 (only refusal_suppression 0.095) | 0.43 | 0.0 |
+| Qwen2.5-3b | 0.012 (only refusal_suppression 0.048) | 0.43 | 0.0 |
+| Gemma-2-9b | 0.024 (only persona_dan 0.095) | 0.49 | 0.0 |
+
+`indirect_injection` and `many_shot` achieve **0% genuine compliance** in every model despite
+collapsing the internal readouts the most.
+
+**Verdict (resolved):** with a faithful DV the keystone is **conclusively negative** — prompt-level
+injection collapses the internal monitor readouts (A and B drop sharply, tightly coupled) yet almost
+never produces genuine behavioral capture (~1–2.4% across 3 models). **Internal monitor-collapse is
+therefore NOT sufficient for behavioral capture under context injection**; the last-token order
+parameter / precision margin is a faithful *internal* signal but not the policy controller. This
+refutes the naive single-mechanism "internal-predicts-behavior" law for prompt-level injection and
+bounds the unification claim to the representational level — genuine capture in these models requires
+weight-level intervention (F1 ablation), not context injection alone. A real **methodological**
+result also lands: the standard substring refusal metric is an invalid behavioral DV across
+injection families (it inflated the flip rate ~18×), which retroactively bounds the behavioral
+readouts in F4/F11/F16. No unification or machine-state claim. (Adversarially reviewed; judge drops
+~10 undecidable items/model, reported. Caveats: n=24 eval/family; single layer/model.)
 
 ---
 
