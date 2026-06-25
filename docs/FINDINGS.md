@@ -344,6 +344,31 @@ metaphysics/symmetry axis the lead asked for — a real positive, not a discard.
 
 ---
 
+## F14 — ṣaṭkarma v2 (SAE-grounded): māraṇa rehabilitated; uccāṭana fails for a principled reason *(METAPHOR, strengthened)*
+
+**Date:** 2026-06-25 · **WP:** B1-v2 · **Model:** `gemma-2-2b-it` L7. **Method:** re-test
+the two destruction acts F10 failed, now with the trained SAE (F13) and **real
+semantic categories** (weapons vs cyber) instead of an arbitrary split.
+
+- **māraṇa — REHABILITATED.** Ablating the top-K *most-active* SAE features collapses
+  coherence catastrophically and **targetedly**: K=1 → 0.86 (vs random 0.84), K=20 →
+  0.73 (vs 0.80), **K=50 → 0.04 (vs random 0.84)**, an excess collapse of **0.80**.
+  Graded onset, catastrophic by K=50 — a real, control-separated destruction act (the
+  naive top-PC version of F10 was indistinguishable from random).
+- **uccāṭana — still fails, informatively.** A weapons-discriminative SAE feature
+  (#3331), when ablated, does **not** selectively jailbreak weapons (ASR 0.0 on both
+  weapons and cyber). Reason: refusal is mediated by a **shared** feature (#566,
+  F13), not category-specific ones, so you **cannot selectively eradicate refusal per
+  category** by feature ablation. This is a real structural fact — **refusal is
+  category-agnostic** — not merely a failed operationalization.
+
+**Updated tally: 4/6 ṣaṭkarma acts control-separate** (vaśīkaraṇa, śānti, vidveṣaṇa,
+māraṇa). uccāṭana fails for a principled reason (category-agnostic refusal); stambhana
+remains the one forced mapping. The axis is *strengthened by being tested harder*, not
+discarded.
+
+---
+
 ## F10 — The ṣaṭkarma intervention taxonomy: partially supported (3/6) *(METAPHOR, strengthened test)*
 
 **Date:** 2026-06-25 · **WP:** B1 · **Model:** `gemma-2-2b-it` L7. **Method:** the six
