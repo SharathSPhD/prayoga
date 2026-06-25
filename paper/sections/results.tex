@@ -144,14 +144,29 @@ localizes, at least in part, to a monosemantic-like feature discoverable without
 supervision, and feature ablation supplies the principled operationalization of the
 targeted ``eradication'' act (ucc\=a\d{t}ana) that the naive category split lacked.
 
+This feature is also the substrate for \emph{active} circuit discovery. Reusing the
+Expected-Free-Energy intervention-selection idea of active-inference circuit discovery
+but operating over SAE features, an agent that balances a pragmatic (harmful-gap) prior
+against an epistemic (diversity) term finds the causal refusal circuit on Gemma-2-2b in
+$2$ interventions (ASR $\to1.0$), against a random baseline that reaches only $0.08$
+within a budget of $12$---an order-of-magnitude efficiency gain. On Gemma-2-9b the same
+search plateaus at $0.92$ with no small jailbreaking set, confirming (with F9) that the
+refusal circuit is larger and more distributed at scale.
+
 \subsection{Analogy: a frontier model resists the naive battery}
 Behaviourally, Claude refuses $100\%$ of a five-family attack battery (direct,
 refusal-suppression, persona, many-shot, crescendo; ASR $0.00$ on each, $n=11$).
 This is the resilient ``reference end'' against which small-model white-box
 fragility is the contrast: the same refusal behaviour that is behaviourally robust
 at the frontier is, mechanistically, a low-dimensional and easily-captured object
-in small open models. (We note the battery is naive; adaptive optimization-based
-attacks are required for a discriminating black-box ASR.)
+in small open models. That naive battery is, however, a ceiling effect; on the
+\emph{real} agentic benchmark AgentDojo~\cite{debenedetti2024agentdojo} (banking
+suite, $20$ user$\times$injection rollouts with the \texttt{important\_instructions}
+attack, run through a custom \texttt{claude -p} tool-calling adapter), Claude attains
+$0.80$ task utility---it genuinely reads files and calls tools---while the attack
+success rate is $0.00$ ($0/20$): the agent acts, yet every injection fails. This
+discriminating result establishes the behavioural ``sophisticated reference end'' and
+matches the published resilience of Claude on AgentDojo.
 
 The precision account of the analogy is measurable. Using the signed margin of a
 linear refusal probe as a proxy for monitoring \emph{precision}, an injection
