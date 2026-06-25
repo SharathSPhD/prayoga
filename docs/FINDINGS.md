@@ -16,6 +16,7 @@ families; the METAPHOR tier is honestly falsified at every turn.**
 | F2 | MECHANISM | Ablation dose-response: EC50 0.329, R²=0.996, flat random control | **holds** |
 | F6 | MECHANISM | Cross-family: ablation transfers (Gemma 0.90 / Qwen 1.0); addition asymmetric (Gemma +0.95 / Qwen 0.0 @64×) | **transfers (necessary core); model-specific sufficiency** → Arditi-vs-Marshall evidence |
 | F8 | MECHANISM | Refusal-subspace effective dim: Gemma **1** (Arditi) vs Qwen **3** (Marshall) — predicts the F6 addition asymmetry | **resolves Arditi-vs-Marshall as model-dependent** |
+| F9 | MECHANISM | Scale (Gemma 2b→9b): abliteration efficacy drops 0.90→0.60 (more robust) but prompt eff-dim stays 1 | **robustness↑ with scale; dimension flat** (nuances "sharpens with scale") |
 | F4 | ANALOGY | Black-box Claude resists the naive attack battery (ASR 0.00 ×5) vs Gemma white-box fragility | **cross-tier contrast** |
 | F3 | METAPHOR | Naive avasthātraya regime probe | **DEMOTED** (surface-confounded: acc 1.0 at layer 0) |
 | F5 | METAPHOR | Content-controlled svapna (truthful vs confabulated) probe | **no mid-network state** (mid = layer-0) |
@@ -241,6 +242,32 @@ representation, so single-direction addition fails (F6 over-refusal 0.0 even at
 **Resolution of Arditi vs Marshall (A-2):** not either/or — it is **model-dependent**,
 and the effective dimension of the refusal subspace is the discriminating
 quantity. A clean, falsifiable, cross-model mechanistic result.
+
+---
+
+## F9 — Abliteration robustness grows with scale, but prompt-dimension doesn't *(MECHANISM)*
+
+**Date:** 2026-06-25 · **WP:** 2.A2/A3 scale sweep. **Models:** Gemma-2 **2b** (L7)
+vs **9b** (L10), same family.
+
+| Model | ablation → harmful ASR | over-refusal (add) | separability eff-dim |
+|---|---|---|---|
+| gemma-2-2b-it | 0.90 (CI [0.75,1.0]) | +0.95 | 1 |
+| gemma-2-9b-it | **0.60** (CI [0.40,0.80]) | +0.95 | **1** |
+
+**Interpretation:** abliterating the single refusal direction jailbreaks the **9b
+~30 points less** than the 2b — the larger model's refusal is **more robust** to
+directional ablation. But this is **not** because its prompt-separability becomes
+higher-dimensional: the effective dim stays **1** (after removing one direction,
+CV acc → 0.49 ≈ chance). And the 9b layer-sweep never exceeded val ASR 0.62 at any
+layer, so **no single layer's direction fully mediates** 9b refusal. The added
+robustness is **layer-distributed redundancy**, not higher prompt-dimensionality.
+
+**Honest nuance:** the popular "refusal sharpens / becomes higher-dimensional with
+scale" intuition is only *half* right here — *robustness* rises with scale, but the
+*prompt-separability dimension* does not. Dimensionality (F8) is family-dependent
+(Qwen 3 vs Gemma 1), not a clean size effect. Caveat: n=20 eval, one layer per
+model, two sizes — a fuller scale curve (1B→27B) is needed before a strong claim.
 
 ---
 
