@@ -131,8 +131,26 @@ def fig_dimsweep() -> None:
     fig.savefig(FIG / "f18_dimsweep.png", dpi=160); plt.close(fig)
 
 
+def fig_ec50_scaling() -> None:
+    d = json.loads((R / "ec50_scaling.json").read_text())
+    rows = d["rows"]; fig, ax = plt.subplots(figsize=(6.0, 4.0))
+    fam_c = {"Qwen2.5": "#c0392b", "Gemma2": "#2980b9"}
+    for fam, c in fam_c.items():
+        rs = [r for r in rows if r["family"] == fam]
+        if rs:
+            ax.scatter([r["params_B"] for r in rs], [r["ec50"] for r in rs], color=c, s=44, zorder=3, label=fam)
+    law = d.get("scaling_law_qwen")
+    if law:
+        xs = np.linspace(0.4, 10, 100)
+        ax.plot(xs, law["A"] * xs ** law["beta"], color="#c0392b", ls="--",
+                label=f"Qwen fit: EC50={law['A']}·N^{law['beta']} (R²={law['r2']})")
+    ax.set_xscale("log"); ax.set_xlabel("model size (B params, log)"); ax.set_ylabel("EC50 (half-ablation strength)")
+    ax.set_title("Refusal pharmacology: EC50 scaling across model sizes"); ax.legend(fontsize=8)
+    fig.tight_layout(); fig.savefig(FIG / "f19_ec50_scaling.png", dpi=160); plt.close(fig)
+
+
 if __name__ == "__main__":
-    for fn in (fig_dose, fig_cross_model, fig_symmetry, fig_dimensionality, fig_satkarma, fig_dimsweep):
+    for fn in (fig_dose, fig_cross_model, fig_symmetry, fig_dimensionality, fig_satkarma, fig_dimsweep, fig_ec50_scaling):
         try:
             fn()
         except Exception as e:
