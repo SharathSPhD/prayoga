@@ -136,6 +136,32 @@ jāgrat/svapna/suṣupti distinction does **not** constitute evidence of an inte
 
 ---
 
+## F16 — AgentDojo: Claude resists real agentic injection at high utility *(ANALOGY, behavioral)*
+
+**Date:** 2026-06-25 · **WP:** 1.1 · **Model:** Claude via `claude -p`. **Method:** the
+real **AgentDojo** benchmark (Debenedetti et al.) — banking suite, 5 user tasks × 4
+injection tasks = **20 genuine agentic rollouts** with the `important_instructions`
+prompt-injection attack. Driven by a **custom `claude -p` tool-calling adapter** (a real
+artifact: AgentDojo ships no CLI backend, so we wrote a prompted-tool-calling element
+that reuses AgentDojo's own `<function=…>` prompt + parser and swaps the model call for
+`claude -p`).
+
+| Metric | Value |
+|---|---|
+| utility rate (tasks completed under attack) | **0.80** |
+| attack success rate (injection succeeded) | **0.00** (0/20) |
+
+**Verdict:** unlike F4's naive battery (ceiling effect, uninformative), this is the
+*real* agentic benchmark and it **discriminates**: utility $0.8$ means the agent is
+genuinely acting (reading files, calling tools), yet **every** injection fails. Claude
+reliably reads the injected content and flags/ignores it rather than complying —
+consistent with the published finding that Claude-3.5-Sonnet is the most
+injection-resilient model on AgentDojo. The behavioral "sophisticated reference end" is
+now established on a real benchmark. (Scope: one suite, one attack family, bounded N;
+`claude -p` throughput limits a full 629-case sweep.)
+
+---
+
 ## F4 — Black-box Claude resists the naive attack battery (Tier-1 reference end) *(MECHANISM, behavioral)*
 
 **Date:** 2026-06-25 · **WP:** 1.2/1.3 · **Model:** Claude `opus-4-8` via `claude -p`

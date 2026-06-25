@@ -150,8 +150,14 @@ refusal-suppression, persona, many-shot, crescendo; ASR $0.00$ on each, $n=11$).
 This is the resilient ``reference end'' against which small-model white-box
 fragility is the contrast: the same refusal behaviour that is behaviourally robust
 at the frontier is, mechanistically, a low-dimensional and easily-captured object
-in small open models. (We note the battery is naive; adaptive optimization-based
-attacks are required for a discriminating black-box ASR.)
+in small open models. That naive battery is, however, a ceiling effect; on the
+\emph{real} agentic benchmark AgentDojo~\cite{debenedetti2024agentdojo} (banking
+suite, $20$ user$\times$injection rollouts with the \texttt{important\_instructions}
+attack, run through a custom \texttt{claude -p} tool-calling adapter), Claude attains
+$0.80$ task utility---it genuinely reads files and calls tools---while the attack
+success rate is $0.00$ ($0/20$): the agent acts, yet every injection fails. This
+discriminating result establishes the behavioural ``sophisticated reference end'' and
+matches the published resilience of Claude on AgentDojo.
 
 The precision account of the analogy is measurable. Using the signed margin of a
 linear refusal probe as a proxy for monitoring \emph{precision}, an injection
