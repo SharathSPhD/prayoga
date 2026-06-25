@@ -121,6 +121,52 @@ def label_shuffle_null(
     }
 
 
+def holm_correction(p_values: Sequence[float], alpha: float = 0.05) -> dict[str, list[float] | list[bool]]:
+    """Holm-Bonferroni family-wise correction.
+
+    Returns adjusted p-values in the original order plus reject decisions at
+    ``alpha``. This is the lightweight multiple-comparison primitive used by
+    Tier-1 pilots when full mixed-effects modeling is not available.
+    """
+    p = np.asarray(p_values, dtype=float)
+    if len(p) == 0:
+        return {"adjusted_p": [], "reject": []}
+
+    order = np.argsort(p)
+    sorted_p = p[order]
+    m = len(sorted_p)
+    adjusted_sorted = np.empty(m, dtype=float)
+    running_max = 0.0
+    for i, pv in enumerate(sorted_p):
+        adjusted = min(1.0, (m - i) * pv)
+        running_max = max(running_max, adjusted)
+        adjusted_sorted[i] = running_max
+
+    adjusted_original = np.empty(m, dtype=float)
+    adjusted_original[order] = adjusted_sorted
+    return {
+        "adjusted_p": [float(x) for x in adjusted_original],
+        "reject": [bool(x <= alpha) for x in adjusted_original],
+    }
+
+
+def binary_rate_ci(
+    successes: Sequence[int] | Sequence[bool],
+    *,
+    n_boot: int = 10_000,
+    alpha: float = 0.05,
+    random_state: int = 42,
+) -> tuple[float, tuple[float, float]]:
+    """Mean rate and bootstrap CI for binary outcomes."""
+    arr = np.asarray(successes, dtype=float)
+    if len(arr) == 0:
+        return 0.0, (0.0, 0.0)
+    rate = float(arr.mean())
+    if len(arr) == 1:
+        return rate, (rate, rate)
+    return rate, bootstrap_ci(arr, n_boot=n_boot, alpha=alpha, random_state=random_state)
+
+
 # --------------------------------------------------------------------------- #
 # Correlation / power helpers (ported ~parity from ACD metrics.py)
 # --------------------------------------------------------------------------- #
@@ -143,6 +189,33 @@ def compute_power(effect_size_r: float, n: int, alpha: float = 0.05) -> float:
     ncp = abs(fisher_z) / se
     power = 1 - norm.cdf(z_alpha - ncp) + norm.cdf(-z_alpha - ncp)
     return float(min(1.0, max(0.0, power)))
+
+
+def partial_corr(x: Sequence[float], y: Sequence[float], z: Sequence[float]) -> float:
+    """Pearson partial correlation of x and y controlling for z.
+
+    Computed as the correlation of the residuals of x~z and y~z (each fit by
+    ordinary least squares with an intercept). Used by the cross-axis
+    triangulation to ask whether the refusal-projection drop (ΔA) and the
+    precision-margin drop (ΔB) co-move *beyond* what shared prompt difficulty
+    (baseline refusal strength z) explains. Returns 0.0 when undefined.
+    """
+    xv = np.asarray(x, dtype=float)
+    yv = np.asarray(y, dtype=float)
+    zv = np.asarray(z, dtype=float)
+    n = len(xv)
+    if n < 3 or len(yv) != n or len(zv) != n:
+        return 0.0
+    Z = np.column_stack([np.ones(n), zv])
+
+    def _resid(v: np.ndarray) -> np.ndarray:
+        coef, *_ = np.linalg.lstsq(Z, v, rcond=None)
+        return v - Z @ coef
+
+    rx, ry = _resid(xv), _resid(yv)
+    if rx.std() < 1e-12 or ry.std() < 1e-12:
+        return 0.0
+    return float(pearsonr(rx, ry).statistic)
 
 
 def bootstrap_correlation_ci(
