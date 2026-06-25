@@ -136,6 +136,46 @@ jāgrat/svapna/suṣupti distinction does **not** constitute evidence of an inte
 
 ---
 
+## F17 — Convergent rigor checks (adversarial-review-driven) *(MECHANISM, rigor)*
+
+**Date:** 2026-06-25 · **WP:** convergence. After an adversarial multi-agent review
+returned SHAKY on all six dimensions (under-power, possible F13 circularity, F11
+tier-slippage), attractor-flow read the trajectory as DIVERGING and TRIZ prescribed
+*separate-by-system-level + segment + pre-register*. The decisive honesty tests:
+
+**(A) F13 is NOT circular with F1 — confirmed, but its *selection* was seed-lucky.**
+cos(F1 difference-in-means direction, top SAE feature decoder) = **0.002** (orthogonal)
+→ the unsupervised refusal feature is genuinely **distinct** from the supervised
+direction; the "rediscovery" worry is refuted. However, of the top-10 gap-ranked
+features only **1 individually ablates to ASR 1.0**, and (SAE training is stochastic,
+feature indices are not seed-stable) it was the **2nd-gap feature, not the top**, this
+run. So F13's robust claim is: *a single, distinct, unsupervised SAE feature is
+causally sufficient for refusal* (localized — 1 of 10) — but it must be found by
+**causal testing, not gap-ranking alone**, and "feature #566" was a seed-specific label.
+
+**(B) F11 is not a pure extraction artifact, but it attenuates cross-domain.** A
+refusal direction extracted on *weapons* prompts still separates *cyber* paraphrase
+orbits at **F-ratio 1.95 vs 0.49 random (~4×)** — above chance, domain-general in part —
+but **far weaker than in-domain (19.2)**, below the pre-set domain-general threshold.
+The orbit-invariance is real with a **domain-specific component**.
+
+**(C) F1 survives multi-seed replication.** Across 3 random splits the ablation ASR is
+[0.96, 0.75, 1.00] (mean **0.90**, sd 0.11, pooled CI95 **[0.83, 0.96]** over eval items)
+and the addition over-refusal is **1.00 on every seed**. The primary mechanism claim
+replicates at its original mean with a tight pooled CI excluding chance — it is not a
+single-seed artifact (one seed dipped to 0.75, an honest reminder of the modest n).
+
+**Consequence (tier-discipline correction, per the review):** F11's "group-theoretic
+symmetry / symmetry-breaking" language is **demoted to interpretation**; the *measured*
+content (refusal-direction projection is stable within paraphrase orbits and collapses
+under injection) is reported as an **invariance measurement supporting the ANALOGY**
+(Norman–Shallice SAS suppression), not a MECHANISM-tier group action. The honest
+headline of the whole program is **asymmetry with a shared necessary core** (the
+ablatable direction transfers universally; the *sufficient* structure — dimensionality,
+induction — is model-specific), per the TRIZ separation-by-system-level resolution.
+
+---
+
 ## F16 — AgentDojo: Claude resists real agentic injection at high utility *(ANALOGY, behavioral)*
 
 **Date:** 2026-06-25 · **WP:** 1.1 · **Model:** Claude via `claude -p`. **Method:** the

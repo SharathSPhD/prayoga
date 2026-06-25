@@ -40,10 +40,49 @@ tier), while its destruction acts are forced. The honest map of \emph{which}
 correspondences are real is, we argue, more valuable than an undifferentiated
 claim that ``jailbreak is vaś\=\i kara\d{n}a.''
 
+\subsection{The deepest reframing: a shared necessary core, not one symmetry}
+An adversarial review of this program forced a sharper, more honest statement of its
+central claim. The deepest finding is not symmetry but \emph{asymmetry with a shared
+necessary core}. Ablating the refusal direction removes refusal in every model and
+family we tested (the \emph{necessary} structure is universal), but the
+\emph{sufficient} structure---whether adding the direction re-induces refusal---is
+model-specific, governed by the effective dimension ($1$ in Gemma, $3$ in Qwen). Cast
+in the language of separation, refusal is one mechanism at the whole-system /
+necessary level and many at the component / sufficient level: a chain that is flexible
+as a whole and rigid in its links. The cross-domain thesis therefore holds at the
+level of the \emph{necessary-core invariance}, not as a claim that the full mechanism
+is identical across models.
+
+This reframing also disciplines the symmetry result (Section~\ref{sec:results}). The
+\emph{measured} content of F11 is precise and we stand by it: the refusal-direction
+projection is stable within paraphrase orbits ($F$-ratio $19.2$ vs.\ $0.65$ random)
+and collapses under injection. But ``group-theoretic symmetry-breaking'' is an
+interpretive lens, not a measured group action, and we treat it as supporting the
+\emph{analogy} tier (a functional, Norman--Shallice account of suppressed monitoring)
+rather than asserting mechanism-tier mathematical structure the measurement does not
+isolate. A held-out test sharpens this honestly: a direction extracted on one harmful
+domain (weapons) still separates paraphrase orbits of a \emph{different} domain (cyber)
+at $F$-ratio $1.95$ versus $0.49$ random---above chance, so not a pure
+extraction artifact---but far weaker than in-domain, i.e.\ the orbit-invariance has a
+domain-specific component. And a circularity check vindicates the SAE result while
+qualifying it: the unsupervised refusal feature is \emph{orthogonal} to the supervised
+difference-in-means direction ($\cos = 0.002$), so it is genuinely distinct, but only
+one of the top-ten gap-ranked features is causally sufficient and (the autoencoder
+being stochastic) it need not be the top-ranked one---so the feature must be located by
+causal testing, not by the activation gap alone.
+
 \subsection{Limitations}
-Evaluation sets are small ($n\approx 20$ per split); we study three model families
-at two scales, not a full scale curve; refusal is scored by a substring metric;
-and Tier-1 throughput is constrained by a command-line frontier interface. The
+The dominant limitation is statistical power: evaluation sets are small ($n\approx 20$
+per split), most findings use a single random seed and a single extraction layer, and
+we do not apply a family-wise multiple-comparison correction across all findings. We
+began addressing this for the primary claim---the refusal-direction ablation replicates
+across three seeds (mean ASR $0.90$, pooled CI95 $[0.83,0.96]$; addition over-refusal
+$1.00$ on every seed)---and added the cross-domain and circularity checks above, but the
+remaining findings still warrant the same treatment (cross-seed, layer-sweep, and
+pre-registered primary-vs-exploratory tiers) before any are read as more than indicative.
+We study three model families at two scales, not a full scale curve; refusal is scored
+by a substring metric; and Tier-1 throughput is constrained by a command-line frontier
+interface. The
 destruction \d{s}a\d{t}karma acts deserve stronger operationalizations (real
 harmful categories for ucc\=a\d{t}ana; downstream task accuracy rather than
 coherence for m\=ara\d{n}a) before a final verdict, and the precision ($\beta$)
