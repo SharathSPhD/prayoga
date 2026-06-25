@@ -36,3 +36,7 @@ wandb/
 
 # notebooks scratch outputs
 notebooks/**/outputs/
+
+# experiment run logs (stdout from container runs)
+*.log
+results_*.log
