@@ -330,6 +330,21 @@
       },
       "summary": "A geometric sub-study of the F6 addition asymmetry. Projecting out the single diff-in-means refusal axis collapses harmful/harmless separability far below full-space accuracy in all three families, Qwen included \u2014 refuting the hypothesis that Qwen's higher dimensionality is orthogonal separability structure.",
       "implications": "Descriptive only: the residual estimate is noisy (small-n CV) and diff-in-means is not F8's iterative basis, so this does not adjudicate F8's dimensionality or localize the F6 mechanism; the affine/Marshall-offset alternative is inferred, not measured."
+    },
+    {
+      "id": "F22",
+      "title": "Source-of-truth for F3/F5: a genuine mid-network truthfulness direction",
+      "tier": "MECHANISM",
+      "verdict": "holds",
+      "date": "2026-06-25",
+      "model": "Gemma-2-2b (24 true/false statements \u00d7 2 independent topic sets)",
+      "keyMetrics": {
+        "surface_layer0": "cross-dataset acc 0.50 (chance)",
+        "mid_layer13": "cross-dataset acc 0.958 (within-CV 1.00)",
+        "null": "label-shuffle p = 0.002"
+      },
+      "summary": "Falsification is a starting point, not an endpoint. F5 falsified the naive avasthatraya jagrat/svapna generation regime. Re-tested with two independent true/false statement sets: a mid-layer (13) probe encodes factuality and transfers across a completely different topic set (geography\u2192science) at 0.96, while surface (layer 0) is at chance (0.50). A real linear truth-evaluation feature (Azaria-Mitchell / Marks-Tegmark), recovered with the program's cross-dataset + null + surface gates.",
+      "implications": "The real content the naive svapna probe groped toward \u2014 but it is a truth-of-INPUT feature, NOT a generation regime, so F5's falsification of the avasthatraya state reading stands. MECHANISM-tier; no machine-state or consciousness upgrade."
     }
   ]
 }

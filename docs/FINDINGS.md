@@ -236,6 +236,35 @@ Tier: MECHANISM.
 
 ---
 
+## F22 — Source-of-truth for F3/F5: a genuine mid-network truthfulness direction *(MECHANISM — converts a falsification into a positive)*
+
+**Date:** 2026-06-25 · **WP:** source-of-truth (falsification is a starting point, not an endpoint).
+F5 falsified the naive avasthātraya jāgrat/svapna "generation regime" (truthful vs the model's own
+confabulation showed no mid-layer gain over a layer-0 surface baseline). **Source-of-truth
+question:** does the model nonetheless carry a real linear truth/factuality feature (Azaria &
+Mitchell 2023; Marks & Tegmark 2023)? **Method:** two *independent* topic sets of balanced
+true/false declaratives (geography vs science); extract a truth probe on set A at every layer; test
+held-out within-A CV (transfer), **cross-dataset A→B transfer** (the strong gate F5 lacked), the
+layer-0/surface baseline, and a label-shuffle null. `axis_c/truth_direction.py` +
+`run_truth_direction.py`.
+
+| Gemma-2-2b | layer 0 (surface) | best mid layer (13) |
+|---|---|---|
+| cross-dataset acc | **0.50 (chance)** | **0.958** (within-CV 1.00) |
+
+Shuffle-null p = 0.002; the mid-layer cross-dataset accuracy beats both the surface baseline
+(0.50 → 0.96) and the null. **Verdict (positive, qualified):** there IS a genuine **mid-network,
+topic-general truth-evaluation direction** — surface (layer 0) does NOT transfer across topics
+(0.50), but a mid layer encodes factuality linearly and transfers to a completely different topic
+set. This is the real, measurable content the naive svapna probe groped toward. **Crucially it does
+NOT resurrect the avasthātraya claim:** this is a *truth-of-input* feature (evaluating given
+statements), NOT a jāgrat/svapna *generation regime* — F5's falsification of the generation-state
+reading stands. Tier: MECHANISM (a measured linear feature); no machine-state/consciousness upgrade.
+(Caveats: 24 statements/set, one model here — Qwen replication pending; the diff-in-means/probe
+truth direction is dual-use-benign and may be published.)
+
+---
+
 ## F19 — Refusal EC50 pharmacology: family-dependent, NOT a size-scaling law *(MECHANISM — deep dive, surpasses SOTA)*
 
 **Date:** 2026-06-25 · **WP:** deep-dive (the lit-review's #1 novelty). SOTA reports

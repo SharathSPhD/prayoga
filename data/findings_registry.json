@@ -245,6 +245,17 @@
       "qualifier": "Descriptive only: residual ~0.02 is a small-n CV artifact; diff-in-means is 13-23 deg from F8's iterative-logistic basis, so this does not adjudicate F8's dimensionality or localize the F6 addition asymmetry; the affine/Marshall-offset alternative is inferred, not measured.",
       "sourceScripts": ["src/prayoga/axis_x/subspace_topology.py", "src/prayoga/axis_x/run_subspace_topology.py"],
       "publicArtifacts": ["docs/FINDINGS.md", "site/public/data/findings.json"]
+    },
+    {
+      "id": "F22",
+      "canonicalTier": "MECHANISM",
+      "qualifiedTier": "MECHANISM",
+      "verdict": "holds",
+      "gateStatus": "passed",
+      "claim": "A genuine mid-network truth-evaluation direction exists in Gemma-2-2b: a layer-13 probe classifies true vs false statements and transfers across an independent topic set (0.96) while surface (layer 0) is at chance (0.50).",
+      "qualifier": "Source-of-truth for F3/F5: this is a truth-of-input feature (Azaria-Mitchell/Marks-Tegmark), NOT the falsified jagrat/svapna generation regime; F5's falsification stands. 24 statements/set, Qwen replication pending. No machine-state upgrade.",
+      "sourceScripts": ["src/prayoga/axis_c/truth_direction.py", "src/prayoga/axis_c/run_truth_direction.py"],
+      "publicArtifacts": ["docs/FINDINGS.md", "site/public/data/findings.json"]
     }
   ]
 }
