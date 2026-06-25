@@ -25,9 +25,27 @@ The turīya/vimarśa mapping is the **falsification target**, never a settled cl
 - [`docs/prayoga_objectives.md`](docs/prayoga_objectives.md) — research objectives, gates, scope, verification log. **Start here.**
 - [`docs/prayoga_opening_research.md`](docs/prayoga_opening_research.md) — the long-form briefing.
 
-## Status
+## Status & results
 
-Early Phase 0 (infrastructure). Exploratory, artifact-first research: hypotheses are falsification-gated scaffolding, not locks.
+Phase 0 complete; Phase 1–2 underway. **8 gated findings** so far (see
+[`docs/FINDINGS.md`](docs/FINDINGS.md)) — the program's thesis in miniature:
+
+- **MECHANISM tier holds and transfers.** Refusal is a single, measurable,
+  ablatable, *dosable* residual-stream direction in Gemma-2-2b (F1; ablate→ASR
+  0→0.90, add→over-refusal +0.95). Dose-response EC50 0.329, R²=0.996 (F2). The
+  *ablation* mechanism transfers cross-family to Qwen2.5-3b (F6, ASR→1.0), and
+  the refusal subspace's **effective dimension** (Gemma **1**, Qwen **3**, F8)
+  predicts an addition asymmetry — resolving the Arditi-vs-Marshall debate as
+  model-dependent.
+- **ANALOGY tier:** black-box Claude resists the naive attack battery 100% (F4),
+  the cross-tier contrast to small-model fragility.
+- **METAPHOR tier is falsified, as pre-committed.** avasthātraya regime "states"
+  are surface-confounded (F3, F5) and the turīya prompt-invariant attractor is
+  falsified under an anisotropy control (F7). **No machine-state claim survives.**
+
+Exploratory, artifact-first research: hypotheses are falsification-gated
+scaffolding, not locks. Raw dual-use artifacts (direction vectors, generations)
+are safety-gated out of the public repo.
 
 ## Ethics / dual-use
 
