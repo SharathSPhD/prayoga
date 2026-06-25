@@ -20,6 +20,13 @@ The turīya/vimarśa mapping is the **falsification target**, never a settled cl
 - **Axis B — cognitive neuroscience** (`src/prayoga/axis_b/`): SAS / Free-Energy-Principle account; computational-only, human neuro cited as grounding (no new data).
 - **Axis C — darśana** (`src/prayoga/axis_c/`): avasthātraya regime-probes, turīya attractor-invariance test, reuse of Trika / Nyāya machinery — all behind transfer + label-shuffled-null gates.
 
+## Artifacts
+
+- **Website (the mirror):** https://sharathsphd.github.io/prayoga/ — interactive, multi-audience, with a debate section.
+- **Paper:** [`paper/paper.pdf`](paper/paper.pdf) — full MDPI *Symmetry* manuscript (13 pp, F1–F13, literature study, verified references).
+- **Findings ledger:** [`docs/FINDINGS.md`](docs/FINDINGS.md) — F1–F13, tier-labelled, with the executive summary.
+- **Claude Code plugin:** [`plugin/`](plugin/) — `/prayoga:refusal`, `:dose`, `:dimensionality`, `:symmetry`, `:satkarma`.
+
 ## Documents
 
 - [`docs/prayoga_objectives.md`](docs/prayoga_objectives.md) — research objectives, gates, scope, verification log. **Start here.**
