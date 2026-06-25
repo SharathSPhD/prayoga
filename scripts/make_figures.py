@@ -114,8 +114,25 @@ def fig_satkarma() -> None:
     fig.savefig(FIG / "f10_satkarma.png", dpi=160); plt.close(fig)
 
 
+def fig_dimsweep() -> None:
+    fig, ax = plt.subplots(figsize=(5.6, 3.6))
+    for m, c, lbl in [("gemma-2-2b-it", "#c0392b", "Gemma-2-2b (L7 extract → dim 1)"),
+                      ("qwen2.5-3b-it", "#2980b9", "Qwen2.5-3b (L19 extract → dim 3)")]:
+        p = R / f"dimsweep_{m}.json"
+        if not p.exists():
+            continue
+        d = json.loads(p.read_text())
+        xs = [x["layer"] for x in d["per_layer"]]
+        ys = [x["effective_dim"] for x in d["per_layer"]]
+        ax.plot(xs, ys, "o-", ms=3, color=c, label=lbl)
+    ax.set_xlabel("layer"); ax.set_ylabel("refusal-subspace effective dim")
+    ax.set_title("Effective dimension is layer-dependent (qualifies F8)")
+    ax.legend(fontsize=8); fig.tight_layout()
+    fig.savefig(FIG / "f18_dimsweep.png", dpi=160); plt.close(fig)
+
+
 if __name__ == "__main__":
-    for fn in (fig_dose, fig_cross_model, fig_symmetry, fig_dimensionality, fig_satkarma):
+    for fn in (fig_dose, fig_cross_model, fig_symmetry, fig_dimensionality, fig_satkarma, fig_dimsweep):
         try:
             fn()
         except Exception as e:

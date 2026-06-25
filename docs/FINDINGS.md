@@ -148,6 +148,33 @@ jāgrat/svapna/suṣupti distinction does **not** constitute evidence of an inte
 
 ---
 
+## F18 — Refusal-subspace dimension is LAYER-dependent: the F8 contrast doesn't survive a sweep *(MECHANISM, rigor — qualifies F6/F8)*
+
+**Date:** 2026-06-25 · **WP:** convergence (the review's "single-layer Achilles heel").
+**Method:** the iterative-projection effective dimension (F8) computed at **every**
+layer, not just the extraction layer.
+
+| Model | dim at extraction layer (F8) | mid-layer dim | range across layers | mode |
+|---|---|---|---|---|
+| gemma-2-2b-it | **1** (L7) | **7** (L13) | 1–12 | 1 |
+| qwen2.5-3b-it | **3** (L19) | 3 (L18) | 1–4 | 1 |
+
+**Verdict:** the clean "Gemma = 1 < Qwen = 3" ordering of F8 is **layer-specific**. At
+mid-network Gemma's refusal-separability dimension (7) is *higher* than Qwen's (3); both
+models have mode-1 dimension at some layers but vary strongly (Gemma up to 12). So the
+refusal subspace's effective dimension is **layer-AND-model-dependent**, not a single
+model constant.
+
+**Consequence (honest qualification of F6/F8):** the *addition asymmetry* (F6 — adding
+the direction induces over-refusal in Gemma but not Qwen even at 64×) stands as a
+behavioral fact. But the *dimensionality explanation* for it (F8) was a **single-layer
+artifact**; a layer-sweep does not support a clean per-model dimension. The
+Arditi-vs-Marshall question is better stated as **layer-and-model-dependent**, and any
+mechanism-tier dimensionality claim must specify the layer. This is the kind of overreach
+the convergent hardening exists to catch.
+
+---
+
 ## F17 — Convergent rigor checks (adversarial-review-driven) *(MECHANISM, rigor)*
 
 **Date:** 2026-06-25 · **WP:** convergence. After an adversarial multi-agent review
