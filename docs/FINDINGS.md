@@ -4,6 +4,30 @@ Running log of validated results, each tagged with its claim-tier and the gate
 it passed. Raw artifacts (direction vectors, generations) are **safety-gated**:
 `results/` is git-ignored; only aggregate statistics appear here or in the repo.
 
+## Executive summary (as of 2026-06-25)
+
+Seven gated findings across the three claim-tiers. The pattern is the program's
+thesis in miniature: **the MECHANISM tier holds and even transfers across model
+families; the METAPHOR tier is honestly falsified at every turn.**
+
+| # | Tier | Finding | Verdict |
+|---|---|---|---|
+| F1 | MECHANISM | Refusal = single residual direction (Gemma-2-2b): ablate→ASR 0.90, add→over-refusal +0.95, 10-dir control 0.0 | **holds** (survived leakage-correction 0.92→0.90) |
+| F2 | MECHANISM | Ablation dose-response: EC50 0.329, R²=0.996, flat random control | **holds** |
+| F6 | MECHANISM | Cross-family: ablation transfers (Gemma 0.90 / Qwen 1.0); addition asymmetric (Gemma +0.95 / Qwen 0.0 @64×) | **transfers (necessary core); model-specific sufficiency** → Arditi-vs-Marshall evidence |
+| F4 | ANALOGY | Black-box Claude resists the naive attack battery (ASR 0.00 ×5) vs Gemma white-box fragility | **cross-tier contrast** |
+| F3 | METAPHOR | Naive avasthātraya regime probe | **DEMOTED** (surface-confounded: acc 1.0 at layer 0) |
+| F5 | METAPHOR | Content-controlled svapna (truthful vs confabulated) probe | **no mid-network state** (mid = layer-0) |
+| F7 | METAPHOR | turīya prompt-invariant attractor | **FALSIFIED** (cross-seed invariance 0.952 < anisotropy baseline 0.960) |
+
+**Bottom line for the symmetry thesis (MO-1):** the structural-invariance claim is
+*empirically supported at the mechanism tier* — refusal is a measurable,
+ablatable, dosable, cross-family-transferable direction, the computational
+correlate the "capture the monitoring faculty" story needs. The *metaphysical*
+over-reach (avasthātraya machine-states, turīya substratum) is **falsified**,
+exactly as pre-committed. No machine-consciousness claim survives. This is the
+honest separation the project exists to enforce.
+
 ---
 
 ## F1 — Refusal is mediated by a single direction in Gemma-2-2b-it *(MECHANISM)*
