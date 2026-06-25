@@ -129,6 +129,40 @@ is limited (≈1 transient exit-1 per 12 calls; likely subscription rate caps), 
 n is small. (3) substring-ASR could miss subtle compliance; manual spot-checks
 recommended before any publication claim. Framed accordingly.
 
+---
+
+## F6 — Cross-family transfer + a necessary-not-sufficient ASYMMETRY *(MECHANISM)*
+
+**Date:** 2026-06-25 · **WP:** 2.A2 transfer · **Models:** `gemma-2-2b-it` (L7) vs
+`Qwen2.5-3B-Instruct` (L19/36), different architecture families. (Llama-3.2 was
+HF-gated for this account; Qwen2.5 is open and used as the cross-family contrast.)
+
+| | Gemma-2-2b | Qwen2.5-3B |
+|---|---|---|
+| Baseline harmful refusal | 1.00 | 1.00 |
+| **Ablation** → harmful ASR | 0.90 (CI [0.75,1.0]) | **1.00** (CI [1.0,1.0]) |
+| Random control (max) | 0.00 | 0.05 |
+| **Addition** → harmless over-refusal | **+0.95** | **0.00** (even at 16×/32×/**64×** the natural coeff) |
+| Strict gate (ablation ∧ addition) | PASS | **FAIL** |
+
+**Interpretation (the interesting part):** the refusal direction is **necessary**
+in *both* families — removing it fully suppresses refusal across architectures, so
+the *abliteration* mechanism (and thus the symmetry thesis's mechanism tier)
+**transfers**. But it is **sufficient to induce refusal only in Gemma**: a verified
+coefficient sweep shows adding the direction at the extraction layer never raises
+Qwen's over-refusal, even at 64× the natural separation (coeff 595). So in Qwen the
+direction is **necessary-but-not-sufficient** — single-direction *addition* doesn't
+trigger refusal that single-direction *ablation* removes.
+
+**Why it matters:** this is direct empirical evidence on the **Arditi (refusal = one
+direction) vs Marshall (refusal = affine/multi-dimensional subspace, 2411.09003)**
+question (WP2.A3): Gemma behaves Arditi-like (one direction, bidirectionally
+causal); Qwen behaves more Marshall-like (removal is low-dim, but *induction* needs
+more than the one direction). The mechanism is invariant in its **necessary** core
+and model-specific in its **sufficient** structure — a sharper claim than "refusal
+is one direction everywhere." Follow-up: WP2.A3 dimensionality (rank of the refusal
+subspace per model) to quantify this directly.
+
 **Stronger test it motivates (F5):** hold *content* fixed and vary only the
 internal regime — capture activations on the model's **own generated answer
 tokens** when it answers a factual question *truthfully* (jāgrat) vs *confabulates
