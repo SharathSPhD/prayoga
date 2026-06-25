@@ -335,3 +335,16 @@ Azaria--Mitchell / Marks--Tegmark truthfulness direction under the program's str
 cross-dataset and surface gates. Crucially it is a feature of \emph{input} factuality, not
 a generation regime, so the avasth\=atraya state reading remains falsified; the positive
 result is reported at the mechanism tier with no machine-state upgrade.
+
+Applying the same discipline to the cross-family \emph{addition asymmetry} (refusal
+addition succeeds in Gemma but was reported to fail in Qwen even at $64\times$) overturns
+its interpretation. Two geometric explanations fail---removing the diff-in-means axis
+collapses separability in all families, and the alignment $\cos(\hat d, w)$ between that
+axis and the probe normal is high everywhere and \emph{highest} in Qwen ($0.91$). A
+coefficient sweep gives the real answer: adding the single direction at coefficient $16$
+induces clean, inspection-verified over-refusal in Qwen ($+1.0$), while coefficient $64$
+pushes activations off-distribution into incoherent text (scored as non-refusal). The
+``Qwen addition fails'' result was thus a dose-calibration artifact, not model-specific
+insufficiency; single-direction addition is sufficient in both families at the appropriate
+coefficient, strengthening the representational-level unification while F20 bounds it
+behaviourally.

@@ -49,7 +49,19 @@ model? (b) **Qwen addition sweep** — does ANY (layer, coefficient) make adding
 in Qwen, or is single-direction addition genuinely insufficient (Marshall-like)? Converge: locate the
 asymmetry in the affine geometry / a (layer,coeff) map, not hand-wave it. `axis_a/run_affine.py`.
 
-## Status
-- S1 truthfulness direction: implement + GPU run on Gemma-2-2b (+Qwen).
-- S3 Marshall affine + Qwen addition sweep: implement + GPU run.
-- S2 attractor basins: implement if budget allows (embedding-based, cheaper).
+## Results (converged)
+- **S1 → F22 (positive).** Gemma-2-2b has a genuine mid-layer (13) truth-evaluation direction:
+  cross-dataset transfer 0.96 vs layer-0 surface 0.50, null p=0.002. A real linear feature, NOT the
+  falsified generation regime (F5 stands).
+- **S3 → F23 (overturns F6).** Both geometric explanations of the F6 addition asymmetry were
+  refuted (F21 separability; cos(d̂,w) is high in all, highest in Qwen). The coefficient sweep found
+  the truth: Qwen single-direction addition induces genuine over-refusal at coeff 16 (+1.0,
+  verified) but produces off-distribution garbage at 64 — so F6's "Qwen addition fails at 64×" was a
+  dose artifact. Sufficiency holds in BOTH families; the asymmetry was uncalibrated dosing.
+- **S2 → F24 (modest).** Self-paraphrase has stable per-seed fixed points (0.994) but only a weak
+  semantic-basin signal (gap 0.045, below threshold); anisotropy-dominated. F7 stands; no clean
+  basins either.
+
+Net: two falsifications (F5 state, F6 asymmetry) yielded genuine source-of-truth corrections — a real
+truthfulness direction, and the dose-artifact overturn of the addition asymmetry. F7 yielded a modest
+honest characterization. All gated, all tier-labelled, no machine-state upgrades.

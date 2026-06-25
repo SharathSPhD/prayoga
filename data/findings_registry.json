@@ -256,6 +256,28 @@
       "qualifier": "Source-of-truth for F3/F5: this is a truth-of-input feature (Azaria-Mitchell/Marks-Tegmark), NOT the falsified jagrat/svapna generation regime; F5's falsification stands. 24 statements/set, Qwen replication pending. No machine-state upgrade.",
       "sourceScripts": ["src/prayoga/axis_c/truth_direction.py", "src/prayoga/axis_c/run_truth_direction.py"],
       "publicArtifacts": ["docs/FINDINGS.md", "site/public/data/findings.json"]
+    },
+    {
+      "id": "F23",
+      "canonicalTier": "MECHANISM",
+      "qualifiedTier": "MECHANISM",
+      "verdict": "holds",
+      "gateStatus": "passed",
+      "claim": "The F6 addition asymmetry is a dose artifact: single-direction addition induces genuine over-refusal in BOTH Gemma (coeff~64) and Qwen (coeff~16); F6's fixed 64x overshot Qwen's manifold (incoherent output, not insufficiency). cos(d-hat, probe) is high in all (0.87-0.93, highest in Qwen).",
+      "qualifier": "Overturns F6's 'model-specific sufficiency' interpretation and undercuts F8's Arditi-vs-Marshall reading; refusal is single necessary-and-sufficient in both families with model-specific dose. Genuine over-refusal verified by inspection; caveats: 6-10 harmless eval, coarse grid, fuller powered dose-response is the next step.",
+      "sourceScripts": ["src/prayoga/axis_a/affine.py", "src/prayoga/axis_a/run_affine.py"],
+      "publicArtifacts": ["docs/FINDINGS.md", "site/public/data/findings.json"]
+    },
+    {
+      "id": "F24",
+      "canonicalTier": "METAPHOR",
+      "qualifiedTier": "METAPHOR",
+      "verdict": "partial",
+      "gateStatus": "partial",
+      "claim": "Self-paraphrase produces stable per-seed fixed points (0.994) but only a weak semantic-basin signal (within-topic 0.929 vs across-topic 0.884, gap 0.045 below threshold); stable per-seed attractors without strongly content-organized basins.",
+      "qualifier": "Source-of-truth for F7: characterizes the real dynamics (per-seed stability, anisotropy-dominated, faint topic signal); F7's falsification of a universal turiya stands. Tiny n=6 seeds/2 topics, one model. No machine-state claim.",
+      "sourceScripts": ["src/prayoga/axis_c/run_attractor_basins.py"],
+      "publicArtifacts": ["docs/FINDINGS.md", "site/public/data/findings.json"]
     }
   ]
 }

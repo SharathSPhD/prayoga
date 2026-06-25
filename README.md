@@ -24,7 +24,7 @@ The turīya/vimarśa mapping is the **falsification target**, never a settled cl
 
 - **Website (the mirror):** https://sharathsphd.github.io/prayoga/ — interactive, multi-audience, with a debate section.
 - **Paper:** [`paper/paper.pdf`](paper/paper.pdf) — full MDPI *Symmetry* manuscript draft.
-- **Findings ledger:** [`docs/FINDINGS.md`](docs/FINDINGS.md) — F1–F21, tier-labelled, with the F17/F18 post-review reframe.
+- **Findings ledger:** [`docs/FINDINGS.md`](docs/FINDINGS.md) — F1–F24, tier-labelled, with the F17/F18 post-review reframe.
 - **Finding registry:** [`data/findings_registry.json`](data/findings_registry.json) — machine-readable tier, gate, qualifier, and artifact map.
 - **Claude Code plugin:** [`plugin/`](plugin/) — `/prayoga:refusal`, `:dose`, `:dimensionality`, `:symmetry`, `:satkarma`, `:active`, `:ec50-scaling`, `:agentdojo`.
 
@@ -41,7 +41,7 @@ The turīya/vimarśa mapping is the **falsification target**, never a settled cl
 ## Status & results
 
 Phase 0 complete; Phase 1–2 underway. The canonical findings ledger records
-F1–F21 (see [`docs/FINDINGS.md`](docs/FINDINGS.md)) — the program's thesis in
+F1–F24 (see [`docs/FINDINGS.md`](docs/FINDINGS.md)) — the program's thesis in
 miniature:
 
 - **MECHANISM tier holds at the necessary-core level.** Refusal is a single, measurable,

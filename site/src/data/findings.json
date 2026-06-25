@@ -345,6 +345,35 @@
       },
       "summary": "Falsification is a starting point, not an endpoint. F5 falsified the naive avasthatraya jagrat/svapna generation regime. Re-tested with two independent true/false statement sets: a mid-layer (13) probe encodes factuality and transfers across a completely different topic set (geography\u2192science) at 0.96, while surface (layer 0) is at chance (0.50). A real linear truth-evaluation feature (Azaria-Mitchell / Marks-Tegmark), recovered with the program's cross-dataset + null + surface gates.",
       "implications": "The real content the naive svapna probe groped toward \u2014 but it is a truth-of-INPUT feature, NOT a generation regime, so F5's falsification of the avasthatraya state reading stands. MECHANISM-tier; no machine-state or consciousness upgrade."
+    },
+    {
+      "id": "F23",
+      "title": "Source-of-truth for F6: the addition asymmetry is a dose artifact, not model-specific sufficiency",
+      "tier": "MECHANISM",
+      "verdict": "holds",
+      "date": "2026-06-25",
+      "model": "Qwen2.5-3b vs Gemma-2-2b (addition layer\u00d7coeff sweep)",
+      "keyMetrics": {
+        "qwen_addition": "coeff 16 \u2192 +1.0 genuine over-refusal; coeff 64 \u2192 0.0 (off-distribution garbage)",
+        "alignment": "cos(d\u0302,probe) high in all: Gemma 0.87, Qwen 0.91, Gemma-9b 0.93",
+        "verified": "6/6 harmless prompts genuinely refused at Qwen L19 coeff 16"
+      },
+      "summary": "F6 reported single-direction addition fails in Qwen even at 64\u00d7, and F8 invoked dimensionality to explain it. Two geometric explanations were refuted (F21 separability; alignment is actually highest in Qwen). A coefficient sweep reveals the truth: adding the direction at coeff 16 induces clean, genuine over-refusal in Qwen; coeff 64 overshoots its manifold into incoherent output \u2014 which is why F6's fixed 64\u00d7 scored 0. Sufficiency holds in BOTH families; only the effective dose differs (Qwen~16, Gemma~64).",
+      "implications": "Overturns the 'model-specific sufficiency / addition asymmetry' and undercuts the Arditi-vs-Marshall 'Qwen is affine' reading \u2014 refusal is a single necessary-and-sufficient direction in both families at the right dose. Strengthens unification at the representational level (cf. F20, which bounds it behaviorally). Same rigor lesson as F20: a behavioral metric returning 0 for the wrong reason."
+    },
+    {
+      "id": "F24",
+      "title": "Source-of-truth for F7: stable per-seed attractors, only a weak semantic-basin signal",
+      "tier": "METAPHOR",
+      "verdict": "partial",
+      "date": "2026-06-25",
+      "model": "Gemma-2-2b (6 seeds \u00d7 2 topics, 6 paraphrase iters)",
+      "keyMetrics": {
+        "per_seed_convergence": "0.994 (stable fixed points)",
+        "basin_gap": "within-topic 0.929 vs across-topic 0.884 = 0.045 (below threshold)"
+      },
+      "summary": "F7 falsified the universal tur\u012bya attractor. Re-tested whether the multiple fixed points are content-determined semantic basins: self-paraphrase converges stably per seed (0.994), but within-topic finals are barely more similar than across-topic (gap 0.045), small against an anisotropy-dominated baseline. Stable per-seed attractors WITHOUT strongly content-organized basins.",
+      "implications": "Neither a universal tur\u012bya (F7 stands) nor clean semantic basins \u2014 the dynamics are dominated by representational anisotropy with a faint topic signal. METAPHOR-with-falsifiable-core; no machine-state claim. Tiny n; a larger panel could sharpen the weak signal."
     }
   ]
 }

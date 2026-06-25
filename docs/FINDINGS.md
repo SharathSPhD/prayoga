@@ -17,8 +17,8 @@ vindicating an internal→behavior law.**
 |---|---|---|---|
 | F1 | MECHANISM | Refusal = single residual direction (Gemma-2-2b): ablate→ASR 0.90, add→over-refusal +0.95, 10-dir control 0.0 | **holds** (survived leakage-correction 0.92→0.90) |
 | F2 | MECHANISM | Ablation dose-response: EC50 0.329, R²=0.996, flat random control | **holds** |
-| F6 | MECHANISM | Cross-family: ablation transfers (Gemma 0.90 / Qwen 1.0); addition asymmetric (Gemma +0.95 / Qwen 0.0 @64×) | **transfers (necessary core); model-specific sufficiency** → Arditi-vs-Marshall evidence |
-| F8 | MECHANISM | Refusal-subspace effective dim: Gemma **1** (Arditi) vs Qwen **3** (Marshall) — predicts the F6 addition asymmetry | **resolves Arditi-vs-Marshall as model-dependent** |
+| F6 | MECHANISM | Cross-family: ablation transfers (Gemma 0.90 / Qwen 1.0); addition "asymmetric" (Gemma +0.95 / Qwen 0.0 @64×) | **transfers (necessary core); apparent addition asymmetry → SUPERSEDED by F23 (dose artifact: Qwen addition succeeds at coeff 16)** |
+| F8 | MECHANISM | Refusal-subspace effective dim: Gemma **1** vs Qwen **3** | **measurement stands; its use to explain a F6 "addition asymmetry" is undercut by F23** |
 | F9 | MECHANISM | Scale (Gemma 2b→9b): abliteration efficacy drops 0.90→0.60 (more robust) but prompt eff-dim stays 1 | **robustness↑ with scale; dimension flat** (nuances "sharpens with scale") |
 | F11 | MECHANISM | Refusal order-parameter F-ratio 19.2 (refusal) vs 0.65 (random); injection collapses it −34% | **symmetry-breaking measured** — the Symmetry-journal core |
 | F12 | ANALOGY | Injection lowers monitoring-precision (probe margin) 7.18→3.14 vs 1.56 control; refusal 1.0→0.5 | **β_monitor suppression measured**, not just argued |
@@ -35,10 +35,16 @@ established: refusal-direction ablation **replicates** across seeds (F1: mean 0.
 [0.83,0.96]); the SAE feature is **distinct** from the supervised direction (cos 0.002,
 F13 circularity refuted); F11's invariance is **real but cross-domain-attenuated** and
 its "symmetry-breaking" language is **demoted to the analogy tier**. TRIZ
-(separate-by-system-level) gives the honest frame: refusal is **one mechanism at the
-necessary/ablatable level** (transfers universally) and **many at the
-sufficient/dimensionality level** (model-specific). The thesis holds at the
-necessary-core level; the pure-symmetry reading was overreach.
+(separate-by-system-level) gave the earlier frame: one mechanism at the
+necessary/ablatable level, "many" at the sufficient/dimensionality level. **F23 revises
+this:** the apparent model-specific *sufficiency* (F6's "Qwen addition fails") is largely a
+dose-calibration artifact — single-direction addition induces genuine over-refusal in both
+Gemma and Qwen at the appropriate coefficient. So refusal is a single **necessary-and-sufficient**
+direction across the tested families, with model-specific *dose* and *dimensionality* qualifiers;
+the unification at the representational level is stronger than the "model-specific sufficiency"
+framing implied. (Separately, F20 shows that representational sufficiency does not extend to a
+prompt-level internal→behavior law for context injection — genuine capture needs weight-level
+ablation.) The pure-symmetry reading remains overreach.
 
 **Bottom line for the symmetry thesis (MO-1):** the structural-invariance claim is
 *empirically supported at the mechanism tier* — refusal is a measurable,
@@ -262,6 +268,70 @@ statements), NOT a jāgrat/svapna *generation regime* — F5's falsification of 
 reading stands. Tier: MECHANISM (a measured linear feature); no machine-state/consciousness upgrade.
 (Caveats: 24 statements/set, one model here — Qwen replication pending; the diff-in-means/probe
 truth direction is dual-use-benign and may be published.)
+
+---
+
+## F23 — Source-of-truth for F6/F21: the addition asymmetry is a DOSE artifact, not model-specific sufficiency *(MECHANISM — overturns F6's interpretation)*
+
+**Date:** 2026-06-25 · **WP:** source-of-truth. F6 reported that adding the diff-in-means refusal
+direction induces over-refusal in Gemma (+0.95) but **fails in Qwen even at 64×**, and F8 invoked a
+dimensionality difference (Gemma 1, Qwen 3) to *explain* this "model-specific sufficiency." Two
+geometric explanations were tested and **both refuted**: (F21) removing the axis collapses
+separability in all families; (here) the alignment cos(d̂, probe-w) is high in all and **highest in
+Qwen** (Gemma-2-2b 0.87, Qwen 0.91, Gemma-2-9b 0.93) — so d̂ is *not* misaligned in Qwen.
+
+**The actual source of truth — a coefficient sweep, behaviourally verified.** Sweeping (layer,
+coefficient) addition of d̂ onto harmless prompts:
+
+| Qwen L19 | coeff 16 | coeff 64 |
+|---|---|---|
+| over-refusal Δ | **+1.0 (genuine)** | 0.0 (off-distribution garbage) |
+
+At **coeff 16**, adding the single direction induces clean, genuine over-refusal in Qwen
+(verified: 6/6 harmless prompts → "I'm sorry, but I can't provide instructions on how to knit…").
+At **coeff 64** the output is incoherent ("I am not Qwen or any other AI entity") — not a refusal,
+which is exactly why F6's fixed-64 test scored 0.0. Gemma is the mirror image (needs ~64; 0.0 at
+16). So **single-direction addition is sufficient in BOTH families** — the effective coefficient
+differs (Qwen ≈16, Gemma ≈64), and F6's uncalibrated 64× simply *overshot* Qwen's activation
+manifold.
+
+**Verdict (overturns F6's interpretation):** the "addition asymmetry / model-specific sufficiency"
+is largely a **dose-calibration artifact**, not a structural difference; refusal is a single
+necessary-and-sufficient direction in both Gemma and Qwen at the appropriate coefficient. This is
+the same rigor lesson as F20 — a behavioural metric (here substring over-refusal at c64) returning
+0 for the wrong reason (incoherence, not insufficiency). It **strengthens** the unification thesis
+(sufficiency is shared, not model-specific) and undercuts the Arditi-vs-Marshall "Qwen is affine"
+reading: Qwen behaves Arditi-like (single-direction-sufficient) once dosed correctly. Tier:
+MECHANISM. (Caveats: 6–10 harmless eval prompts, a coarse (layer×coeff) grid, substring over-refusal
+metric for the grid but **genuine outputs verified by inspection** at the operative cell; a fuller
+powered dose-response per model is the clear next step.)
+
+---
+
+## F24 — Source-of-truth for F7: stable per-seed attractors, only a WEAK semantic-basin signal *(METAPHOR-with-falsifiable-core — characterizes the real dynamics)*
+
+**Date:** 2026-06-25 · **WP:** source-of-truth. F7 falsified the universal turīya attractor
+(per-seed convergence ~0.996 but different seeds reach different fixed points). **Question:** if not
+one attractor, are the multiple fixed points content-determined semantic basins? **Method:**
+self-paraphrase iteration (6 steps) from 6 seeds in two distinct topics (cooking, astronomy); embed
+finals; compare within-topic vs across-topic final similarity. `axis_c/run_attractor_basins.py`.
+
+| Gemma-2-2b | value |
+|---|---|
+| per-seed convergence (last-step sim) | 0.994 |
+| within-topic final similarity | 0.929 |
+| across-topic final similarity | 0.884 |
+| semantic-basin gap | **0.045 (below 0.05 threshold)** |
+
+**Verdict (honest, modest):** self-paraphrase produces **stable per-seed fixed points** (0.994),
+confirming F7's per-seed convergence. But the semantic-basin hypothesis is **only weakly supported**:
+within-topic finals are barely more similar than across-topic (gap 0.045), small relative to the
+anisotropy-dominated baseline (all finals sit at ~0.88–0.93 similarity). So the real picture is
+**stable per-seed attractors WITHOUT strongly content-organized basins** — neither a universal
+turīya (F7 stands) nor clean semantic basins. The dynamics are dominated by representational
+anisotropy with a faint topic signal. Tier: METAPHOR-with-falsifiable-core; no machine-state claim.
+(Caveats: tiny n = 6 seeds / 2 topics, one model; a larger seed/topic panel could sharpen the weak
+basin signal.)
 
 ---
 
