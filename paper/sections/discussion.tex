@@ -17,10 +17,21 @@ Wollschl\"ager picture into a single mechanistic statement: the mean-difference
 refusal direction is \emph{necessary} for refusal in every model we tested
 (ablation always removes it), but \emph{sufficient} to re-induce refusal only when
 the refusal subspace is one-dimensional. Effective dimension is the discriminating
-quantity, and it is model-dependent (Gemma $1$, Qwen $3$), not universal. This
-predicts a clean experimental signature---steerability-by-addition should track
-measured dimension---and recommends, for both attack and defense, treating refusal
-as a subspace whose dimension must be estimated per model rather than assumed.
+quantity at the extraction layer (Gemma $1$, Qwen $3$). A convergent rigor check
+qualifies this, however: a full layer-sweep shows the refusal-subspace dimension is
+\emph{layer-dependent}, ranging $1$--$12$ across Gemma's layers (mid-network it is $7$,
+higher than Qwen's $3$). The clean per-model ordering is thus layer-specific; the honest
+statement is that effective dimension is layer-\emph{and}-model-dependent and any
+dimensionality claim must name its layer. The \emph{behavioural} addition asymmetry
+(F6) stands; its single-layer dimensional explanation does not generalize across layers,
+and we report it as indicative rather than settled.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.62\linewidth]{f18_dimsweep.png}
+\caption{Layer-sweep of the refusal-subspace effective dimension. The single-layer values (Gemma L7$=$1, Qwen L19$=$3) are not representative: dimension varies strongly across layers (Gemma 1--12), so the clean per-model ordering is layer-specific.}
+\label{fig:dimsweep}
+\end{figure}
 
 \subsection{Where the cross-domain symmetry holds and where it breaks}
 Our three-tier discipline yields an asymmetric verdict that we regard as the
