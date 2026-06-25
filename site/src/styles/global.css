@@ -1,0 +1,115 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  @apply antialiased;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-slate-950 text-slate-100;
+  font-feature-settings: "kern" 1;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  @apply font-serif font-bold;
+}
+
+h1 {
+  @apply text-4xl lg:text-5xl;
+}
+
+h2 {
+  @apply text-3xl lg:text-4xl;
+}
+
+h3 {
+  @apply text-2xl lg:text-3xl;
+}
+
+p {
+  @apply leading-relaxed;
+}
+
+/* Prose & code */
+code {
+  @apply bg-slate-800 px-1.5 py-0.5 rounded text-sm font-mono text-slate-100;
+}
+
+pre {
+  @apply bg-slate-800 rounded-lg p-4 overflow-x-auto;
+}
+
+pre code {
+  @apply bg-transparent px-0 py-0;
+}
+
+a {
+  @apply text-blue-400 hover:text-blue-300 transition-colors;
+}
+
+/* KaTeX */
+.katex {
+  @apply text-current;
+}
+
+.katex-display {
+  @apply my-4;
+}
+
+/* Diacritics: ensure they don't cause layout shifts */
+.diacritic-text {
+  @apply tracking-tight;
+}
+
+/* Common card style */
+.card {
+  @apply bg-slate-900 border border-slate-800 rounded-xl p-6;
+}
+
+.card-interactive {
+  @apply card hover:border-slate-700 transition-all cursor-pointer;
+}
+
+/* Grid patterns */
+.grid-pattern {
+  background-image:
+    linear-gradient(0deg, transparent 24%, rgba(148, 163, 184, 0.05) 25%, rgba(148, 163, 184, 0.05) 26%, transparent 27%, transparent 74%, rgba(148, 163, 184, 0.05) 75%, rgba(148, 163, 184, 0.05) 76%, transparent 77%, transparent),
+    linear-gradient(90deg, transparent 24%, rgba(148, 163, 184, 0.05) 25%, rgba(148, 163, 184, 0.05) 26%, transparent 27%, transparent 74%, rgba(148, 163, 184, 0.05) 75%, rgba(148, 163, 184, 0.05) 76%, transparent 77%, transparent);
+  background-size: 40px 40px;
+}
+
+/* Tier badges */
+.badge-mechanism {
+  @apply bg-emerald-900 text-emerald-100 px-3 py-1 rounded-full text-xs font-semibold;
+}
+
+.badge-analogy {
+  @apply bg-blue-900 text-blue-100 px-3 py-1 rounded-full text-xs font-semibold;
+}
+
+.badge-metaphor {
+  @apply bg-purple-900 text-purple-100 px-3 py-1 rounded-full text-xs font-semibold;
+}
+
+/* Verdict styles */
+.verdict-holds {
+  @apply text-emerald-200;
+}
+
+.verdict-supported {
+  @apply text-blue-200;
+}
+
+.verdict-falsified {
+  @apply text-rose-200;
+}
+
+.verdict-partial {
+  @apply text-yellow-200;
+}

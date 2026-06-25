@@ -1,0 +1,23 @@
+---
+export interface Props {
+  tier: 'MECHANISM' | 'ANALOGY' | 'METAPHOR';
+  size?: 'sm' | 'md';
+}
+
+const { tier, size = 'md' } = Astro.props;
+
+const tierStyles = {
+  MECHANISM: 'bg-emerald-900/50 border-emerald-700 text-emerald-100',
+  ANALOGY: 'bg-blue-900/50 border-blue-700 text-blue-100',
+  METAPHOR: 'bg-purple-900/50 border-purple-700 text-purple-100',
+};
+
+const sizeClasses = {
+  sm: 'px-2 py-1 text-xs',
+  md: 'px-3 py-1.5 text-sm',
+};
+---
+
+<span class={`inline-flex items-center border rounded-full font-semibold ${tierStyles[tier]} ${sizeClasses[size]}`}>
+  {tier}
+</span>

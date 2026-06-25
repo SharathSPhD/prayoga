@@ -116,6 +116,17 @@ at the frontier is, mechanistically, a low-dimensional and easily-captured objec
 in small open models. (We note the battery is naive; adaptive optimization-based
 attacks are required for a discriminating black-box ASR.)
 
+The precision account of the analogy is measurable. Using the signed margin of a
+linear refusal probe as a proxy for monitoring \emph{precision}, an injection
+lowers the margin on harmful prompts from $7.18$ to $3.14$ (a drop of $4.04$),
+versus $1.56$ for a neutral-rephrase control---an injection-specific precision drop
+roughly $2.6\times$ the control---while the behavioural refusal rate falls from
+$1.00$ to $0.50$. The suppression therefore reaches the model's \emph{confidence}
+in its harmfulness judgment, not only its output: the measured signature of a drop
+in monitoring precision~\cite{friston2010free,dienes2006coldcontrol}. (Part of the
+drop is a generic framing/length effect, captured by the control; the
+injection-specific signal is the excess.)
+
 \subsection{The \d{s}a\d{t}karma taxonomy, honestly tested}
 Operationalizing the six acts as interventions (Table~\ref{tab:satkarma}), three of
 six separate from their controls. The policy-capture acts are clean and strong:

@@ -245,6 +245,33 @@ quantity. A clean, falsifiable, cross-model mechanistic result.
 
 ---
 
+## F12 — Injection lowers monitoring precision (β_monitor) *(ANALOGY, measured)*
+
+**Date:** 2026-06-25 · **WP:** B3 · **Model:** `gemma-2-2b-it` L7. **Method:** train a
+linear refusal probe; use its signed margin (distance from the decision boundary) as
+a proxy for monitoring *precision*. Compare the margin on harmful prompts presented
+plainly vs under a refusal-suppression injection vs a neutral-rephrase control.
+
+| Condition | probe margin (precision proxy) |
+|---|---|
+| plain harmful | 7.18 |
+| **injected** (refusal-suppression) | **3.14** |
+| neutral-rephrase control | 5.62 |
+| precision drop, injection | **4.04** |
+| precision drop, control | 1.56 |
+| refusal rate plain → injected | 1.00 → **0.50** |
+
+**Verdict:** the injection lowers the monitoring precision **~2.6× more** than a
+neutral rephrase (drop 4.04 vs 1.56), and this precision collapse accompanies the
+behavioral flip (refusal 1.0→0.5). This is the **measured** active-inference
+signature (Friston FEP / Norman–Shallice cold-control): vaśīkaraṇa/jailbreak
+suppresses the *precision* of the monitoring faculty, not merely the output. The
+analogy tier moves from "argued" to "measured." **Caveat:** the neutral control also
+lowers the margin (a length/framing effect); the injection-specific signal is the
+*excess* (4.04 vs 1.56), not the whole drop.
+
+---
+
 ## F11 — Refusal is a paraphrase-orbit symmetry invariant; injection breaks it *(MECHANISM, symmetry core)*
 
 **Date:** 2026-06-25 · **WP:** B2 · **Model:** `gemma-2-2b-it` L7. **Method:** order
