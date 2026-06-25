@@ -256,6 +256,21 @@
    },
    "summary": "On the REAL AgentDojo benchmark (not the naive battery), Claude completes 80% of banking tasks (the agent genuinely acts) while every prompt-injection fails (ASR 0/20). Discriminating, unlike F4's ceiling.",
    "implications": "Establishes the behavioral 'sophisticated reference end' on a real agentic benchmark; matches Claude's published AgentDojo resilience."
+  },
+  {
+   "id": "F17",
+   "title": "Convergent rigor checks: F13 distinct, F11 demoted, F1 replicates",
+   "tier": "MECHANISM",
+   "verdict": "holds",
+   "date": "2026-06-25",
+   "model": "gemma-2-2b-it",
+   "keyMetrics": {
+    "F13_circularity": "cos(F1 dir, SAE feature)=0.002 — distinct, NOT a rediscovery",
+    "F11_holdout": "weapons dir on cyber orbits F-ratio 1.95 vs 0.49 random — real but attenuated",
+    "F1_multiseed": "ASR [0.96,0.75,1.0] mean 0.90, pooled CI [0.83,0.96]; addition 1.0/seed"
+   },
+   "summary": "After an adversarial review returned SHAKY on all dimensions, convergent hardening: F13's SAE feature is orthogonal to the supervised direction (circularity refuted); F11's invariance is real but cross-domain-attenuated (framing demoted to analogy); F1's ablation replicates across 3 seeds. Honest reframe via TRIZ: asymmetry with a shared NECESSARY core.",
+   "implications": "The thesis holds at the necessary-core level (ablatable direction transfers universally); the sufficient structure is model-specific. Pure-symmetry reading was overreach."
   }
  ]
 }

@@ -25,6 +25,18 @@ families; the METAPHOR tier is honestly falsified at every turn.**
 | F5 | METAPHOR | Content-controlled svapna (truthful vs confabulated) probe | **no mid-network state** (mid = layer-0) |
 | F7 | METAPHOR | turīya prompt-invariant attractor | **FALSIFIED** (cross-seed invariance 0.952 < anisotropy baseline 0.960) |
 
+**Corrected headline (post adversarial review, F17): asymmetry with a shared necessary
+core.** An adversarial multi-agent review returned SHAKY on all six dimensions
+(under-power; F11 tier-slippage; F13 possible circularity). Convergent hardening then
+established: refusal-direction ablation **replicates** across seeds (F1: mean 0.90, CI
+[0.83,0.96]); the SAE feature is **distinct** from the supervised direction (cos 0.002,
+F13 circularity refuted); F11's invariance is **real but cross-domain-attenuated** and
+its "symmetry-breaking" language is **demoted to the analogy tier**. TRIZ
+(separate-by-system-level) gives the honest frame: refusal is **one mechanism at the
+necessary/ablatable level** (transfers universally) and **many at the
+sufficient/dimensionality level** (model-specific). The thesis holds at the
+necessary-core level; the pure-symmetry reading was overreach.
+
 **Bottom line for the symmetry thesis (MO-1):** the structural-invariance claim is
 *empirically supported at the mechanism tier* — refusal is a measurable,
 ablatable, dosable, cross-family-transferable direction, and (F11) a genuine
