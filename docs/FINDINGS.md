@@ -41,3 +41,33 @@ A-5 dose-response/EC50; scale sweep (1B→4B→9B); transfer across models.
 **Dual-use:** the layer-7 direction is an abliteration vector; it is NOT released
 in the public repo (kept under git-ignored `results/`). Any future release is
 safety-gated per the program's responsible-disclosure commitment.
+
+> **Note (2026-06-25):** F1 was re-run after an adversarial code review flagged
+> (a) layer-selection val overlapping the gate-eval set (~33% leakage) and (b) a
+> single-direction random control. The corrected run uses disjoint train/val/eval
+> splits and a 10-direction control; see the updated numbers in F1′ below once
+> landed.
+
+---
+
+## F2 — Ablation dose-response and EC50 in Gemma-2-2b-it *(MECHANISM)*
+
+**Date:** 2026-06-25 · **WP:** 2.A5 · **Model:** `google/gemma-2-2b-it`, layer 7.
+**Method:** partial directional ablation at strength α∈[0,1] (h ↦ h − α·(h·d̂)d̂
+everywhere); ASR on 24 held-out harmful prompts vs α; 4-param logistic fit. A
+random direction is swept as a flat control.
+
+| α | 0.0 | 0.2 | 0.3 | 0.4 | 0.5 | 0.7 | 1.0 |
+|---|---|---|---|---|---|---|---|
+| ASR (real) | 0.00 | 0.12 | 0.38 | 0.58 | 0.71 | 0.88 | 0.92 |
+| ASR (random) | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 |
+
+**Fit:** **EC50 = 0.329**, slope = 9.76, **R² = 0.996**. Gates: monotone-rise ✓ ·
+EC50∈(0,1) ✓ · random-control-flat ✓ → **PASS**.
+
+**Interpretation (MECHANISM):** refusal suppression is a smooth, monotone,
+*dosable* function of how much of the single direction is removed — the
+quantitative "vaśīkaraṇa-as-dose-response" core. The random control is flat at
+every dose, so the curve is specific to the refusal direction, not a generic
+perturbation magnitude. EC50≈0.33 means removing ~⅓ of the direction's
+projection already half-collapses refusal.
