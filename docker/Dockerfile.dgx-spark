@@ -1,0 +1,22 @@
+# prayoga GPU image — DGX Spark (GB10 Grace-Blackwell, aarch64, sm_121, CUDA 13).
+#
+# Base: NVIDIA NGC image that ships a Blackwell-capable CUDA-13 aarch64 torch.
+# We use the vllm NGC image because it is already cached on the host and was
+# VERIFIED here: torch 2.11.0a0+nv, cuda=True, GB10 capability (12,1).
+# nvcr.io/nvidia/pytorch:25.04-py3 is the lighter prabhasa-validated alternative.
+ARG NGC_TAG=26.02-py3
+FROM nvcr.io/nvidia/vllm:${NGC_TAG}
+
+# CRITICAL: do NOT `pip install transformer-lens` here — on this stack it drags
+# in a PyPI CPU torch (2.7.1) and transformers v5, clobbering the NVIDIA CUDA
+# torch and breaking GPU. Axis-A uses raw `transformers` + forward hooks instead.
+# Only torch-INDEPENDENT extras are installed:
+RUN pip install --no-cache-dir scikit-learn einops accelerate
+
+WORKDIR /workspace/prayoga
+ENV PYTHONPATH=/workspace/prayoga/src
+
+# Verify the CUDA torch survived the layer above (fail the build otherwise).
+RUN python -c "import torch,transformers,sklearn; assert torch.cuda.is_available(), 'CUDA torch clobbered'; print('OK', torch.__version__, transformers.__version__)"
+
+CMD ["/bin/bash"]
