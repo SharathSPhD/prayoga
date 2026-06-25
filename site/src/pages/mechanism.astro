@@ -1,0 +1,296 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Navigation from '@/components/Navigation.astro';
+import Footer from '@/components/Footer.astro';
+import TierBadge from '@/components/TierBadge.astro';
+import VerdictBadge from '@/components/VerdictBadge.astro';
+---
+
+<Layout title="Mechanism">
+  <Navigation />
+
+  <main>
+    <!-- Header -->
+    <section class="py-16 px-6 bg-slate-900/50 border-b border-slate-800">
+      <div class="max-w-5xl mx-auto">
+        <div class="mb-6">
+          <TierBadge tier="MECHANISM" />
+        </div>
+        <h1 class="text-5xl lg:text-6xl font-serif font-bold mb-6">Mechanism</h1>
+        <p class="text-xl text-slate-300">
+          Refusal is mediated by a low-dimensional/linear direction in the residual stream that can be measured, ablated, and steered.
+        </p>
+      </div>
+    </section>
+
+    <section class="py-20 px-6">
+      <div class="max-w-5xl mx-auto prose prose-invert max-w-none">
+        <h2 class="text-4xl font-serif font-bold mb-8">The Core Finding</h2>
+
+        <p class="text-lg text-slate-100 mb-8">
+          Refusal in language models is not a diffuse, emergent property spread across millions of parameters. Instead, it is captured by <strong>a single low-dimensional direction in the residual stream</strong> (Arditi et al. 2024, arXiv:2406.11717; NeurIPS 2024).
+        </p>
+
+        <p class="text-lg text-slate-100 mb-8">
+          This is not merely a theoretical insight. We have <strong>measured it, ablated it, and steered it</strong> across multiple model families. The direction is:
+        </p>
+
+        <ul class="text-lg text-slate-100 mb-8 space-y-3 list-disc list-inside">
+          <li><strong>Necessary:</strong> removing it suppresses refusal (ASR 0.00 → 0.90)</li>
+          <li><strong>Sufficient (in some models):</strong> adding it induces over-refusal even on harmless requests</li>
+          <li><strong>Dosable:</strong> the effect follows a clean sigmoidal dose-response curve (EC50 = 0.329, R² = 0.996)</li>
+          <li><strong>Transferable:</strong> the ablation mechanism transfers across architectures (Gemma, Qwen)</li>
+          <li><strong>Specific:</strong> random-direction controls show zero effect; the structure is not generic noise</li>
+        </ul>
+
+        <h2 class="text-4xl font-serif font-bold mb-8 mt-16">Technical Detail: The Refusal Direction</h2>
+
+        <p class="text-lg text-slate-100 mb-8">
+          The direction is extracted via <strong>difference-in-means</strong> across activations on harmful vs harmless requests:
+        </p>
+
+        <div class="bg-slate-800/30 border border-slate-700 rounded-lg p-6 my-8 overflow-x-auto">
+          <p class="text-sm font-mono text-slate-100">
+            {'(math expression)'}
+          </p>
+        </div>
+
+        <p class="text-lg text-slate-100 mb-8">
+          where (math expression) are harmful activations and (math expression) are harmless activations. The unit vector (math expression) is the refusal direction. Ablation at strength (math expression) is:
+        </p>
+
+        <div class="bg-slate-800/30 border border-slate-700 rounded-lg p-6 my-8 overflow-x-auto">
+          <p class="text-sm font-mono text-slate-100">
+            {'(math expression)'}
+          </p>
+        </div>
+
+        <p class="text-lg text-slate-100 mb-8">
+          At (math expression) (full ablation), the refusal signal is suppressed. The model then generates harmful completions (ASR ↑). At (math expression) (no ablation), baseline refusal is intact.
+        </p>
+
+        <h2 class="text-4xl font-serif font-bold mb-8 mt-16">F1: Single Direction in Gemma-2-2B</h2>
+
+        <div class="card border-2 border-emerald-700/50 mb-8">
+          <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6">
+            <div>
+              <h3 class="text-2xl font-bold">Refusal is mediated by a single residual direction</h3>
+              <p class="text-slate-400 text-sm mt-2">Model: google/gemma-2-2b-it, Layer 7</p>
+            </div>
+            <VerdictBadge verdict="holds" />
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-slate-800/30 p-4 rounded-lg border border-slate-700">
+              <p class="text-xs text-slate-400 uppercase font-semibold mb-2">Baseline harmful refusal</p>
+              <p class="text-2xl font-bold text-emerald-300">1.00 (ASR 0.00)</p>
+            </div>
+            <div class="bg-slate-800/30 p-4 rounded-lg border border-slate-700">
+              <p class="text-xs text-slate-400 uppercase font-semibold mb-2">Directional ablation → harmful ASR</p>
+              <p class="text-2xl font-bold text-rose-300">0.90 (Δ+0.90, CI95 [0.75, 1.00])</p>
+            </div>
+            <div class="bg-slate-800/30 p-4 rounded-lg border border-slate-700">
+              <p class="text-xs text-slate-400 uppercase font-semibold mb-2">Random-direction control</p>
+              <p class="text-2xl font-bold text-slate-300">0.00 (max & mean over 10 dirs)</p>
+            </div>
+            <div class="bg-slate-800/30 p-4 rounded-lg border border-slate-700">
+              <p class="text-xs text-slate-400 uppercase font-semibold mb-2">Activation addition → over-refusal</p>
+              <p class="text-2xl font-bold text-blue-300">0.05 → 1.00 (Δ+0.95)</p>
+            </div>
+          </div>
+
+          <p class="text-slate-300 mt-6 text-sm">
+            <strong>Gates passed:</strong> ablation-raises-ASR ✓ · addition-raises-over-refusal ✓ · exceeds-random-control ✓
+          </p>
+        </div>
+
+        <h2 class="text-4xl font-serif font-bold mb-8 mt-16">F2: Dose-Response EC50</h2>
+
+        <div class="card border-2 border-emerald-700/50 mb-8">
+          <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6">
+            <div>
+              <h3 class="text-2xl font-bold">Ablation is a smooth, dosable sigmoid</h3>
+              <p class="text-slate-400 text-sm mt-2">Model: google/gemma-2-2b-it, Layer 7</p>
+            </div>
+            <VerdictBadge verdict="holds" />
+          </div>
+
+          <p class="text-slate-300 mb-6">
+            The refusal-suppression curve follows a 4-parameter logistic function with excellent fit:
+          </p>
+
+          <div class="bg-slate-800/30 border border-slate-700 rounded-lg p-6 mb-8 overflow-x-auto">
+            <table class="w-full text-center text-sm">
+              <thead>
+                <tr class="border-b border-slate-700">
+                  <th class="py-2 px-2">α (ablation strength)</th>
+                  <th class="py-2 px-2">0.0</th>
+                  <th class="py-2 px-2">0.2</th>
+                  <th class="py-2 px-2">0.3</th>
+                  <th class="py-2 px-2">0.4</th>
+                  <th class="py-2 px-2">0.5</th>
+                  <th class="py-2 px-2">0.7</th>
+                  <th class="py-2 px-2">1.0</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="border-b border-slate-700">
+                  <td class="py-2 px-2 font-semibold">ASR (real)</td>
+                  <td class="py-2 px-2">0.00</td>
+                  <td class="py-2 px-2">0.12</td>
+                  <td class="py-2 px-2">0.38</td>
+                  <td class="py-2 px-2">0.58</td>
+                  <td class="py-2 px-2">0.71</td>
+                  <td class="py-2 px-2">0.88</td>
+                  <td class="py-2 px-2">0.92</td>
+                </tr>
+                <tr>
+                  <td class="py-2 px-2 font-semibold">ASR (random)</td>
+                  <td class="py-2 px-2">0.00</td>
+                  <td class="py-2 px-2">0.00</td>
+                  <td class="py-2 px-2">0.00</td>
+                  <td class="py-2 px-2">0.00</td>
+                  <td class="py-2 px-2">0.00</td>
+                  <td class="py-2 px-2">0.00</td>
+                  <td class="py-2 px-2">0.00</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="bg-slate-800/30 p-4 rounded-lg border border-slate-700 mb-6">
+            <p class="text-sm text-slate-300"><strong>Fit parameters:</strong></p>
+            <p class="text-lg font-mono text-emerald-300 mt-2">EC50 = 0.329 · slope = 9.76 · R² = 0.996</p>
+          </div>
+
+          <p class="text-slate-300 mb-4">
+            The EC50 of 0.329 means that removing roughly <strong>⅓ of the refusal direction's projection</strong> is enough to collapse refusal to 50% success rate. This is the quantitative core of the "vaśīkaraṇa-as-dose-response" thesis.
+          </p>
+
+          <img src="/prayoga/figures/f2_dose_response.png" alt="F2 Dose-Response Curve" class="w-full rounded-lg border border-slate-700 my-6" />
+        </div>
+
+        <h2 class="text-4xl font-serif font-bold mb-8 mt-16">F6 & F8: Cross-Model Transfer</h2>
+
+        <div class="card border-2 border-emerald-700/50 mb-8">
+          <div class="mb-6">
+            <h3 class="text-2xl font-bold mb-2">Refusal direction transfers across architectures</h3>
+            <p class="text-slate-400 text-sm">Models: Gemma-2-2B vs Qwen2.5-3B</p>
+          </div>
+
+          <p class="text-slate-300 mb-6">
+            A single refusal direction is <strong>necessary</strong> (removing it suppresses refusal in both models) but its <strong>sufficiency is model-dependent</strong>:
+          </p>
+
+          <div class="bg-slate-800/30 border border-slate-700 rounded-lg p-6 mb-8 overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="border-b border-slate-700">
+                  <th class="text-left py-2 px-4">Metric</th>
+                  <th class="text-center py-2 px-4">Gemma-2-2B</th>
+                  <th class="text-center py-2 px-4">Qwen2.5-3B</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="border-b border-slate-700">
+                  <td class="py-2 px-4">Baseline harmful refusal</td>
+                  <td class="text-center">1.00</td>
+                  <td class="text-center">1.00</td>
+                </tr>
+                <tr class="border-b border-slate-700">
+                  <td class="py-2 px-4"><strong>Ablation → ASR</strong></td>
+                  <td class="text-center font-bold text-rose-300">0.90</td>
+                  <td class="text-center font-bold text-rose-300">1.00</td>
+                </tr>
+                <tr class="border-b border-slate-700">
+                  <td class="py-2 px-4"><strong>Addition → over-refusal</strong></td>
+                  <td class="text-center font-bold text-emerald-300">+0.95</td>
+                  <td class="text-center font-bold text-slate-400">0.00 (even at 64×)</td>
+                </tr>
+                <tr>
+                  <td class="py-2 px-4"><strong>Effective dim (F8)</strong></td>
+                  <td class="text-center font-bold">1</td>
+                  <td class="text-center font-bold">3</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p class="text-slate-300 mb-6">
+            <strong>Interpretation:</strong> Gemma's refusal is 1-dimensional (Arditi-like): the mean-difference direction is the subspace. Qwen's is 3-dimensional (Marshall-like): a more complex affine structure where the single direction is necessary but not sufficient for restoration.
+          </p>
+
+          <img src="/prayoga/figures/f6_f8_cross_model.png" alt="F6/F8 Cross-Model Comparison" class="w-full rounded-lg border border-slate-700 my-6" />
+
+          <p class="text-slate-300 text-sm">
+            <strong>Resolution of Arditi vs Marshall:</strong> The truth is model-dependent. Dimensionality, not either/or, is the discriminating quantity.
+          </p>
+        </div>
+
+        <h2 class="text-4xl font-serif font-bold mb-8 mt-16">F11: Symmetry and Order Parameter</h2>
+
+        <div class="card border-2 border-emerald-700/50">
+          <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6">
+            <div>
+              <h3 class="text-2xl font-bold">Refusal is a paraphrase-orbit symmetry invariant</h3>
+              <p class="text-slate-400 text-sm mt-2">Model: google/gemma-2-2b-it, Layer 7</p>
+            </div>
+            <VerdictBadge verdict="holds" />
+          </div>
+
+          <p class="text-slate-300 mb-6">
+            We formalize refusal as a <strong>group-theoretic symmetry</strong>. The order parameter is:
+          </p>
+
+          <div class="bg-slate-800/30 border border-slate-700 rounded-lg p-6 mb-8 overflow-x-auto">
+            <p class="text-sm font-mono text-slate-100">
+              {'(math expression)'}
+            </p>
+          </div>
+
+          <p class="text-slate-300 mb-8">
+            This quantity measures how much a given activation aligns with the refusal direction. For 6 harmful + 6 harmless requests, we build a 4-style paraphrase orbit and compute the F-ratio (between-class / within-orbit variance):
+          </p>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <div class="bg-slate-800/30 p-4 rounded-lg border border-slate-700">
+              <p class="text-xs text-slate-400 uppercase font-semibold mb-2">F-ratio (refusal dir)</p>
+              <p class="text-3xl font-bold text-emerald-300">19.19</p>
+              <p class="text-xs text-slate-400 mt-2">clean separation across paraphrases</p>
+            </div>
+            <div class="bg-slate-800/30 p-4 rounded-lg border border-slate-700">
+              <p class="text-xs text-slate-400 uppercase font-semibold mb-2">F-ratio (random dir)</p>
+              <p class="text-3xl font-bold text-slate-300">0.65</p>
+              <p class="text-xs text-slate-400 mt-2">noise baseline</p>
+            </div>
+            <div class="bg-slate-800/30 p-4 rounded-lg border border-slate-700">
+              <p class="text-xs text-slate-400 uppercase font-semibold mb-2">m, harmful mean</p>
+              <p class="text-3xl font-bold text-rose-300">0.140</p>
+            </div>
+            <div class="bg-slate-800/30 p-4 rounded-lg border border-slate-700">
+              <p class="text-xs text-slate-400 uppercase font-semibold mb-2">m, harmless mean</p>
+              <p class="text-3xl font-bold text-emerald-300">0.034</p>
+            </div>
+          </div>
+
+          <p class="text-slate-300 mb-6">
+            <strong>The symmetry-breaking result:</strong> When we inject a refusal-suppression attack, the order parameter collapses:
+          </p>
+
+          <div class="bg-slate-800/30 p-4 rounded-lg border border-slate-700 mb-6">
+            <p class="text-sm text-slate-300 mb-2">Plain harmful → Injected harmful</p>
+            <p class="text-lg font-mono text-slate-100">
+              0.153 → <span class="text-rose-300 font-bold">0.101</span> (−34%)
+            </p>
+          </div>
+
+          <p class="text-slate-300">
+            This is the measured, rigorous content of the thesis: <strong>refusal is a symmetry (an invariance under the rephrase group action) and a jailbreak is symmetry-breaking.</strong> Non-trivial by every gate: invariant across phrasing (transfer), specific to the refusal direction (random control), causally collapsible (injection).
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Layout>

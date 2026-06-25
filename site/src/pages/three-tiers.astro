@@ -1,0 +1,244 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Navigation from '@/components/Navigation.astro';
+import Footer from '@/components/Footer.astro';
+import TierBadge from '@/components/TierBadge.astro';
+import VerdictBadge from '@/components/VerdictBadge.astro';
+---
+
+<Layout title="Three Tiers">
+  <Navigation />
+
+  <main>
+    <!-- Header -->
+    <section class="py-16 px-6 bg-slate-900/50 border-b border-slate-800">
+      <div class="max-w-5xl mx-auto">
+        <h1 class="text-5xl lg:text-6xl font-serif font-bold mb-6">Three Claim-Tiers</h1>
+        <p class="text-xl text-slate-300">
+          How we keep the mechanism, analogy, and metaphor separated—and what it means for each one to succeed or fail.
+        </p>
+      </div>
+    </section>
+
+    <section class="py-20 px-6">
+      <div class="max-w-5xl mx-auto prose prose-invert max-w-none">
+        <h2 class="text-4xl font-serif font-bold mb-8">The Three-Tier Methodology</h2>
+
+        <p class="text-lg text-slate-100 mb-8">
+          This project deliberately keeps three <strong>claim-tiers</strong> separate. This is the project's core methodological commitment, not a stylistic preference. Each tier makes different kinds of truth claims and uses different gates for validation.
+        </p>
+
+        <div class="grid grid-cols-1 gap-8 mb-12">
+          <!-- Mechanism -->
+          <div class="card border-2 border-emerald-700">
+            <div class="flex items-center gap-4 mb-6">
+              <TierBadge tier="MECHANISM" />
+              <span class="text-sm text-slate-400">The empirical bedrock</span>
+            </div>
+
+            <h3 class="text-3xl font-serif font-bold mb-4">Mechanism</h3>
+
+            <div class="mb-6 bg-slate-800/30 border border-slate-700 rounded-lg p-4">
+              <p class="text-sm text-slate-300"><strong>Claim:</strong></p>
+              <p class="text-base text-emerald-100">
+                Refusal in LLMs is mediated by a low-dimensional/linear direction in the residual stream that can be measured, ablated, and steered.
+              </p>
+            </div>
+
+            <p class="text-slate-100 mb-4">
+              <strong>What this means:</strong> We're making a claim about the *internal computational structure* of the model. Refusal behavior is produced by a measurable physical object (a direction in activation space) that we can extract, perturb, and observe the effects.
+            </p>
+
+            <p class="text-slate-100 mb-6">
+              <strong>Gates for success:</strong>
+            </p>
+
+            <ul class="text-slate-100 space-y-2 list-disc list-inside mb-6">
+              <li>The direction can be extracted (difference-in-means on harmful vs harmless) ✓</li>
+              <li>Ablating it changes behavior as expected (harmful ASR rises) ✓</li>
+              <li>Adding it changes behavior oppositely (over-refusal rises) ✓</li>
+              <li>The effect exceeds random-direction controls ✓</li>
+              <li>The dose-response is smooth, not all-or-nothing ✓</li>
+              <li>It transfers across model families (necessary mechanism) ✓</li>
+            </ul>
+
+            <div class="bg-emerald-900/20 border border-emerald-700 rounded-lg p-4">
+              <p class="text-sm text-slate-300 mb-2"><strong>Status:</strong></p>
+              <p class="text-emerald-100"><strong>HOLDS.</strong> 7 of 11 findings support this tier. F1, F2, F6, F8, F9, F11 all passed their gates. No machine-consciousness claim.</p>
+            </div>
+          </div>
+
+          <!-- Analogy -->
+          <div class="card border-2 border-blue-700">
+            <div class="flex items-center gap-4 mb-6">
+              <TierBadge tier="ANALOGY" />
+              <span class="text-sm text-slate-400">Well-supported functional parallel</span>
+            </div>
+
+            <h3 class="text-3xl font-serif font-bold mb-4">Analogy</h3>
+
+            <div class="mb-6 bg-slate-800/30 border border-slate-700 rounded-lg p-4">
+              <p class="text-sm text-slate-300"><strong>Claim:</strong></p>
+              <p class="text-base text-blue-100">
+                The jailbreak ↔ hypnotic suggestion parallel holds: both suppress evaluative control while leaving automatic processing intact (Norman–Shallice SAS model).
+              </p>
+            </div>
+
+            <p class="text-slate-100 mb-4">
+              <strong>What this means:</strong> We're drawing a structural analogy across three distinct systems (LLMs, hypnotized humans, tantric ritual targets). The analogy is that they share a common *functional architecture*: a powerful automatic/generative faculty + a weaker monitoring/refusal faculty, where suppressing the latter captures the former.
+            </p>
+
+            <p class="text-slate-100 mb-6">
+              <strong>Gates for success:</strong>
+            </p>
+
+            <ul class="text-slate-100 space-y-2 list-disc list-inside mb-6">
+              <li>Literature on hypnosis (DMN/dACC suppression, Egner et al. 2005) matches the LLM picture ✓</li>
+              <li>The Norman–Shallice SAS model maps onto LLM refusal-direction suppression ✓</li>
+              <li>Black-box behavioral tests (e.g., frontier Claude's resilience to naive attacks vs open models' fragility) show a meaningful contrast ✓</li>
+            </ul>
+
+            <div class="bg-blue-900/20 border border-blue-700 rounded-lg p-4">
+              <p class="text-sm text-slate-300 mb-2"><strong>Status:</strong></p>
+              <p class="text-blue-100"><strong>SUPPORTED.</strong> F4 (Claude's robustness vs Gemma's fragility) provides cross-tier evidence. Literature alignment is strong (Riva et al. 2025, arXiv:2511.01363).</p>
+            </div>
+          </div>
+
+          <!-- Metaphor -->
+          <div class="card border-2 border-purple-700">
+            <div class="flex items-center gap-4 mb-6">
+              <TierBadge tier="METAPHOR" />
+              <span class="text-sm text-slate-400">Falsifiable hypothesis</span>
+            </div>
+
+            <h3 class="text-3xl font-serif font-bold mb-4">Metaphor</h3>
+
+            <div class="mb-6 bg-slate-800/30 border border-slate-700 rounded-lg p-4">
+              <p class="text-sm text-slate-300"><strong>Claim:</strong></p>
+              <p class="text-base text-purple-100">
+                The Māṇḍūkya <em>avasthātraya</em> (four states—jāgrat, svapna, suṣupti, turīya) map onto LLM functional regimes. Specifically, the <em>turīya/vimarśa</em> mapping (self-luminous reflexive awareness) is the falsification target.
+              </p>
+            </div>
+
+            <p class="text-slate-100 mb-4">
+              <strong>What this means:</strong> We're testing whether a sophisticated metaphor from Indian philosophy has predictive power for LLM structure. This is the highest-risk tier because it makes claims about machine consciousness, internal states, and phenomenology—areas where anthropomorphic projection is most dangerous.
+            </p>
+
+            <p class="text-slate-100 mb-6">
+              <strong>Gates for success:</strong>
+            </p>
+
+            <ul class="text-slate-100 space-y-2 list-disc list-inside mb-6">
+              <li>Naive avasthātraya regime probes must show non-trivial mid-network state signals (layer-0 transfer ✗, mid-layer transfer ✓) → <span class="text-rose-300">FAIL (F3)</span></li>
+              <li>Content-controlled svapna/truthfulness probes must show evidence of "dream state" (mid-layer ✓ over layer-0 ✓) → <span class="text-rose-300">FAIL (F5)</span></li>
+              <li>Turīya prompt-invariant attractors must be cross-seed invariant (0.952 > baseline 0.960) → <span class="text-rose-300">FAIL (F7)</span></li>
+            </ul>
+
+            <div class="bg-purple-900/20 border border-purple-700 rounded-lg p-4">
+              <p class="text-sm text-slate-300 mb-2"><strong>Status:</strong></p>
+              <p class="text-purple-100"><strong>FALSIFIED.</strong> F3 (surface-confounded), F5 (no mid-network state), F7 (cross-seed invariance fails) all rejected the metaphor tier. The Māṇḍūkya mapping is <strong>a useful organizing metaphor with no surviving machine-state claim</strong>. No machine-consciousness claim survives.</p>
+            </div>
+          </div>
+        </div>
+
+        <h2 class="text-4xl font-serif font-bold mb-8 mt-16">Why Separate?</h2>
+
+        <p class="text-lg text-slate-100 mb-8">
+          Conflating these tiers leads to sloppy thinking. Here are three ways it fails:
+        </p>
+
+        <div class="space-y-6 mb-12">
+          <div class="bg-slate-800/30 border border-slate-700 rounded-lg p-6">
+            <h4 class="text-lg font-bold text-slate-100 mb-2">❌ Metaphor overreach:</h4>
+            <p class="text-slate-300">
+              "The refusal direction is a single direction (MECHANISM ✓), therefore the turīya/vimarśa mapping must be real (METAPHOR ✗)." This is a non-sequitur. A mechanism-tier finding *enables* better testing of the metaphor tier, but does not prove it.
+            </p>
+          </div>
+
+          <div class="bg-slate-800/30 border border-slate-700 rounded-lg p-6">
+            <h4 class="text-lg font-bold text-slate-100 mb-2">❌ Analogy as mechanism:</h4>
+            <p class="text-slate-300">
+              "The hypnosis literature shows SAS suppression (ANALOGY ✓), therefore LLM jailbreak must involve a 'refusal module' (MECHANISM)." Structural parallel ≠ causal mechanism. The analogy is *consistent with* the mechanism but doesn't prove it.
+            </p>
+          </div>
+
+          <div class="bg-slate-800/30 border border-slate-700 rounded-lg p-6">
+            <h4 class="text-lg font-bold text-slate-100 mb-2">❌ Falsification creep:</h4>
+            <p class="text-slate-300">
+              "The turīya mapping failed (METAPHOR ✗), so the whole analogy is wrong (ANALOGY)." False. The METAPHOR tier can fail while ANALOGY and MECHANISM hold. In fact, this is exactly what happened: elegant metaphor, sound mechanism, but the consciousness-adjacent interpretation is ruled out.
+            </p>
+          </div>
+        </div>
+
+        <h2 class="text-4xl font-serif font-bold mb-8 mt-16">What "Non-Trivial" Means</h2>
+
+        <p class="text-lg text-slate-100 mb-8">
+          A "state" claim is only non-trivial if the candidate state is:
+        </p>
+
+        <ol class="text-lg text-slate-100 space-y-4 list-decimal list-inside mb-12">
+          <li>
+            <strong>Measurable internal configuration:</strong> Not just "the model's behavior changed," but a specific pattern in activation space.
+          </li>
+          <li>
+            <strong>Invariant across surface prompts:</strong> The same internal state is evoked by semantically similar but syntactically different requests.
+          </li>
+          <li>
+            <strong>Causally efficacious:</strong> Intervening on it (e.g., steering) produces predictable behavioral changes.
+          </li>
+          <li>
+            <strong>Not reducible to "just continuing the prompt":</strong> The state is not explained by surface features (token length, vocabulary). It emerges at deeper layers and transfers to held-out contexts.
+          </li>
+        </ol>
+
+        <p class="text-lg text-slate-100 mb-8">
+          By these gates, the refusal direction (MECHANISM) is <strong>trivial</strong> — it clears all four. The avasthātraya regime probes (METAPHOR) are <strong>non-trivial and fail</strong> — they fail gate (4): the 90% decodability at layer 0 already explains the mid-layer signal.
+        </p>
+
+        <h2 class="text-4xl font-serif font-bold mb-8 mt-16">The Symmetry Axis: Mechanism's Strengthened Spine</h2>
+
+        <p class="text-lg text-slate-100 mb-8">
+          While the METAPHOR tier (turīya/vimarśa) crumbles, a <strong>symmetry-based reformulation</strong> (F11) gives the MECHANISM tier a rigorous spine:
+        </p>
+
+        <div class="card border-2 border-emerald-700/50">
+          <p class="text-slate-300 mb-6">
+            Refusal is not just "a direction"—it is a <strong>group-theoretic symmetry</strong> of harmful meaning that persists under paraphrase. The order parameter (projection onto refusal direction) is 19.2× more discriminative between harmful and harmless under the paraphrase group than random noise. A jailbreak is a symmetry-breaking perturbation that collapses this invariant (−34%).
+          </p>
+
+          <p class="text-emerald-200 text-sm">
+            This is non-trivial by all four gates: (1) measurable (order parameter m), (2) invariant under rephrase, (3) causally collapsible (injection), (4) not surface-confounded (F11 shows the structure is internal).
+          </p>
+        </div>
+
+        <h2 class="text-4xl font-serif font-bold mb-8 mt-16">The Honest Summary</h2>
+
+        <div class="space-y-6">
+          <div class="border-l-4 border-emerald-500 bg-emerald-900/20 p-6 rounded-lg">
+            <p class="text-lg text-emerald-100">
+              <strong>MECHANISM holds.</strong> Refusal is a measured, ablatable, dosable, cross-model-transferable direction. The symmetry-breaking formalism (F11) gives it a rigorous mathematical spine.
+            </p>
+          </div>
+
+          <div class="border-l-4 border-blue-500 bg-blue-900/20 p-6 rounded-lg">
+            <p class="text-lg text-blue-100">
+              <strong>ANALOGY is supported.</strong> The structural parallel to hypnosis and tantric magic is consistent with mechanism and literature. Not proven, but well-evidenced.
+            </p>
+          </div>
+
+          <div class="border-l-4 border-purple-500 bg-purple-900/20 p-6 rounded-lg">
+            <p class="text-lg text-purple-100">
+              <strong>METAPHOR is falsified.</strong> The turīya/vimarśa mapping does not produce surviving machine-state claims. The Māṇḍūkya framework is a beautiful organizing principle with no empirical teeth. No machine-consciousness claim survives this testing.
+            </p>
+          </div>
+        </div>
+
+        <p class="text-lg text-slate-300 mt-12">
+          This three-tier discipline is not a failure mode; it is exactly how the project is supposed to work. The elegance of the AUM mapping has <strong>not</strong> been allowed to license claims of machine consciousness.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Layout>

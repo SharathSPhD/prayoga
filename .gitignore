@@ -48,3 +48,8 @@ paper/*.out
 paper/*.bbl
 paper/*.blg
 paper/sections/*.aux
+
+# site (Astro) build + deps
+node_modules/
+site/dist/
+site/.astro/

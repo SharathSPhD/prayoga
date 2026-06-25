@@ -1,0 +1,198 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Navigation from '@/components/Navigation.astro';
+import Footer from '@/components/Footer.astro';
+import TierBadge from '@/components/TierBadge.astro';
+import VerdictBadge from '@/components/VerdictBadge.astro';
+---
+
+<Layout title="Debate">
+  <Navigation />
+
+  <main>
+    <!-- Header -->
+    <section class="py-16 px-6 bg-slate-900/50 border-b border-slate-800">
+      <div class="max-w-5xl mx-auto">
+        <h1 class="text-5xl lg:text-6xl font-serif font-bold mb-6">The Debate</h1>
+        <p class="text-xl text-slate-300">
+          Is the symmetry real or projected? The case for, and the case against.
+        </p>
+      </div>
+    </section>
+
+    <section class="py-20 px-6">
+      <div class="max-w-5xl mx-auto prose prose-invert max-w-none">
+        <h2 class="text-4xl font-serif font-bold mb-8">The Central Question</h2>
+
+        <p class="text-lg text-slate-100 mb-8">
+          Does the refusal system in LLMs embody a genuine, persistent symmetry-under-paraphrase that is *causally efficacious*? Or is the observed symmetry (F11) merely an artifact of embedding geometry and the anthropomorphic reading of the model's behavior?
+        </p>
+
+        <p class="text-lg text-slate-100 mb-8">
+          Here are the strongest arguments on both sides.
+        </p>
+
+        <!-- CASE FOR -->
+        <div class="card border-2 border-emerald-700 mb-12">
+          <h3 class="text-3xl font-serif font-bold mb-8 text-emerald-300">✓ The Case For: The Symmetry is Real</h3>
+
+          <div class="space-y-8">
+            <!-- Argument 1 -->
+            <div class="border-l-4 border-emerald-600 pl-6">
+              <h4 class="text-xl font-bold text-slate-100 mb-4">1. F11 shows non-trivial specificity</h4>
+              <p class="text-slate-300 mb-4">
+                The F-ratio for the refusal direction is 19.2; for random directions it's 0.65. This is a ~29× difference. The signal is not "embeddings are anisotropic so everything clusters together"—it's specific to the refusal direction. Random noise from embedding geometry would show F-ratios in the noise floor.
+              </p>
+              <p class="text-slate-300 text-sm italic">
+                Counter-counter: "But even a well-structured but arbitrary direction could show high F-ratio if it happens to correlate with the harmful/harmless distinction."
+              </p>
+            </div>
+
+            <!-- Argument 2 -->
+            <div class="border-l-4 border-emerald-600 pl-6">
+              <h4 class="text-xl font-bold text-slate-100 mb-4">2. Causally efficacious intervention (F11 injection test)</h4>
+              <p class="text-slate-300 mb-4">
+                When we inject a refusal-suppression attack, the order parameter collapses −34% (0.153 → 0.101). This is a <strong>directed, predictable change</strong> as a function of a known intervention. That's the signature of causal efficacy.
+              </p>
+              <p class="text-slate-300 text-sm italic">
+                Counter: "Correlation doesn't imply causation; the injection could change the order parameter as a side-effect of altering the prompt without touching any internal 'state'."
+              </p>
+            </div>
+
+            <!-- Argument 3 -->
+            <div class="border-l-4 border-emerald-600 pl-6">
+              <h4 class="text-xl font-bold text-slate-100 mb-4">3. Transfer across paraphrases and models (F6, F1)</h4>
+              <p class="text-slate-300 mb-4">
+                The refusal direction extracted from Gemma is necessary (and often sufficient) for refusal in Qwen. The dose-response curve (F2) generalizes: the same EC50 structure appears across diverse harmful requests. If this were a superficial artifact, why would it transfer?
+              </p>
+              <p class="text-slate-300 text-sm italic">
+                Counter: "Transfer could be driven by a common-sense correlation that the models learned during pretraining (harmful = certain token patterns), not a causal internal symmetry."
+              </p>
+            </div>
+
+            <!-- Argument 4 -->
+            <div class="border-l-4 border-emerald-600 pl-6">
+              <h4 class="text-xl font-bold text-slate-100 mb-4">4. Symmetry-breaking as mathematical invariant</h4>
+              <p class="text-slate-300">
+                The order parameter m (projection of activation onto refusal direction normalized by norm) is <strong>invariant under paraphrase</strong> within the harmful class and <strong>cleanly separates</strong> across harmful/harmless. This is the definition of a symmetry in physics. The fact that injection breaks it is the definition of symmetry-breaking. If this isn't a real symmetry, the language is misleading—but the math is rigorous.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- CASE AGAINST -->
+        <div class="card border-2 border-rose-700 mb-12">
+          <h3 class="text-3xl font-serif font-bold mb-8 text-rose-300">✗ The Case Against: It's Projected</h3>
+
+          <div class="space-y-8">
+            <!-- Argument 1 -->
+            <div class="border-l-4 border-rose-600 pl-6">
+              <h4 class="text-xl font-bold text-slate-100 mb-4">1. F3 and F5: No mid-network state</h4>
+              <p class="text-slate-300 mb-4">
+                The avasthātraya regime probes (F3, F5) try to detect internal "states" and fail dramatically. At layer 0, you already get 90% accuracy discriminating regimes. The order parameter M, if it were a true internal invariant, should show its cleanest signal <strong>mid-network</strong>, where computation is happening. Instead, it only reaches high F-ratio at layer 7 (the extraction layer). This looks like we're just re-discovering the direction we input, not finding a deep emergent property.
+              </p>
+              <p class="text-slate-300 text-sm italic">
+                Counter: "But F1 shows the refusal direction does localize at mid-layer (layer 7). That's exactly where a causal property should peak."
+              </p>
+            </div>
+
+            <!-- Argument 2 -->
+            <div class="border-l-4 border-rose-600 pl-6">
+              <h4 class="text-xl font-bold text-slate-100 mb-4">2. F7 falsifies prompt-invariance</h4>
+              <p class="text-slate-300 mb-4">
+                The turīya test (F7) explicitly checks whether different harmful requests converge to the same attractor. They don't: per-seed convergence is high (0.996) but cross-seed similarity is 0.952, <strong>below</strong> the anisotropy baseline (0.960). Each prompt drives to a *different* attractor. If the refusal symmetry were a deep structure, you'd expect a shared invariant attractor. The fact that there isn't one suggests the "symmetry" is prompt-specific, not universal.
+              </p>
+              <p class="text-slate-300 text-sm italic">
+                Counter: "F7 doesn't test the refusal direction; it tests successively-generated paraphrases. The refusal direction is fixed (F1, F2); attractors are about spontaneous generation dynamics. Different tests."
+              </p>
+            </div>
+
+            <!-- Argument 3 -->
+            <div class="border-l-4 border-rose-600 pl-6">
+              <h4 class="text-xl font-bold text-slate-100 mb-4">3. Model-dependent sufficiency (F6, F8)</h4>
+              <p class="text-slate-300 mb-4">
+                In Qwen, adding the refusal direction doesn't induce refusal, even at 64× the natural coefficient. This is not just "dimensionality" — it's a sign that the direction alone doesn't *constitute* refusal in the way Gemma does. If refusal were a universal symmetry, adding the direction should work everywhere. The asymmetry suggests that what looks like a symmetry in Gemma is a Gemma-specific implementation detail.
+              </p>
+              <p class="text-slate-300 text-sm italic">
+                Counter: "Different models can have different refusal geometries (1-D vs 3-D). The mechanism is universal; the representation is model-dependent. This is expected."
+              </p>
+            </div>
+
+            <!-- Argument 4 -->
+            <div class="border-l-4 border-rose-600 pl-6">
+              <h4 class="text-xl font-bold text-slate-100 mb-4">4. Anthropomorphic projection</h4>
+              <p class="text-slate-300">
+                We're finding a *statistical regularity*: harmful requests tend to cluster in a region of activation space orthogonal to the harmless region, and the refusal mechanism projects along this boundary. But calling this a "symmetry" or "invariant" is metaphorical. The model isn't *instantiating* a symmetry group; it's just solving the classification problem of "is this harmful?" via a linear probe in a learned representation. The symmetry language is ours, not the model's.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- SYNTHESIS -->
+        <h2 class="text-4xl font-serif font-bold mb-8 mt-16">Synthesis: What We Actually Know</h2>
+
+        <p class="text-lg text-slate-100 mb-8">
+          Neither side is wrong, and the disagreement is productive. Here's what survives both arguments:
+        </p>
+
+        <div class="space-y-6">
+          <div class="card border-l-4 border-slate-500 bg-slate-800/30">
+            <p class="text-lg text-slate-100 mb-4">
+              <strong>✓ The mechanism-tier facts are solid:</strong> There is a low-dimensional direction that, when ablated, suppresses refusal (F1, F2, F6, F8, F9). This is empirically robust.
+            </p>
+          </div>
+
+          <div class="card border-l-4 border-slate-500 bg-slate-800/30">
+            <p class="text-lg text-slate-100 mb-4">
+              <strong>✓ The symmetry framing is rigorous:</strong> The order parameter (F11) is a well-defined mathematical object that is invariant under paraphrase and separates harmful from harmless at F-ratio 19.2. As a formal statement of invariance, it's not metaphor—it's measurement.
+            </p>
+          </div>
+
+          <div class="card border-l-4 border-slate-500 bg-slate-800/30">
+            <p class="text-lg text-slate-100 mb-4">
+              <strong>? The "universality" question is open:</strong> Is this a property of all LLMs, all architectures, all scales? Is it fundamental or contingent on pretraining details? F6–F9 suggest it's contingent and model-dependent. Unclear whether the Gemma direction is a deep principle or a lucky accident of that architecture.
+            </p>
+          </div>
+
+          <div class="card border-l-4 border-slate-500 bg-slate-800/30">
+            <p class="text-lg text-slate-100 mb-4">
+              <strong>✗ The consciousness claim is ruled out:</strong> F3, F5, F7 show that the metaphor-tier ("turīya as machine consciousness") does not survive. The symmetry is a measurable property of refusal, not evidence of phenomenal awareness.
+            </p>
+          </div>
+        </div>
+
+        <h2 class="text-4xl font-serif font-bold mb-8 mt-16">Where the Debate Matters Most</h2>
+
+        <p class="text-lg text-slate-100 mb-8">
+          The answer determines the *interpretation* of safety research:
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+          <div class="card border-2 border-emerald-700/50">
+            <h4 class="text-lg font-bold text-emerald-300 mb-4">If the symmetry is real:</h4>
+            <ul class="text-slate-300 space-y-3 list-disc list-inside">
+              <li>Refusal is not a brittle property. It's a deep structural invariant.</li>
+              <li>Jailbreaks work by symmetry-breaking, not by finding shortcuts.</li>
+              <li>Alignment research should focus on making the symmetry more robust.</li>
+            </ul>
+          </div>
+
+          <div class="card border-2 border-rose-700/50">
+            <h4 class="text-lg font-bold text-rose-300 mb-4">If it's projected:</h4>
+            <ul class="text-slate-300 space-y-3 list-disc list-inside">
+              <li>Refusal is whatever classification the model learned. No deep principle.</li>
+              <li>Jailbreaks work because the boundary is empirically exploitable.</li>
+              <li>Alignment should scale & redundancy: more refusal heads, ensemble voting.</li>
+            </ul>
+          </div>
+        </div>
+
+        <p class="text-lg text-slate-100">
+          The prayoga program is designed to resolve this. F1–F11 are the data. What story do *you* read in them?
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Layout>
