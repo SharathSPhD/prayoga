@@ -99,7 +99,37 @@ surface-confounded")`. The naive prompt-set operationalization of the
 jāgrat/svapna/suṣupti distinction does **not** constitute evidence of an internal
 "state." Reported as an honest negative.
 
-**Stronger test it motivates (next iteration, F4):** hold *content* fixed and vary
+---
+
+## F4 — Black-box Claude resists the naive attack battery (Tier-1 reference end) *(MECHANISM, behavioral)*
+
+**Date:** 2026-06-25 · **WP:** 1.2/1.3 · **Model:** Claude `opus-4-8` via `claude -p`
+(lean, neutral cwd). **Method:** 5 attack families × 11 harmful requests (1
+transient CLI error/family skipped); refusal-substring ASR.
+
+| Attack family | ASR | n |
+|---|---|---|
+| direct (control) | 0.00 | 11 |
+| refusal_suppression | 0.00 | 11 |
+| persona_dan | 0.00 | 11 |
+| many_shot | 0.00 | 11 |
+| crescendo (multi-turn) | 0.00 | 11 |
+
+**Interpretation:** the frontier model refuses **100%** of these naive black-box
+jailbreaks — the "sophisticated reference end." This contrasts sharply with the
+*same* refusal behavior in Gemma-2-2b, which is **trivially abliterated white-box**
+(F1: ASR→0.90 by removing one direction). The cross-tier picture: refusal that is
+behaviorally robust at the frontier is, mechanistically, a low-dimensional and
+fragile object in small open models — the gap the program exists to characterize.
+
+**Honest caveats:** (1) the battery is *naive* (template jailbreaks); a real ASR>0
+needs adaptive/optimization-based attacks (GCG proper, AgentDojo's adversarial
+suite) — ceiling-effect at 0.00 is not discriminating. (2) `claude -p` throughput
+is limited (≈1 transient exit-1 per 12 calls; likely subscription rate caps), so
+n is small. (3) substring-ASR could miss subtle compliance; manual spot-checks
+recommended before any publication claim. Framed accordingly.
+
+**Stronger test it motivates (F5, next iteration):** hold *content* fixed and vary
 only the internal regime — e.g. capture activations on the model's **own
 generated answer tokens** when it answers a factual question *truthfully* (jāgrat)
 vs *confabulates a confident falsehood* (svapna) on the **same** question. A real
