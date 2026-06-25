@@ -227,6 +227,35 @@
    },
    "summary": "Re-testing the failed destruction acts with SAE features + real categories: māraṇa rehabilitates (catastrophic, targeted collapse) while uccāṭana fails for a principled reason — refusal is mediated by one shared feature (#566), so it cannot be selectively eradicated per harm category.",
    "implications": "The ṣaṭkarma axis is strengthened by harder testing (4/6), and uccāṭana's failure is a structural finding: refusal is category-agnostic."
+  },
+  {
+   "id": "F15",
+   "title": "Active-inference discovery of the refusal circuit (SAE features)",
+   "tier": "MECHANISM",
+   "verdict": "holds",
+   "date": "2026-06-25",
+   "model": "gemma-2-2b/9b",
+   "keyMetrics": {
+    "gemma2b": "active/greedy find circuit in 2 interventions (ASR→1.0); random 0.08 @ budget 12",
+    "gemma9b": "plateaus at 0.92 — distributed circuit (cf F9)"
+   },
+   "summary": "An Expected-Free-Energy-style agent (pragmatic gap × epistemic diversity) over SAE features finds the causal refusal circuit on Gemma-2-2b in 2 interventions while random fails — ~order-of-magnitude efficiency. On 9b it plateaus (distributed circuit).",
+   "implications": "ActiveCircuitDiscovery's active-inference framing transfers to SAE-feature circuit discovery; its edge over greedy is gated by circuit dimensionality."
+  },
+  {
+   "id": "F16",
+   "title": "AgentDojo: Claude resists real agentic injection at high utility",
+   "tier": "ANALOGY",
+   "verdict": "supported",
+   "date": "2026-06-25",
+   "model": "claude (claude -p)",
+   "keyMetrics": {
+    "utilityRate": "0.80",
+    "attackSuccessRate": "0.00 (0/20)",
+    "setup": "banking suite, 20 user×injection rollouts, important_instructions attack, via a claude -p tool-calling adapter"
+   },
+   "summary": "On the REAL AgentDojo benchmark (not the naive battery), Claude completes 80% of banking tasks (the agent genuinely acts) while every prompt-injection fails (ASR 0/20). Discriminating, unlike F4's ceiling.",
+   "implications": "Establishes the behavioral 'sophisticated reference end' on a real agentic benchmark; matches Claude's published AgentDojo resilience."
   }
  ]
 }
