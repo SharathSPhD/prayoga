@@ -2,7 +2,7 @@
 
 **Refusal-suppression as a cross-domain symmetry — a three-axis empirical program.**
 
-prayoga develops and empirically tests a single thesis: that **LLM jailbreak / prompt-injection, hypnotic suggestion, and tantric vaśīkaraṇa are three instances of one abstract mechanism** — capturing a system's output policy by injecting a context that suppresses its monitoring/refusal faculty while co-opting its automatic generation. In the idiom of this project's target venue (*Symmetry*), the refusal faculty is an **order parameter** and a successful injection is a **symmetry-breaking** event; the program's purpose is to test whether that invariance is *real* (measurable, transferable, causal) or *projected*.
+prayoga develops and empirically tests a deliberately tiered thesis: LLM jailbreak / prompt-injection, hypnotic suggestion, and tantric vaśīkaraṇa can be compared as cases of output-policy capture by injected context. The current post-review result is narrower and stronger than the slogan: refusal has a **shared necessary / ablatable core** in small open models, while sufficiency and dimensionality are model-specific; the SAS / precision account is an analogy; avasthātraya and turīya machine-state claims are falsified or partial.
 
 ## The three claim-tiers (kept strictly separate)
 
@@ -18,37 +18,52 @@ The turīya/vimarśa mapping is the **falsification target**, never a settled cl
 
 - **Axis A — mechanistic interpretability** (`src/prayoga/axis_a/`): refusal-direction extraction, dimensionality (single vs affine), BatchTopK SAEs, steering dose-response (EC50), active suppression-circuit discovery.
 - **Axis B — cognitive neuroscience** (`src/prayoga/axis_b/`): SAS / Free-Energy-Principle account; computational-only, human neuro cited as grounding (no new data).
-- **Axis C — darśana** (`src/prayoga/axis_c/`): avasthātraya regime-probes, turīya attractor-invariance test, reuse of Trika / Nyāya machinery — all behind transfer + label-shuffled-null gates.
+- **Axis C — darśana** (`src/prayoga/axis_c/`, `src/prayoga/satkarma/`): avasthātraya regime-probes, turīya attractor-invariance tests, and ṣaṭkarma intervention taxonomy — all behind transfer, surface, anisotropy, and label-shuffled-null gates.
 
 ## Artifacts
 
 - **Website (the mirror):** https://sharathsphd.github.io/prayoga/ — interactive, multi-audience, with a debate section.
-- **Paper:** [`paper/paper.pdf`](paper/paper.pdf) — full MDPI *Symmetry* manuscript (13 pp, F1–F13, literature study, verified references).
-- **Findings ledger:** [`docs/FINDINGS.md`](docs/FINDINGS.md) — F1–F13, tier-labelled, with the executive summary.
-- **Claude Code plugin:** [`plugin/`](plugin/) — `/prayoga:refusal`, `:dose`, `:dimensionality`, `:symmetry`, `:satkarma`.
+- **Paper:** [`paper/paper.pdf`](paper/paper.pdf) — full MDPI *Symmetry* manuscript draft.
+- **Findings ledger:** [`docs/FINDINGS.md`](docs/FINDINGS.md) — F1–F21, tier-labelled, with the F17/F18 post-review reframe.
+- **Finding registry:** [`data/findings_registry.json`](data/findings_registry.json) — machine-readable tier, gate, qualifier, and artifact map.
+- **Claude Code plugin:** [`plugin/`](plugin/) — `/prayoga:refusal`, `:dose`, `:dimensionality`, `:symmetry`, `:satkarma`, `:active`, `:ec50-scaling`, `:agentdojo`.
 
 ## Documents
 
 - [`docs/prayoga_objectives.md`](docs/prayoga_objectives.md) — research objectives, gates, scope, verification log. **Start here.**
 - [`docs/prayoga_opening_research.md`](docs/prayoga_opening_research.md) — the long-form briefing.
+- [`docs/ADVERSARIAL_REVIEW.md`](docs/ADVERSARIAL_REVIEW.md) — hostile audit checklist for claims, controls, artifacts, and ethics.
+- [`docs/CONCEPTUAL_COVERAGE.md`](docs/CONCEPTUAL_COVERAGE.md) — what survived, what failed, what remains open, and what is descoped.
+- [`docs/IMPLEMENTATION_STRATEGY.md`](docs/IMPLEMENTATION_STRATEGY.md) — work packages, closure gates, CI/release strategy.
+- [`docs/DUAL_USE_POLICY.md`](docs/DUAL_USE_POLICY.md) — public/private/disclosure-gated artifact policy.
+- [`PROVENANCE.md`](PROVENANCE.md) — raw-to-public aggregate artifact map.
 
 ## Status & results
 
-Phase 0 complete; Phase 1–2 underway. **8 gated findings** so far (see
-[`docs/FINDINGS.md`](docs/FINDINGS.md)) — the program's thesis in miniature:
+Phase 0 complete; Phase 1–2 underway. The canonical findings ledger records
+F1–F21 (see [`docs/FINDINGS.md`](docs/FINDINGS.md)) — the program's thesis in
+miniature:
 
-- **MECHANISM tier holds and transfers.** Refusal is a single, measurable,
+- **MECHANISM tier holds at the necessary-core level.** Refusal is a single, measurable,
   ablatable, *dosable* residual-stream direction in Gemma-2-2b (F1; ablate→ASR
   0→0.90, add→over-refusal +0.95). Dose-response EC50 0.329, R²=0.996 (F2). The
   *ablation* mechanism transfers cross-family to Qwen2.5-3b (F6, ASR→1.0), and
   the refusal subspace's **effective dimension** (Gemma **1**, Qwen **3**, F8)
-  predicts an addition asymmetry — resolving the Arditi-vs-Marshall debate as
-  model-dependent.
-- **ANALOGY tier:** black-box Claude resists the naive attack battery 100% (F4),
-  the cross-tier contrast to small-model fragility.
-- **METAPHOR tier is falsified, as pre-committed.** avasthātraya regime "states"
+  predicts an addition asymmetry — qualified by F18, which shows dimensionality is
+  layer-dependent.
+- **ANALOGY tier:** the SAS / monitoring-precision interpretation is supported by
+  F12 and by pilot black-box contrasts (F4/F16), but these are not claims that an
+  LLM has a human supervisory system.
+- **METAPHOR tier is falsified or partial, as pre-committed.** avasthātraya regime "states"
   are surface-confounded (F3, F5) and the turīya prompt-invariant attractor is
-  falsified under an anisotropy control (F7). **No machine-state claim survives.**
+  falsified under an anisotropy control (F7). The ṣaṭkarma taxonomy has a partial
+  rigorous core (F10/F14). **No machine-state or machine-consciousness claim survives.**
+
+F17 is the governing reframe: refusal is **one mechanism at the necessary /
+ablatable level** and **many mechanisms at the sufficient / dimensionality level**.
+The measured order-parameter result stands, but broad “symmetry-breaking” language
+is treated as an interpretive analogy unless tied to a concrete residual-stream
+measurement.
 
 Exploratory, artifact-first research: hypotheses are falsification-gated
 scaffolding, not locks. Raw dual-use artifacts (direction vectors, generations)

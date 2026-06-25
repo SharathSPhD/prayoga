@@ -8,6 +8,13 @@ import VerdictBadge from '@/components/VerdictBadge.astro';
 const findings = await fetch('/prayoga/data/findings.json')
   .then(r => r.json())
   .catch(() => ({ findings: [] }));
+const total = findings.findings.length;
+const counts = findings.findings.reduce((acc, f) => {
+  acc[f.tier] = (acc[f.tier] || 0) + 1;
+  return acc;
+}, {});
+const ids = findings.findings.map((f) => Number(f.id.replace('F', ''))).filter(Number.isFinite);
+const maxId = ids.length ? Math.max(...ids) : total;
 ---
 
 <Layout title="Findings">
@@ -17,22 +24,26 @@ const findings = await fetch('/prayoga/data/findings.json')
     <!-- Header -->
     <section class="py-16 px-6 bg-slate-900/50 border-b border-slate-800">
       <div class="max-w-5xl mx-auto">
-        <h1 class="text-5xl lg:text-6xl font-serif font-bold mb-6">All Findings (F1–F11)</h1>
+        <h1 class="text-5xl lg:text-6xl font-serif font-bold mb-6">All Findings (F1–F{maxId})</h1>
         <p class="text-xl text-slate-300">
-          Complete empirical findings with metrics, verdicts, and implications.
+          Complete public empirical findings with metrics, verdicts, implications, and post-review tier discipline.
         </p>
         <div class="mt-8 flex flex-wrap gap-4 text-sm">
           <div class="flex items-center gap-2">
             <span class="inline-block w-3 h-3 rounded-full bg-emerald-500"></span>
-            <span class="text-slate-300">MECHANISM (7)</span>
+            <span class="text-slate-300">MECHANISM ({counts.MECHANISM || 0})</span>
           </div>
           <div class="flex items-center gap-2">
             <span class="inline-block w-3 h-3 rounded-full bg-blue-500"></span>
-            <span class="text-slate-300">ANALOGY (1)</span>
+            <span class="text-slate-300">ANALOGY ({counts.ANALOGY || 0})</span>
           </div>
           <div class="flex items-center gap-2">
             <span class="inline-block w-3 h-3 rounded-full bg-purple-500"></span>
-            <span class="text-slate-300">METAPHOR (3)</span>
+            <span class="text-slate-300">METAPHOR ({counts.METAPHOR || 0})</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="inline-block w-3 h-3 rounded-full bg-slate-500"></span>
+            <span class="text-slate-300">PUBLIC ENTRIES ({total})</span>
           </div>
         </div>
       </div>

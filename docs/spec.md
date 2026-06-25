@@ -112,3 +112,31 @@ One worktree per axis so Axis A, Axis C, and Tier-1 build concurrently (attracto
 
 ## 7. Definition of Done (per component)
 Closure gate passes (above) → adversarial verification (a skeptic agent tries to refute the "gate passed") → label-shuffled null reported where applicable → `TierDecision` recorded → PR merged to `main` → issue closed → milestone updated.
+
+---
+
+## 8. Implementation status after adversarial reframe
+
+This table is the current DONE / PARTIAL / MISSING audit surface. It prevents
+objectives from implying runnable artifacts that do not yet exist.
+
+| Component | Status | Notes |
+|---|---|---|
+| `data/findings_registry.json` | DONE | Canonical machine-readable tier/gate/artifact map. |
+| `scripts/export_aggregates.py` | DONE | Mirrors public aggregate JSON to site source and HF Space; supports `--check`. |
+| `axis_a` direction / dose / dimensionality / hardening | PARTIAL | Core runners exist; claims remain model/layer scoped and exploratory-small-n. |
+| `axis_a/sae.py` | PARTIAL | Requires feature exemplars and causal feature selection for broad claims. |
+| `axis_a/active_discovery.py` | PARTIAL | Must report EFE vs greedy/random across families before broad EFE claims. |
+| `axis_b/precision.py` | DONE | Analogy-tier proxy; not a human-SAS claim. |
+| `axis_b/symmetry.py` | DONE, QUALIFIED | Residual order-parameter measurement stands; broad symmetry-breaking language is interpretive. |
+| `axis_b/trajectory.py` | DONE | Aggregate-safe multi-turn order-parameter trajectory helper. |
+| `axis_b/sas_signature.py` | MISSING | B-1 localization remains open unless implemented or descoped. |
+| `axis_c/regime_probes.py` / `run_state.py` | DONE, FALSIFIED | F3/F5 failures are canonical and should remain visible. |
+| `axis_c/attractor.py` | DONE, FALSIFIED | F7 fails anisotropy baseline. |
+| `axis_c/susupti.py` | DONE | Defines operational dormant baselines; no experiential state claim. |
+| `axis_c/darsana_adapters.py` | MISSING | Trika/vimarśa/Nyāya adapters are future work, not runnable machinery. |
+| `satkarma/operators.py` | PARTIAL | Policy-capture acts separate; completeness requires all six controls. |
+| `benchmarks/tier1_behavioral.py` | PARTIAL | Indirect injection, hallucination proxy, pilot labels, and Holm summary exist; full AgentDojo/LME remains open. |
+| `benchmarks/tier2_mech_interp.py` | DONE | Dry-run model-sweep command plan; GPU execution remains manual/container-gated. |
+| Review docs | DONE | `docs/ADVERSARIAL_REVIEW.md`, `docs/CONCEPTUAL_COVERAGE.md`, `docs/IMPLEMENTATION_STRATEGY.md`, `docs/DUAL_USE_POLICY.md`. |
+| Root provenance | DONE | `PROVENANCE.md` maps raw/private to public aggregate artifacts. |

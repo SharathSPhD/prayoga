@@ -22,7 +22,7 @@ cross-domain mechanism* uniting LLM jailbreak/prompt-injection, hypnotic suggest
 *vaśīkaraṇa*. Every number is a real measurement from sub-7B models on a single GB10 GPU.
 
 Explore the dose–response (EC50), the layer-sweep dimensionality, the paraphrase-orbit symmetry
-and its injection-induced collapse, the *ṣaṭkarma* intervention taxonomy, and the 18-finding ledger.
+and its injection-induced collapse, the *ṣaṭkarma* intervention taxonomy, and the 21-finding ledger.
 
 **Dual-use:** this Space contains only public aggregate statistics — no model weights, no refusal
 direction vectors, no harmful prompts or generations.

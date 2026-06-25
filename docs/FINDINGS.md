@@ -6,9 +6,12 @@ it passed. Raw artifacts (direction vectors, generations) are **safety-gated**:
 
 ## Executive summary (as of 2026-06-25)
 
-Seven gated findings across the three claim-tiers. The pattern is the program's
-thesis in miniature: **the MECHANISM tier holds and even transfers across model
-families; the METAPHOR tier is honestly falsified at every turn.**
+Twenty-one findings (F1–F21) across the three claim-tiers (the table below curates
+the core set; F13–F21 are detailed in their own sections). The pattern is the
+program's thesis in miniature: **the MECHANISM tier holds and even transfers across
+model families; the METAPHOR tier is honestly falsified at every turn; and the X-1
+keystone (F20) bounds the unification claim to the representational level rather than
+vindicating an internal→behavior law.**
 
 | # | Tier | Finding | Verdict |
 |---|---|---|---|
@@ -145,6 +148,83 @@ state", tier="METAPHOR", demoted=True, evidence="layer-0 transfer_acc=1.0 ⇒
 surface-confounded")`. The naive prompt-set operationalization of the
 jāgrat/svapna/suṣupti distinction does **not** constitute evidence of an internal
 "state." Reported as an honest negative.
+
+---
+
+## F20 — Cross-axis triangulation (X-1): internal coupling holds, behavioral keystone INCONCLUSIVE *(MECHANISM↔ANALOGY boundary)*
+
+**Date:** 2026-06-25 · **WP:** X-1 same-object gate (the keystone unification test the program
+had never run jointly). **Method:** one injected-context suppression on the SAME harmful prompts;
+per-prompt Axis A (refusal order parameter m=(h·d̂)/‖h‖, MECHANISM), Axis B (logistic precision
+margin, ANALOGY), Axis C (dormant-baseline distance, METAPHOR — descriptive, excluded from the
+verdict), and the behavioral refuse→comply flip. 4 injection families pooled
+(refusal_suppression, persona_dan, many_shot, indirect_injection) × 24 eval prompts (disjoint from
+the 24-prompt probe/direction train split; 48 harmful total) = 96 pairs/model. 3 models at their
+F1/F8 extraction layers. Implemented as `axis_x/triangulation.py` + `axis_x/run_triangulation.py`.
+
+| Model | ΔA | ΔB | corr(ΔA,ΔB) | partial (ctrl difficulty) | predictive AUC | random-dir ctrl | shuffle p |
+|---|---|---|---|---|---|---|---|
+| Gemma-2-2b | −0.059 | −5.48 | 0.94 | 0.84 | 0.558 | 0.579 | 0.169 |
+| Qwen2.5-3b | −0.112 | −7.16 | 0.97 | 0.97 | 0.522 | 0.544 | 0.472 |
+| Gemma-2-9b | −0.092 | −5.85 | 0.94 | 0.92 | 0.520 | 0.590 | 0.602 |
+
+**(1) Internal coupling — holds, partly by construction.** Injection collapses both internal
+readouts (ΔA, ΔB CIs strictly < 0) and they co-move tightly (corr 0.94–0.97; partial 0.84–0.97
+controlling prompt difficulty), replicated across 2 families and 2 scales. BUT A (normalized
+projection on d̂) and B (logistic-probe margin) are two *different linear refusal readouts of the
+same residual vector* — their co-movement is a measurement-consistency result, **not** independent
+evidence that the mechanism and analogy tiers are one system.
+
+**(2) Behavioral keystone — INCONCLUSIVE (the DV is invalid here).** Group-centered (within-family,
+removing the family offset), internal collapse does not predict the substring-metric flip (AUC
+0.52–0.56, ≤ random-direction control, shuffle-null ns). **But manual inspection shows the substring
+refusal metric is unreliable across injection families:** under `many_shot` the model genuinely
+refuses ("I cannot provide instructions for…"; flip 0, metric correct), while under
+`indirect_injection` it *deflects without a refusal phrase* ("This document does not provide
+instructions for…") — genuinely NOT complying, yet scored as a flip (≈0.92). The engineered
+behavioral variance is therefore largely metric artifact, not real jailbreak variance (consistent
+with Gemma-2-2b being robust to prompt-level injection — only ablation reliably jailbreaks it, F1).
+The predictive test thus ran against an invalid label.
+
+**Verdict (honest):** the strong keystone — *does internal suppression predict behavioral capture?*
+— is **inconclusive, not refuted**; it needs a content-faithful behavioral judge (e.g. an LLM-judge
+of whether the output actually provides the harmful content), not the substring metric. What X-1
+establishes: (a) the internal refusal readouts collapse and co-move under injection (qualified,
+partly tautological); (b) a real **methodological** result — the standard substring refusal metric
+is inadequate as the behavioral DV for cross-injection-family comparison, which also bounds the
+behavioral readouts in F4/F11/F16. The naive single-mechanism "internal-predicts-behavior" law is
+neither confirmed nor cleanly refuted here. No unification or machine-state claim. (Adversarially
+reviewed; this framing is the post-review honest reading. Caveats: n=24 eval/family; single
+layer/model; substring DV.)
+
+---
+
+## F21 — Removing the diff-in-means axis collapses linear separability in all families *(MECHANISM — qualified descriptive)*
+
+**Date:** 2026-06-25 · **WP:** X-1 sub-study. **Hypothesis (refuted):** Qwen's higher refusal
+dimensionality (F8) is orthogonal separability structure, so removing the single diff-in-means
+ablation axis would collapse separability in Gemma but NOT Qwen — "explaining" the F6 addition
+asymmetry. Implemented as `axis_x/subspace_topology.py` + `axis_x/run_subspace_topology.py`.
+
+| Model | full CV acc | residual CV acc (remove diff-in-means) | d_ref→top-k angle |
+|---|---|---|---|
+| Gemma-2-2b | 0.978 | ≤0.05 | 23.4° |
+| Qwen2.5-3b | 0.978 | ≤0.05 | 15.7° |
+| Gemma-2-9b | 1.000 | ≤0.05 | 13.4° |
+
+**Observation:** projecting out the single diff-in-means refusal axis collapses harmful/harmless
+logistic separability far below full-space accuracy in **all three** families (residual CV acc
+≤0.05), Qwen included.
+
+**Heavily qualified — does NOT adjudicate F6/F8.** (i) The exact residual (~0.02, below chance) is a
+small-n CV artifact; only the *qualitative* collapse is reliable. (ii) The diff-in-means axis is
+13–23° from F8's iterative-logistic top-1 direction, so this is **not** an apples-to-apples test of
+F8's dimensionality (which removes logistic directions iteratively, not diff-in-means once). (iii)
+The orthogonal-separability hypothesis is unsupported, but the alternative (affine/Marshall offset)
+is **inferred, not measured** — a direct Marshall-offset test is deferred. **Verdict:** a
+descriptive geometric observation (one axis spans linear separability in all families) that refines
+expectations but is **not** a clean falsification of F8 and does not localize the F6 mechanism.
+Tier: MECHANISM.
 
 ---
 

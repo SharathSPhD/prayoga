@@ -27,6 +27,7 @@ venv/
 # experiment outputs / heavy artifacts (kept out of git; released via OSF/HF, safety-gated)
 # NOTE: track input prompt datasets (data/prompts/**) but ignore everything else under data/
 data/*
+!data/findings_registry.json
 !data/prompts/
 results/
 checkpoints/

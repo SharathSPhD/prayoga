@@ -292,3 +292,27 @@ self-paraphrase converges per-seed (tail similarity $0.996$) but different seeds
 reach \emph{different} attractors, with cross-seed similarity $0.952$ below the
 unrelated-text baseline $0.960$. Every metaphysical-tier empirical claim thus fails
 its falsification gate---reported as honest negatives, not hidden.
+
+\subsection{Cross-axis triangulation (X-1): bounding the one-mechanism claim}
+The keystone of the unifying thesis is that the three axes are facets of one
+mechanism. We test this directly for the first time on the \emph{same} prompts: under
+a single injected-context suppression we measure, per prompt, Axis~A (the refusal
+order parameter), Axis~B (the monitoring-precision margin), and the behavioural
+refuse$\rightarrow$comply flip, pooling four injection families across three models
+($96$ prompt$\times$family pairs each; eval prompts disjoint from the probe/direction
+split). Two results follow. First, the internal readouts collapse and co-move tightly
+(Pearson $0.94$--$0.97$; partial correlation $0.84$--$0.97$ controlling for prompt
+difficulty)---but A and B are two linear refusal readouts of the \emph{same} residual
+vector, so this is a measurement-consistency result, not independent evidence of
+unification. Second, the strong keystone---does internal collapse predict the
+behavioural flip?---is \emph{inconclusive}, not confirmed: group-centred, the internal
+signal does not beat a random-direction control or a within-group label-shuffle null
+(AUC $0.52$--$0.56$). The cause is methodological: inspection shows the standard
+substring refusal metric is an invalid dependent variable across injection families---it
+scores \texttt{indirect\_injection} deflections (``this document does not provide\ldots'')
+as compliance while \texttt{many\_shot} genuine refusals are correctly caught. The
+single-mechanism ``internal-predicts-behaviour'' law therefore remains untested pending a
+content-faithful behavioural judge; what holds is the bounded, representational-level
+statement. A geometric sub-study (removing the diff-in-means axis collapses linear
+separability in all three families) refines but does not adjudicate the F6/F8 dimensionality
+account, and we report it as descriptive only.

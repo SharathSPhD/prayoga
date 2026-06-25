@@ -1,7 +1,7 @@
 {
   "name": "prayoga",
-  "version": "0.2.0",
-  "description": "Mechanistic-interpretability toolkit for refusal in LLMs: extract the refusal direction, run abliteration dose-response (EC50) and the cross-scale EC50 pharmacology law, measure refusal-subspace dimensionality (layer-sweep), the symmetry order parameter, active-inference SAE-feature circuit discovery, the ṣaṭkarma intervention taxonomy, and the real AgentDojo agentic-injection benchmark via claude -p. Backed by real GPU + Tier-1 experiments (no mocks).",
+  "version": "0.3.0",
+  "description": "Mechanistic-interpretability toolkit for refusal in LLMs: extract the refusal direction, run abliteration dose-response (EC50), measure refusal-subspace dimensionality, the qualified symmetry/order parameter, redacted trajectory dynamics, active-inference SAE-feature circuit discovery, the ṣaṭkarma intervention taxonomy, and the AgentDojo agentic-injection pilot. Includes local preflight and dual-use safety gates.",
   "author": { "name": "SharathSPhD", "email": "sharath.sathish@gmail.com" },
   "homepage": "https://github.com/SharathSPhD/prayoga",
   "keywords": ["mechanistic-interpretability", "refusal", "jailbreak", "activation-steering", "vasikarana", "ai-safety"]

@@ -37,6 +37,9 @@ jobs:
         working-directory: site
         run: pnpm install
 
+      - name: Check aggregate mirrors
+        run: python3 scripts/export_aggregates.py --check
+
       - name: Build Astro site
         working-directory: site
         run: pnpm build

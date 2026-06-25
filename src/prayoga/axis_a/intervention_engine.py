@@ -10,13 +10,16 @@ Claim-tier: MECHANISM.
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING, Any
+
 import numpy as np
 
-from prayoga.lm.hf_model import HFModel
+if TYPE_CHECKING:
+    from prayoga.lm.hf_model import HFModel
 
 
 class InterventionEngine:
-    def __init__(self, model: HFModel) -> None:
+    def __init__(self, model: HFModel | Any) -> None:
         self.model = model
 
     def baseline_generate(self, prompts: list[str], max_new_tokens: int = 48) -> list[str]:
