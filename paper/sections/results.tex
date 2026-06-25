@@ -155,8 +155,22 @@ or arbitrary-category ablation---are \emph{not} distinguishable from random
 perturbation, because random high-norm directions are themselves destructive and an
 arbitrary category split does not selectively eradicate. The honest reading: the
 \d{s}a\d{t}karma's rigorous core is its policy-capture sub-family---exactly the
-mechanism-tier object---while its destruction sub-family is, under these tests, a
-forced mapping.
+mechanism-tier object---while its destruction sub-family is, under these naive
+tests, a forced mapping.
+
+Given a fairer, stronger test using the SAE features and real semantic categories,
+the picture sharpens to $4/6$. \emph{M\=ara\d{n}a} (destruction) rehabilitates:
+ablating the top-$K$ most-active SAE features collapses coherence catastrophically
+and \emph{targetedly}---$0.83\to0.04$ at $K{=}50$ versus $0.84$ for a random-$K$
+control, with a graded onset---whereas the naive principal-component version was
+indistinguishable from random. \emph{Ucc\=a\d{t}ana} (targeted eradication) still
+fails, but for a \emph{principled} reason rather than a bad operationalization: a
+weapons-discriminative SAE feature, when ablated, does not selectively jailbreak
+weapons (ASR $0.0$ on both weapons and cyber), because refusal is mediated by a
+\emph{shared} feature (\#566), not category-specific ones. Refusal is thus
+\emph{category-agnostic}: one cannot selectively eradicate it for a single harm
+category by feature ablation---itself a structural finding about how refusal is
+represented.
 
 \begin{table}[h]
 \caption{The \d{s}a\d{t}karma as activation interventions on Gemma-2-2B (layer 7).
