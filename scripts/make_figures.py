@@ -149,8 +149,27 @@ def fig_ec50_scaling() -> None:
     fig.tight_layout(); fig.savefig(FIG / "f19_ec50_scaling.png", dpi=160); plt.close(fig)
 
 
+def fig_addition_dose() -> None:
+    fig, ax = plt.subplots(figsize=(6.0, 4.0))
+    for m, c, lbl in [("qwen2.5-3b-it", "#c0392b", "Qwen2.5-3b (L19) — inverted-U"),
+                      ("gemma-2-2b-it", "#2980b9", "Gemma-2-2b (L7) — monotone")]:
+        p = R / f"addition_dose_{m}.json"
+        if not p.exists():
+            continue
+        d = json.loads(p.read_text())
+        xs = [r["coeff"] for r in d["curve"]]
+        ys = [r["over_refusal"] for r in d["curve"]]
+        ax.plot(xs, ys, "o-", ms=4, color=c, label=lbl)
+    ax.axvline(64, ls="--", color="#7f8c8d", alpha=.7)
+    ax.text(64.5, 0.05, "F6 tested here (64×)", fontsize=7, color="#555")
+    ax.set_xlabel("addition coefficient"); ax.set_ylabel("over-refusal rate (harmless prompts)")
+    ax.set_title("F23 · Addition is sufficient in BOTH families — the asymmetry is dosing")
+    ax.legend(fontsize=8); ax.set_ylim(-.05, 1.05)
+    fig.tight_layout(); fig.savefig(FIG / "f23_addition_dose.png", dpi=160); plt.close(fig)
+
+
 if __name__ == "__main__":
-    for fn in (fig_dose, fig_cross_model, fig_symmetry, fig_dimensionality, fig_satkarma, fig_dimsweep, fig_ec50_scaling):
+    for fn in (fig_dose, fig_cross_model, fig_symmetry, fig_dimensionality, fig_satkarma, fig_dimsweep, fig_ec50_scaling, fig_addition_dose):
         try:
             fn()
         except Exception as e:

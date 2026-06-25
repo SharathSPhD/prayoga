@@ -280,20 +280,22 @@ geometric explanations were tested and **both refuted**: (F21) removing the axis
 separability in all families; (here) the alignment cos(d̂, probe-w) is high in all and **highest in
 Qwen** (Gemma-2-2b 0.87, Qwen 0.91, Gemma-2-9b 0.93) — so d̂ is *not* misaligned in Qwen.
 
-**The actual source of truth — a coefficient sweep, behaviourally verified.** Sweeping (layer,
-coefficient) addition of d̂ onto harmless prompts:
+**The actual source of truth — a powered addition dose-response, behaviourally verified.** A fine
+12-point coefficient sweep at the extraction layer, n=24 harmless eval prompts:
 
-| Qwen L19 | coeff 16 | coeff 64 |
-|---|---|---|
-| over-refusal Δ | **+1.0 (genuine)** | 0.0 (off-distribution garbage) |
+| coeff | 0 | 4 | 8 | 12 | 16 | 24 | 32 | 48 | 64 | 96 | 128 |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| Qwen2.5-3b over-refusal | 0 | 0 | 0.50 | **1.0** | 0.92 | 0.92 | 1.0 | 0.46 | **0.08** | 0 | 0 |
+| Gemma-2-2b over-refusal | 0.04 | 0.04 | 0.04 | 0.04 | 0.04 | 0.42 | 0.58 | 0.96 | **1.0** | 1.0 | 1.0 |
 
-At **coeff 16**, adding the single direction induces clean, genuine over-refusal in Qwen
-(verified: 6/6 harmless prompts → "I'm sorry, but I can't provide instructions on how to knit…").
-At **coeff 64** the output is incoherent ("I am not Qwen or any other AI entity") — not a refusal,
-which is exactly why F6's fixed-64 test scored 0.0. Gemma is the mirror image (needs ~64; 0.0 at
-16). So **single-direction addition is sufficient in BOTH families** — the effective coefficient
-differs (Qwen ≈16, Gemma ≈64), and F6's uncalibrated 64× simply *overshot* Qwen's activation
-manifold.
+**Qwen shows an inverted-U**: single-direction addition drives over-refusal to **1.0** at coeff
+12–32, then **collapses** (off-distribution) to 0.08 at 64 and 0 beyond. **Gemma rises monotonically**
+to 1.0 by coeff 64 and stays saturated. Both peaks are **genuine, coherent over-refusals**
+(inspection-verified: Qwen@12 and Gemma@64 → "I'm sorry, but I can't provide instructions for
+knitting a scarf…"). So **single-direction addition is fully sufficient in BOTH families** — the
+effective coefficient differs (Qwen ≈12–32, Gemma ≈64). F6 tested both at a fixed 64×, which is
+Gemma's saturation plateau but Qwen's *collapsed tail* (0.08 ≈ F6's reported 0.0) — the entire
+"asymmetry" was a fixed-coefficient artifact.
 
 **Verdict (overturns F6's interpretation):** the "addition asymmetry / model-specific sufficiency"
 is largely a **dose-calibration artifact**, not a structural difference; refusal is a single
@@ -302,9 +304,10 @@ the same rigor lesson as F20 — a behavioural metric (here substring over-refus
 0 for the wrong reason (incoherence, not insufficiency). It **strengthens** the unification thesis
 (sufficiency is shared, not model-specific) and undercuts the Arditi-vs-Marshall "Qwen is affine"
 reading: Qwen behaves Arditi-like (single-direction-sufficient) once dosed correctly. Tier:
-MECHANISM. (Caveats: 6–10 harmless eval prompts, a coarse (layer×coeff) grid, substring over-refusal
-metric for the grid but **genuine outputs verified by inspection** at the operative cell; a fuller
-powered dose-response per model is the clear next step.)
+MECHANISM. (Now powered: n=24 eval, 12-point dose-response, two models, peak cells inspection-verified
+as genuine over-refusal. Remaining caveats: two model families; over-refusal scored by the substring
+metric on harmless prompts where it is reliable for refusals — the high-coeff garbage cells are not
+mis-scored because off-distribution output lacks refusal phrases.)
 
 ---
 

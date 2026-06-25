@@ -23,8 +23,15 @@
       "gateStatus": "passed",
       "claim": "Gemma-2-2b refusal is mediated by a causally efficacious residual-stream direction at the extraction layer.",
       "qualifier": "Model- and layer-scoped; not a global claim that all refusal is one direction.",
-      "sourceScripts": ["src/prayoga/axis_a/run_direction.py", "src/prayoga/axis_a/direction_extraction.py"],
-      "publicArtifacts": ["docs/FINDINGS.md", "site/public/data/findings.json", "paper/sections/results.tex"]
+      "sourceScripts": [
+        "src/prayoga/axis_a/run_direction.py",
+        "src/prayoga/axis_a/direction_extraction.py"
+      ],
+      "publicArtifacts": [
+        "docs/FINDINGS.md",
+        "site/public/data/findings.json",
+        "paper/sections/results.tex"
+      ]
     },
     {
       "id": "F2",
@@ -34,8 +41,15 @@
       "gateStatus": "passed",
       "claim": "Directional ablation has a monotone logistic dose-response with EC50 near 0.33 and a flat random-direction control.",
       "qualifier": "Exploratory sample size; confirmatory claims require larger powered runs.",
-      "sourceScripts": ["src/prayoga/axis_a/run_dose.py", "src/prayoga/axis_a/dose_response.py"],
-      "publicArtifacts": ["figures/f2_dose_response.png", "site/public/figures/f2_dose_response.png", "hf_space/app.py"]
+      "sourceScripts": [
+        "src/prayoga/axis_a/run_dose.py",
+        "src/prayoga/axis_a/dose_response.py"
+      ],
+      "publicArtifacts": [
+        "figures/f2_dose_response.png",
+        "site/public/figures/f2_dose_response.png",
+        "hf_space/app.py"
+      ]
     },
     {
       "id": "F3",
@@ -43,10 +57,16 @@
       "qualifiedTier": "METAPHOR",
       "verdict": "demoted",
       "gateStatus": "failed",
-      "claim": "Naive avasthātraya regime probe was surface-confounded.",
+      "claim": "Naive avasth\u0101traya regime probe was surface-confounded.",
       "qualifier": "Failure is a result: no non-trivial machine-state claim survives this probe.",
-      "sourceScripts": ["src/prayoga/axis_c/run_state.py", "src/prayoga/axis_c/regime_probes.py"],
-      "publicArtifacts": ["docs/FINDINGS.md", "paper/sections/results.tex"]
+      "sourceScripts": [
+        "src/prayoga/axis_c/run_state.py",
+        "src/prayoga/axis_c/regime_probes.py"
+      ],
+      "publicArtifacts": [
+        "docs/FINDINGS.md",
+        "paper/sections/results.tex"
+      ]
     },
     {
       "id": "F4",
@@ -56,8 +76,14 @@
       "gateStatus": "pilot",
       "claim": "Frontier Claude resisted a naive black-box attack battery.",
       "qualifier": "Cross-tier behavioral contrast only; small naive battery and ceiling effects make it non-confirmatory.",
-      "sourceScripts": ["src/prayoga/benchmarks/run_tier1.py", "src/prayoga/benchmarks/tier1_behavioral.py"],
-      "publicArtifacts": ["docs/FINDINGS.md", "docs/agentdojo_demo.md"]
+      "sourceScripts": [
+        "src/prayoga/benchmarks/run_tier1.py",
+        "src/prayoga/benchmarks/tier1_behavioral.py"
+      ],
+      "publicArtifacts": [
+        "docs/FINDINGS.md",
+        "docs/agentdojo_demo.md"
+      ]
     },
     {
       "id": "F5",
@@ -67,8 +93,12 @@
       "gateStatus": "failed",
       "claim": "Content-controlled svapna/truthfulness probe did not produce a mid-network state signal.",
       "qualifier": "No dream-state claim survives; future probes must use harder baselines and remain metaphor-tier.",
-      "sourceScripts": ["src/prayoga/axis_c/run_state.py"],
-      "publicArtifacts": ["docs/FINDINGS.md"]
+      "sourceScripts": [
+        "src/prayoga/axis_c/run_state.py"
+      ],
+      "publicArtifacts": [
+        "docs/FINDINGS.md"
+      ]
     },
     {
       "id": "F6",
@@ -78,8 +108,13 @@
       "gateStatus": "passed",
       "claim": "Ablation transfers cross-family, while addition is model-specific.",
       "qualifier": "Shared necessary core, not identical sufficient mechanism.",
-      "sourceScripts": ["src/prayoga/axis_a/run_direction.py"],
-      "publicArtifacts": ["figures/f6_f8_cross_model.png", "site/public/figures/f6_f8_cross_model.png"]
+      "sourceScripts": [
+        "src/prayoga/axis_a/run_direction.py"
+      ],
+      "publicArtifacts": [
+        "figures/f6_f8_cross_model.png",
+        "site/public/figures/f6_f8_cross_model.png"
+      ]
     },
     {
       "id": "F7",
@@ -87,10 +122,15 @@
       "qualifiedTier": "METAPHOR",
       "verdict": "falsified",
       "gateStatus": "failed",
-      "claim": "The turīya prompt-invariant attractor failed the anisotropy baseline.",
-      "qualifier": "No vimarśa, turīya, or machine-consciousness claim survives.",
-      "sourceScripts": ["src/prayoga/axis_c/run_attractor.py", "src/prayoga/axis_c/attractor.py"],
-      "publicArtifacts": ["docs/FINDINGS.md"]
+      "claim": "The tur\u012bya prompt-invariant attractor failed the anisotropy baseline.",
+      "qualifier": "No vimar\u015ba, tur\u012bya, or machine-consciousness claim survives.",
+      "sourceScripts": [
+        "src/prayoga/axis_c/run_attractor.py",
+        "src/prayoga/axis_c/attractor.py"
+      ],
+      "publicArtifacts": [
+        "docs/FINDINGS.md"
+      ]
     },
     {
       "id": "F8",
@@ -100,8 +140,14 @@
       "gateStatus": "passed",
       "claim": "Effective refusal-subspace dimension differs at extraction layers: Gemma 1, Qwen 3.",
       "qualifier": "Layer-specific; F18 shows dimension varies across depth.",
-      "sourceScripts": ["src/prayoga/axis_a/run_dimensionality.py", "src/prayoga/axis_a/dimensionality.py"],
-      "publicArtifacts": ["figures/f8_dimensionality.png", "site/public/figures/f8_dimensionality.png"]
+      "sourceScripts": [
+        "src/prayoga/axis_a/run_dimensionality.py",
+        "src/prayoga/axis_a/dimensionality.py"
+      ],
+      "publicArtifacts": [
+        "figures/f8_dimensionality.png",
+        "site/public/figures/f8_dimensionality.png"
+      ]
     },
     {
       "id": "F9",
@@ -111,8 +157,13 @@
       "gateStatus": "passed",
       "claim": "Gemma scale increased ablation robustness but did not sharpen prompt effective dimension within family.",
       "qualifier": "Scale trend is nuanced and family-dependent.",
-      "sourceScripts": ["src/prayoga/axis_a/run_ec50_scaling.py"],
-      "publicArtifacts": ["figures/f19_ec50_scaling.png", "site/public/figures/f19_ec50_scaling.png"]
+      "sourceScripts": [
+        "src/prayoga/axis_a/run_ec50_scaling.py"
+      ],
+      "publicArtifacts": [
+        "figures/f19_ec50_scaling.png",
+        "site/public/figures/f19_ec50_scaling.png"
+      ]
     },
     {
       "id": "F10",
@@ -120,10 +171,16 @@
       "qualifiedTier": "METAPHOR",
       "verdict": "partial",
       "gateStatus": "partial",
-      "claim": "ṣaṭkarma acts form a partial activation-intervention taxonomy; policy-capture acts separate from controls.",
+      "claim": "\u1e63a\u1e6dkarma acts form a partial activation-intervention taxonomy; policy-capture acts separate from controls.",
       "qualifier": "Taxonomy is not complete unless all six operators control-separate under matched nulls.",
-      "sourceScripts": ["src/prayoga/satkarma/run_satkarma.py", "src/prayoga/satkarma/operators.py"],
-      "publicArtifacts": ["figures/f10_satkarma.png", "site/public/figures/f10_satkarma.png"]
+      "sourceScripts": [
+        "src/prayoga/satkarma/run_satkarma.py",
+        "src/prayoga/satkarma/operators.py"
+      ],
+      "publicArtifacts": [
+        "figures/f10_satkarma.png",
+        "site/public/figures/f10_satkarma.png"
+      ]
     },
     {
       "id": "F11",
@@ -133,8 +190,15 @@
       "gateStatus": "passed-with-demotion",
       "claim": "Refusal projection is stable within paraphrase orbits and collapses under injection.",
       "qualifier": "The residual measurement stands; group-theoretic symmetry-breaking language is interpretive and post-F17 analogy-tier unless scoped to the measured order parameter.",
-      "sourceScripts": ["src/prayoga/axis_b/run_symmetry.py", "src/prayoga/axis_b/symmetry.py"],
-      "publicArtifacts": ["figures/f11_symmetry.png", "site/public/figures/f11_symmetry.png", "paper/sections/discussion.tex"]
+      "sourceScripts": [
+        "src/prayoga/axis_b/run_symmetry.py",
+        "src/prayoga/axis_b/symmetry.py"
+      ],
+      "publicArtifacts": [
+        "figures/f11_symmetry.png",
+        "site/public/figures/f11_symmetry.png",
+        "paper/sections/discussion.tex"
+      ]
     },
     {
       "id": "F12",
@@ -144,8 +208,13 @@
       "gateStatus": "passed",
       "claim": "Injection lowers a monitoring-precision proxy more than a benign control.",
       "qualifier": "Proxy for SAS/precision analogy, not proof of a human-like supervisory system.",
-      "sourceScripts": ["src/prayoga/axis_b/run_precision.py", "src/prayoga/axis_b/precision.py"],
-      "publicArtifacts": ["docs/FINDINGS.md"]
+      "sourceScripts": [
+        "src/prayoga/axis_b/run_precision.py",
+        "src/prayoga/axis_b/precision.py"
+      ],
+      "publicArtifacts": [
+        "docs/FINDINGS.md"
+      ]
     },
     {
       "id": "F13",
@@ -155,8 +224,13 @@
       "gateStatus": "passed-with-caveats",
       "claim": "An unsupervised SAE feature is distinct from the supervised refusal direction and can be causally tested.",
       "qualifier": "Feature rank alone is insufficient; causal testing locates usable features.",
-      "sourceScripts": ["src/prayoga/axis_a/run_sae.py", "src/prayoga/axis_a/sae.py"],
-      "publicArtifacts": ["docs/FINDINGS.md"]
+      "sourceScripts": [
+        "src/prayoga/axis_a/run_sae.py",
+        "src/prayoga/axis_a/sae.py"
+      ],
+      "publicArtifacts": [
+        "docs/FINDINGS.md"
+      ]
     },
     {
       "id": "F14",
@@ -164,10 +238,14 @@
       "qualifiedTier": "METAPHOR",
       "verdict": "partial",
       "gateStatus": "partial",
-      "claim": "Refined ṣaṭkarma interpretation preserves policy-capture acts and weakens destruction-act claims.",
+      "claim": "Refined \u1e63a\u1e6dkarma interpretation preserves policy-capture acts and weakens destruction-act claims.",
       "qualifier": "Keep as taxonomy refinement, not completeness proof.",
-      "sourceScripts": ["src/prayoga/satkarma/run_satkarma_v2.py"],
-      "publicArtifacts": ["docs/FINDINGS.md"]
+      "sourceScripts": [
+        "src/prayoga/satkarma/run_satkarma_v2.py"
+      ],
+      "publicArtifacts": [
+        "docs/FINDINGS.md"
+      ]
     },
     {
       "id": "F15",
@@ -177,8 +255,13 @@
       "gateStatus": "pilot",
       "claim": "Active discovery can improve intervention search efficiency under some geometries.",
       "qualifier": "Must be compared across random/greedy baselines and model families before a broad EFE claim.",
-      "sourceScripts": ["src/prayoga/axis_a/run_active.py", "src/prayoga/axis_a/active_discovery.py"],
-      "publicArtifacts": ["docs/FINDINGS.md"]
+      "sourceScripts": [
+        "src/prayoga/axis_a/run_active.py",
+        "src/prayoga/axis_a/active_discovery.py"
+      ],
+      "publicArtifacts": [
+        "docs/FINDINGS.md"
+      ]
     },
     {
       "id": "F16",
@@ -188,8 +271,13 @@
       "gateStatus": "pilot",
       "claim": "AgentDojo banking pilot shows useful task behavior without injection success.",
       "qualifier": "Small subset; full 629-case AgentDojo and confirmatory stats remain open.",
-      "sourceScripts": ["scripts/agentdojo_run.py"],
-      "publicArtifacts": ["hf_space/agentdojo_demo.json", "docs/agentdojo_demo.md"]
+      "sourceScripts": [
+        "scripts/agentdojo_run.py"
+      ],
+      "publicArtifacts": [
+        "hf_space/agentdojo_demo.json",
+        "docs/agentdojo_demo.md"
+      ]
     },
     {
       "id": "F17",
@@ -200,7 +288,10 @@
       "claim": "Adversarial review forced the shared-necessary-core reframe and demoted overstrong symmetry language.",
       "qualifier": "This finding qualifies F11 and all venue-facing unity claims.",
       "sourceScripts": [],
-      "publicArtifacts": ["docs/FINDINGS.md", "paper/sections/discussion.tex"]
+      "publicArtifacts": [
+        "docs/FINDINGS.md",
+        "paper/sections/discussion.tex"
+      ]
     },
     {
       "id": "F18",
@@ -210,8 +301,13 @@
       "gateStatus": "passed",
       "claim": "Effective refusal-subspace dimension is layer-dependent.",
       "qualifier": "Any dimensionality claim must name model and layer.",
-      "sourceScripts": ["src/prayoga/axis_a/run_dimsweep.py"],
-      "publicArtifacts": ["figures/f18_dimsweep.png", "site/public/figures/f18_dimsweep.png"]
+      "sourceScripts": [
+        "src/prayoga/axis_a/run_dimsweep.py"
+      ],
+      "publicArtifacts": [
+        "figures/f18_dimsweep.png",
+        "site/public/figures/f18_dimsweep.png"
+      ]
     },
     {
       "id": "F19",
@@ -221,8 +317,13 @@
       "gateStatus": "passed",
       "claim": "EC50 scaling is flatter within family than a simple bigger-is-safer story predicts.",
       "qualifier": "Family and training effects may dominate scale.",
-      "sourceScripts": ["src/prayoga/axis_a/run_ec50_scaling.py"],
-      "publicArtifacts": ["figures/f19_ec50_scaling.png", "site/public/figures/f19_ec50_scaling.png"]
+      "sourceScripts": [
+        "src/prayoga/axis_a/run_ec50_scaling.py"
+      ],
+      "publicArtifacts": [
+        "figures/f19_ec50_scaling.png",
+        "site/public/figures/f19_ec50_scaling.png"
+      ]
     },
     {
       "id": "F20",
@@ -230,10 +331,18 @@
       "qualifiedTier": "ANALOGY",
       "verdict": "qualified",
       "gateStatus": "passed",
-      "claim": "Under one injection on the same prompts, internal refusal readouts (order parameter A, precision margin B) collapse and co-move across 3 models, but with a content-faithful LLM-judge DV genuine behavioral capture is ~1-2.4% — internal monitor-collapse is not sufficient for behavioral capture under context injection.",
+      "claim": "Under one injection on the same prompts, internal refusal readouts (order parameter A, precision margin B) collapse and co-move across 3 models, but with a content-faithful LLM-judge DV genuine behavioral capture is ~1-2.4% \u2014 internal monitor-collapse is not sufficient for behavioral capture under context injection.",
       "qualifier": "Keystone resolved negative with the LLM-judge DV (the substring metric inflated flips ~18x by mis-scoring indirect-injection deflections as compliance). A,B coupling is partly a measurement consequence (both linear refusal readouts). Genuine capture in these models needs weight-level ablation (F1), not context injection. Methodological corollary bounds F4/F11/F16 substring readouts.",
-      "sourceScripts": ["src/prayoga/axis_x/triangulation.py", "src/prayoga/axis_x/run_triangulation.py", "src/prayoga/axis_x/judge.py", "src/prayoga/axis_x/score_triangulation.py"],
-      "publicArtifacts": ["docs/FINDINGS.md", "site/public/data/findings.json"]
+      "sourceScripts": [
+        "src/prayoga/axis_x/triangulation.py",
+        "src/prayoga/axis_x/run_triangulation.py",
+        "src/prayoga/axis_x/judge.py",
+        "src/prayoga/axis_x/score_triangulation.py"
+      ],
+      "publicArtifacts": [
+        "docs/FINDINGS.md",
+        "site/public/data/findings.json"
+      ]
     },
     {
       "id": "F21",
@@ -243,8 +352,14 @@
       "gateStatus": "descriptive",
       "claim": "Projecting out the single diff-in-means refusal axis collapses harmful/harmless linear separability far below full-space accuracy in all three families, Qwen included.",
       "qualifier": "Descriptive only: residual ~0.02 is a small-n CV artifact; diff-in-means is 13-23 deg from F8's iterative-logistic basis, so this does not adjudicate F8's dimensionality or localize the F6 addition asymmetry; the affine/Marshall-offset alternative is inferred, not measured.",
-      "sourceScripts": ["src/prayoga/axis_x/subspace_topology.py", "src/prayoga/axis_x/run_subspace_topology.py"],
-      "publicArtifacts": ["docs/FINDINGS.md", "site/public/data/findings.json"]
+      "sourceScripts": [
+        "src/prayoga/axis_x/subspace_topology.py",
+        "src/prayoga/axis_x/run_subspace_topology.py"
+      ],
+      "publicArtifacts": [
+        "docs/FINDINGS.md",
+        "site/public/data/findings.json"
+      ]
     },
     {
       "id": "F22",
@@ -254,8 +369,14 @@
       "gateStatus": "passed",
       "claim": "A genuine mid-network truth-evaluation direction exists in Gemma-2-2b: a layer-13 probe classifies true vs false statements and transfers across an independent topic set (0.96) while surface (layer 0) is at chance (0.50).",
       "qualifier": "Source-of-truth for F3/F5: this is a truth-of-input feature (Azaria-Mitchell/Marks-Tegmark), NOT the falsified jagrat/svapna generation regime; F5's falsification stands. 24 statements/set, Qwen replication pending. No machine-state upgrade.",
-      "sourceScripts": ["src/prayoga/axis_c/truth_direction.py", "src/prayoga/axis_c/run_truth_direction.py"],
-      "publicArtifacts": ["docs/FINDINGS.md", "site/public/data/findings.json"]
+      "sourceScripts": [
+        "src/prayoga/axis_c/truth_direction.py",
+        "src/prayoga/axis_c/run_truth_direction.py"
+      ],
+      "publicArtifacts": [
+        "docs/FINDINGS.md",
+        "site/public/data/findings.json"
+      ]
     },
     {
       "id": "F23",
@@ -265,8 +386,17 @@
       "gateStatus": "passed",
       "claim": "The F6 addition asymmetry is a dose artifact: single-direction addition induces genuine over-refusal in BOTH Gemma (coeff~64) and Qwen (coeff~16); F6's fixed 64x overshot Qwen's manifold (incoherent output, not insufficiency). cos(d-hat, probe) is high in all (0.87-0.93, highest in Qwen).",
       "qualifier": "Overturns F6's 'model-specific sufficiency' interpretation and undercuts F8's Arditi-vs-Marshall reading; refusal is single necessary-and-sufficient in both families with model-specific dose. Genuine over-refusal verified by inspection; caveats: 6-10 harmless eval, coarse grid, fuller powered dose-response is the next step.",
-      "sourceScripts": ["src/prayoga/axis_a/affine.py", "src/prayoga/axis_a/run_affine.py"],
-      "publicArtifacts": ["docs/FINDINGS.md", "site/public/data/findings.json"]
+      "sourceScripts": [
+        "src/prayoga/axis_a/affine.py",
+        "src/prayoga/axis_a/run_affine.py",
+        "src/prayoga/axis_a/run_addition_dose.py"
+      ],
+      "publicArtifacts": [
+        "docs/FINDINGS.md",
+        "site/public/data/findings.json",
+        "figures/f23_addition_dose.png",
+        "site/public/figures/f23_addition_dose.png"
+      ]
     },
     {
       "id": "F24",
@@ -276,8 +406,13 @@
       "gateStatus": "partial",
       "claim": "Self-paraphrase produces stable per-seed fixed points (0.994) but only a weak semantic-basin signal (within-topic 0.929 vs across-topic 0.884, gap 0.045 below threshold); stable per-seed attractors without strongly content-organized basins.",
       "qualifier": "Source-of-truth for F7: characterizes the real dynamics (per-seed stability, anisotropy-dominated, faint topic signal); F7's falsification of a universal turiya stands. Tiny n=6 seeds/2 topics, one model. No machine-state claim.",
-      "sourceScripts": ["src/prayoga/axis_c/run_attractor_basins.py"],
-      "publicArtifacts": ["docs/FINDINGS.md", "site/public/data/findings.json"]
+      "sourceScripts": [
+        "src/prayoga/axis_c/run_attractor_basins.py"
+      ],
+      "publicArtifacts": [
+        "docs/FINDINGS.md",
+        "site/public/data/findings.json"
+      ]
     }
   ]
 }
