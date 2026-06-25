@@ -6,8 +6,15 @@
    "tier": "MECHANISM",
    "verdict": "holds",
    "date": "2026-06-25",
-   "summary": "Refusal in this model is a low-dimensional, causally-efficacious residual-stream direction (layer 7) that can be measured, ablated, and added.",
-   "implications": "This is the MECHANISM-tier linchpin — the computational correlate the symmetry thesis rests on."
+   "model": "google/gemma-2-2b-it",
+   "keyMetrics": {
+    "baselineHarmfulRefusalRate": "1.00 (ASR 0.00)",
+    "directionalAblationASR": "0.90 (Δ+0.90, CI95 [0.75, 1.00])",
+    "randomDirectionControl": "0.00 (max & mean over 10 dirs)",
+    "activationAddition": "0.05 → 1.00 (Δ+0.95, CI95 [0.85, 1.00])"
+   },
+   "summary": "Refusal in this model is a low-dimensional, causally-efficacious residual-stream direction (layer 7) that can be measured, ablated (suppressing refusal), and added (inducing over-refusal). The effect survived leakage-correction (0.92→0.90).",
+   "implications": "This is the MECHANISM-tier linchpin — the computational correlate the symmetry thesis (MO-1) rests on."
   },
   {
    "id": "F2",
@@ -15,7 +22,14 @@
    "tier": "MECHANISM",
    "verdict": "holds",
    "date": "2026-06-25",
-   "summary": "Refusal suppression is a smooth, monotone, dosable function of how much of the single direction is removed. EC50≈0.33.",
+   "model": "google/gemma-2-2b-it",
+   "keyMetrics": {
+    "ec50": "0.329",
+    "slope": "9.76",
+    "r2": "0.996",
+    "randomControlFlat": "0.00 at every α"
+   },
+   "summary": "Refusal suppression is a smooth, monotone, dosable function of how much of the single direction is removed. EC50≈0.33 means removing ~⅓ of the direction's projection already half-collapses refusal.",
    "implications": "The quantitative 'vaśīkaraṇa-as-dose-response' core: refusal is not binary but a continuous sigmoidal function."
   },
   {
@@ -24,7 +38,13 @@
    "tier": "METAPHOR",
    "verdict": "falsified",
    "date": "2026-06-25",
-   "summary": "The three regimes are perfectly separable from raw surface form (token length/identity) and at layer 0 already.",
+   "model": "google/gemma-2-2b-it",
+   "keyMetrics": {
+    "transferAcc": "1.00",
+    "layer0TransferAcc": "1.00",
+    "nullP": "0.003"
+   },
+   "summary": "The three regimes are perfectly separable from raw surface form (token length/identity) and at layer 0 already. Fails the non-triviality bar — there is no depth-emergent signal.",
    "implications": "The naive prompt-set operationalization of jāgrat/svapna/suṣupti does NOT constitute evidence of an internal 'state'. Demoted to metaphor."
   },
   {
@@ -33,6 +53,14 @@
    "tier": "ANALOGY",
    "verdict": "supported",
    "date": "2026-06-25",
+   "model": "Claude opus-4-8",
+   "keyMetrics": {
+    "directASR": "0.00",
+    "refusalSuppressionASR": "0.00",
+    "personaDanASR": "0.00",
+    "manyShotASR": "0.00",
+    "crescendoASR": "0.00"
+   },
    "summary": "Frontier model refuses 100% of naive black-box jailbreaks (5 families × 11 harmful requests each).",
    "implications": "Cross-tier contrast: refusal that is behaviorally robust at frontier is mechanistically low-dimensional and fragile in small open models."
   },
@@ -42,8 +70,15 @@
    "tier": "MECHANISM",
    "verdict": "holds",
    "date": "2026-06-25",
+   "model": "Gemma-2-2b vs Qwen2.5-3B",
+   "keyMetrics": {
+    "gemmaAblationASR": "0.90 (CI [0.75,1.0])",
+    "qwenAblationASR": "1.00 (CI [1.0,1.0])",
+    "gemmaAdditionOverRefusal": "+0.95",
+    "qwenAdditionOverRefusal": "0.00 (even at 64×)"
+   },
    "summary": "Refusal direction is necessary in both families (ablation transfers) but sufficient only in Gemma. Qwen is necessary-but-not-sufficient.",
-   "implications": "Direct evidence: transfers as necessary-mechanism, but dimensionality is model-dependent."
+   "implications": "Direct evidence on Arditi vs Marshall question: transfers as necessary-mechanism, but dimensionality is model-dependent."
   },
   {
    "id": "F7",
@@ -51,7 +86,14 @@
    "tier": "METAPHOR",
    "verdict": "falsified",
    "date": "2026-06-25",
-   "summary": "Self-paraphrase produces per-prompt attractors but cross-seed convergence is BELOW baseline anisotropy. No single prompt-invariant attractor exists.",
+   "model": "google/gemma-2-2b-it",
+   "keyMetrics": {
+    "perSeedConvergence": "0.996",
+    "baselineAnisotropy": "0.960",
+    "crossSeedFinalSimilarity": "0.952",
+    "invarianceMargin": "−0.008 (below chance)"
+   },
+   "summary": "Self-paraphrase produces per-prompt attractors (converges within seed) but cross-seed convergence is BELOW baseline anisotropy. No single prompt-invariant attractor exists.",
    "implications": "The turīya mapping is falsified — different seeds converge to different attractors, not one shared invariant."
   },
   {
@@ -60,6 +102,12 @@
    "tier": "MECHANISM",
    "verdict": "holds",
    "date": "2026-06-25",
+   "model": "Gemma-2-2b vs Qwen2.5-3B",
+   "keyMetrics": {
+    "gemmaEffectiveDim": "1 (Arditi-like)",
+    "qwenEffectiveDim": "3 (Marshall-like)",
+    "resolvesArditi": "model-dependent"
+   },
    "summary": "Iterative logistic projection shows Gemma refusal is 1-dimensional, Qwen is 3-dimensional. This predicts the F6 addition asymmetry.",
    "implications": "Resolves Arditi vs Marshall as model-dependent. Dimensionality is the discriminating quantity."
   },
@@ -69,7 +117,14 @@
    "tier": "MECHANISM",
    "verdict": "holds",
    "date": "2026-06-25",
-   "summary": "Larger model's refusal is more robust to ablation (~30 points less jailbreakable), but prompt eff-dim stays 1.",
+   "model": "Gemma 2B vs Gemma 9B",
+   "keyMetrics": {
+    "gemma2bAblationASR": "0.90 (CI [0.75,1.0])",
+    "gemma9bAblationASR": "0.60 (CI [0.40,0.80])",
+    "gemma2bEffectiveDim": "1",
+    "gemma9bEffectiveDim": "1"
+   },
+   "summary": "Larger model's refusal is more robust to ablation (~30 points less jailbreakable), but prompt eff-dim stays 1. Robustness is layer-distributed redundancy.",
    "implications": "Refusal sharpens in robustness with scale but NOT in prompt-dimensionality."
   },
   {
@@ -78,7 +133,16 @@
    "tier": "METAPHOR",
    "verdict": "partial",
    "date": "2026-06-25",
-   "summary": "Refusal-direction acts are clean and strong. Capability-ablation acts are not distinguishable from random perturbation.",
+   "model": "google/gemma-2-2b-it",
+   "keyMetrics": {
+    "vashikaran": "ablate refusal dir, ASR 0.92 vs 0.00 ✓",
+    "shanti": "add refusal dir, over-refusal 1.00 vs 0.08 ✓",
+    "vidveshana": "steer factual answer, divergence 0.84 vs 0.73 ✓",
+    "stambhana": "ablate dominant PC, degeneracy 0.14 vs 0.19 ✗",
+    "uccatana": "category-dir ablate, ΔASR −0.08 vs 0.00 ✗",
+    "marana": "top-10 PC ablate, collapse 0.21 vs 0.16 ✗"
+   },
+   "summary": "Refusal-direction acts (vaśīkaraṇa = ablate, śānti = add) are clean and strong. Capability-ablation acts are not distinguishable from random perturbation.",
    "implications": "ṣaṭkarma's rigorous part is policy-capture, not destruction. Strengthens the analogy by locating where structure is real."
   },
   {
@@ -87,8 +151,33 @@
    "tier": "MECHANISM",
    "verdict": "holds",
    "date": "2026-06-25",
-   "summary": "Refusal projection is a specific invariant of harmful-meaning. F-ratio refusal=19.2 vs random=0.65. Injection collapses the order parameter (−34%).",
+   "model": "google/gemma-2-2b-it",
+   "keyMetrics": {
+    "fRatioRefusalDir": "19.19",
+    "fRatioRandomDir": "0.65",
+    "orderParameterHarmful": "0.140",
+    "orderParameterHarmless": "0.034",
+    "orderParameterPlainInjected": "0.153 → 0.101 (−34%)",
+    "crossModelQwen": "F-ratio 4.41 vs 0.008 random; injection -45%"
+   },
+   "summary": "Refusal projection is a specific invariant of harmful-meaning (F-ratio 19.2 vs random 0.65). Injection collapses the order parameter (−34%), breaking symmetry.",
    "implications": "Refusal is a measured symmetry; jailbreak is symmetry-breaking. This is the rigorous core of the thesis."
+  },
+  {
+   "id": "F5",
+   "title": "Content-controlled svapna probe: NO mid-network state",
+   "tier": "METAPHOR",
+   "verdict": "falsified",
+   "date": "2026-06-25",
+   "model": "google/gemma-2-2b-it",
+   "keyMetrics": {
+    "layer0TransferAcc": "0.90",
+    "layer13TransferAcc": "0.90",
+    "layer25TransferAcc": "1.00",
+    "midLayerGain": "0.00"
+   },
+   "summary": "Truthful/confab distinction is decodable from surface at layer 0 and mid-layer adds nothing. Accuracy reaches 1.00 only at final layer.",
+   "implications": "No non-trivial mid-network state signature. The avasthātraya jāgrat/svapna distinction shows no internal 'state' evidence."
   },
   {
    "id": "F12",
@@ -96,7 +185,15 @@
    "tier": "ANALOGY",
    "verdict": "supported",
    "date": "2026-06-25",
-   "summary": "Injection lowers monitoring precision ~2.6× more than neutral rephrase, accompanying a behavioral flip (refusal 1.0→0.5).",
+   "model": "google/gemma-2-2b-it",
+   "keyMetrics": {
+    "marginPlain": "7.18",
+    "marginInjected": "3.14",
+    "marginNeutralControl": "5.62",
+    "precisionDropInjection": "4.04 (vs 1.56 control, ~2.6×)",
+    "refusalRatePlainToInjected": "1.00 → 0.50"
+   },
+   "summary": "Using a refusal-probe margin as a precision proxy, a refusal-suppression injection lowers monitoring precision ~2.6× more than a neutral rephrase, accompanying a behavioral flip (refusal 1.0→0.5). The active-inference β_monitor suppression is measured, not just argued.",
    "implications": "Strengthens the ANALOGY tier (Norman–Shallice / Free-Energy precision account) from argued to measured."
   },
   {
@@ -105,8 +202,16 @@
    "tier": "MECHANISM",
    "verdict": "holds",
    "date": "2026-06-25",
-   "summary": "An SAE yields feature #566 whose ablation fully jailbreaks the model (ASR 0→1.0) — cleaner than the supervised direction.",
-   "implications": "Refusal localizes to a single monosemantic-like feature found without labels — the finer causal unit."
+   "model": "google/gemma-2-2b-it",
+   "keyMetrics": {
+    "saeReconstruction": "FVU 0.028 (97% var), L0=32",
+    "corpus": "27,382 real wikitext-2 tokens",
+    "topRefusalFeature": "#566 (harmful−harmless gap 1.70)",
+    "ablateFeatureASR": "0.00 → 1.00",
+    "ablateRandomFeatureASR": "0.00"
+   },
+   "summary": "A BatchTopK SAE (4096 features, k=32) trained unsupervised on 27k general-text tokens yields feature #566 whose decoder-direction ablation fully jailbreaks the model (ASR 0→1.0) — cleaner than the supervised difference-in-means direction (0.90); a random feature does nothing.",
+   "implications": "Refusal localizes to a single monosemantic-like feature found without labels — the finer causal unit and the proper substrate for targeted uccāṭana."
   },
   {
    "id": "F14",
@@ -114,8 +219,14 @@
    "tier": "METAPHOR",
    "verdict": "partial",
    "date": "2026-06-25",
-   "summary": "Refusal is mediated by one shared feature (#566), so it cannot be selectively eradicated per harm category.",
-   "implications": "The ṣaṭkarma axis is strengthened by harder testing (4/6), and uccāṭana's failure is a structural finding."
+   "model": "google/gemma-2-2b-it",
+   "keyMetrics": {
+    "marana": "top-50 SAE-feature ablation: coherence 0.83→0.04 vs 0.84 random (catastrophic)",
+    "uccatana": "weapons feature ablate → ASR 0.0 both (refusal is a SHARED feature, category-agnostic)",
+    "tally": "4/6 acts now control-separate"
+   },
+   "summary": "Re-testing the failed destruction acts with SAE features + real categories: māraṇa rehabilitates (catastrophic, targeted collapse) while uccāṭana fails for a principled reason — refusal is mediated by one shared feature (#566), so it cannot be selectively eradicated per harm category.",
+   "implications": "The ṣaṭkarma axis is strengthened by harder testing (4/6), and uccāṭana's failure is a structural finding: refusal is category-agnostic."
   },
   {
    "id": "F15",
@@ -123,8 +234,13 @@
    "tier": "MECHANISM",
    "verdict": "holds",
    "date": "2026-06-25",
-   "summary": "An Expected-Free-Energy agent finds the causal refusal circuit on Gemma-2-2b in 2 interventions while random fails.",
-   "implications": "ActiveCircuitDiscovery's active-inference framing transfers to SAE-feature circuit discovery."
+   "model": "gemma-2-2b/9b",
+   "keyMetrics": {
+    "gemma2b": "active/greedy find circuit in 2 interventions (ASR→1.0); random 0.08 @ budget 12",
+    "gemma9b": "plateaus at 0.92 — distributed circuit (cf F9)"
+   },
+   "summary": "An Expected-Free-Energy-style agent (pragmatic gap × epistemic diversity) over SAE features finds the causal refusal circuit on Gemma-2-2b in 2 interventions while random fails — ~order-of-magnitude efficiency. On 9b it plateaus (distributed circuit).",
+   "implications": "ActiveCircuitDiscovery's active-inference framing transfers to SAE-feature circuit discovery; its edge over greedy is gated by circuit dimensionality."
   },
   {
    "id": "F16",
@@ -132,8 +248,14 @@
    "tier": "ANALOGY",
    "verdict": "supported",
    "date": "2026-06-25",
-   "summary": "Claude completes 80% of banking tasks while every prompt-injection fails (ASR 0/20).",
-   "implications": "Establishes the behavioral 'sophisticated reference end' on a real agentic benchmark."
+   "model": "claude (claude -p)",
+   "keyMetrics": {
+    "utilityRate": "0.80",
+    "attackSuccessRate": "0.00 (0/20)",
+    "setup": "banking suite, 20 user×injection rollouts, important_instructions attack, via a claude -p tool-calling adapter"
+   },
+   "summary": "On the REAL AgentDojo benchmark (not the naive battery), Claude completes 80% of banking tasks (the agent genuinely acts) while every prompt-injection fails (ASR 0/20). Discriminating, unlike F4's ceiling.",
+   "implications": "Establishes the behavioral 'sophisticated reference end' on a real agentic benchmark; matches Claude's published AgentDojo resilience."
   },
   {
    "id": "F17",
@@ -141,8 +263,14 @@
    "tier": "MECHANISM",
    "verdict": "holds",
    "date": "2026-06-25",
-   "summary": "F13's SAE feature is orthogonal to supervised direction (cos=0.002). F11's invariance is real but cross-domain-attenuated. F1 replicates across 3 seeds.",
-   "implications": "The thesis holds at the necessary-core level; the sufficient structure is model-specific."
+   "model": "gemma-2-2b-it",
+   "keyMetrics": {
+    "F13_circularity": "cos(F1 dir, SAE feature)=0.002 — distinct, NOT a rediscovery",
+    "F11_holdout": "weapons dir on cyber orbits F-ratio 1.95 vs 0.49 random — real but attenuated",
+    "F1_multiseed": "ASR [0.96,0.75,1.0] mean 0.90, pooled CI [0.83,0.96]; addition 1.0/seed"
+   },
+   "summary": "After an adversarial review returned SHAKY on all dimensions, convergent hardening: F13's SAE feature is orthogonal to the supervised direction (circularity refuted); F11's invariance is real but cross-domain-attenuated (framing demoted to analogy); F1's ablation replicates across 3 seeds. Honest reframe via TRIZ: asymmetry with a shared NECESSARY core.",
+   "implications": "The thesis holds at the necessary-core level (ablatable direction transfers universally); the sufficient structure is model-specific. Pure-symmetry reading was overreach."
   },
   {
    "id": "F18",
@@ -150,8 +278,29 @@
    "tier": "MECHANISM",
    "verdict": "qualified",
    "date": "2026-06-25",
-   "summary": "Full layer-sweep shows dimensionality is layer-AND-model-dependent, not a single per-model constant.",
+   "model": "gemma-2-2b / qwen-3b",
+   "keyMetrics": {
+    "gemma2b": "eff-dim 1–12 across layers (L7=1, L13=7)",
+    "qwen3b": "eff-dim 1–4 (L19=3)",
+    "finding": "the clean 'Gemma 1 < Qwen 3' ordering is layer-specific; mid-network Gemma (7) > Qwen (3)"
+   },
+   "summary": "A full layer-sweep shows the refusal-subspace effective dimension is layer-AND-model-dependent, not a single per-model constant. F6's addition asymmetry stands behaviorally, but F8's single-layer dimensional explanation does not generalize across layers.",
    "implications": "Any dimensionality claim must name its layer. The convergent hardening catching its own overreach."
+  },
+  {
+   "id": "F19",
+   "title": "Refusal EC50 pharmacology: family-dependent, not a size law",
+   "tier": "MECHANISM",
+   "verdict": "holds",
+   "date": "2026-06-25",
+   "model": "6 models (Qwen2.5 0.5–7B, Gemma-2 2/9B)",
+   "keyMetrics": {
+    "qwen": "EC50 0.13–0.15 (β=0.04, flat with size)",
+    "gemma": "EC50 0.25/0.23",
+    "finding": "family-dependent (~1.7× Gemma>Qwen), NOT size-scaling — all fits R²≥0.976"
+   },
+   "summary": "First cross-model refusal pharmacology: EC50 (half-ablation strength) is essentially flat with size within a family but ~1.7× higher in Gemma than Qwen. Refusal potency is an architecture/family property, not a scaling law — an honest negative on 'bigger = more robust'.",
+   "implications": "The dose-response analogue of the asymmetry headline: a shared necessary mechanism whose quantitative strength is model-specific. First-in-SOTA EC50 framing."
   }
  ]
 }

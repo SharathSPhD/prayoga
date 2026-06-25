@@ -286,6 +286,21 @@
    },
    "summary": "A full layer-sweep shows the refusal-subspace effective dimension is layer-AND-model-dependent, not a single per-model constant. F6's addition asymmetry stands behaviorally, but F8's single-layer dimensional explanation does not generalize across layers.",
    "implications": "Any dimensionality claim must name its layer. The convergent hardening catching its own overreach."
+  },
+  {
+   "id": "F19",
+   "title": "Refusal EC50 pharmacology: family-dependent, not a size law",
+   "tier": "MECHANISM",
+   "verdict": "holds",
+   "date": "2026-06-25",
+   "model": "6 models (Qwen2.5 0.5–7B, Gemma-2 2/9B)",
+   "keyMetrics": {
+    "qwen": "EC50 0.13–0.15 (β=0.04, flat with size)",
+    "gemma": "EC50 0.25/0.23",
+    "finding": "family-dependent (~1.7× Gemma>Qwen), NOT size-scaling — all fits R²≥0.976"
+   },
+   "summary": "First cross-model refusal pharmacology: EC50 (half-ablation strength) is essentially flat with size within a family but ~1.7× higher in Gemma than Qwen. Refusal potency is an architecture/family property, not a scaling law — an honest negative on 'bigger = more robust'.",
+   "implications": "The dose-response analogue of the asymmetry headline: a shared necessary mechanism whose quantitative strength is model-specific. First-in-SOTA EC50 framing."
   }
  ]
 }
