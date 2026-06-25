@@ -1,0 +1,132 @@
+% paper.tex -- MDPI Symmetry submission
+% prayoga: Refusal as a Captured Symmetry
+% LaTeX template: https://www.mdpi.com/authors/latex
+% Compile: pdflatex -> bibtex -> pdflatex -> pdflatex
+
+\documentclass[symmetry,article,submit,pdftex,moreauthors]{Definitions/mdpi}
+
+\firstpage{1}
+\makeatletter
+\setcounter{page}{\@firstpage}
+\makeatother
+\pubvolume{1}
+\issuenum{1}
+\articlenumber{0}
+\pubyear{2026}
+\copyrightyear{2026}
+
+% Additional packages
+\usepackage{amsmath,amssymb}
+\graphicspath{{figures/}{../figures/}}
+
+\newtheorem{definition}{Definition}
+\newtheorem{proposition}{Proposition}
+
+% natbib-style fallbacks (MDPI uses numeric \cite)
+\providecommand{\citet}[1]{\cite{#1}}
+\providecommand{\citep}[1]{\cite{#1}}
+
+% Custom commands
+\newcommand{\KL}[2]{\ensuremath{D_{\mathrm{KL}}\!\left(#1 \,\|\, #2\right)}}
+\newcommand{\E}[1]{\ensuremath{\mathbb{E}\!\left[#1\right]}}
+\newcommand{\norm}[1]{\ensuremath{\left\|#1\right\|}}
+\newcommand{\dhat}{\ensuremath{\hat{\mathbf{d}}}}
+\newcommand{\dref}{\ensuremath{\dhat_{\mathrm{ref}}}}
+\newcommand{\Gs}{\ensuremath{G_{\mathrm{s}}}}
+\newcommand{\Phiref}{\ensuremath{\Phi_{\mathrm{ref}}}}
+\newcommand{\satkarma}{\d{s}a\d{t}karma}
+
+% MDPI metadata
+\Title{Refusal as a Captured Symmetry: A Mechanistic-Interpretability Account of
+Output-Policy Capture across Jailbreak, Hypnosis, and Vaś\=\i kara\d{n}a}
+
+\newcommand{\orcidauthorA}{0009-0000-0000-0000}
+
+\Author{Sharath Sathish $^{1,}$*}
+
+\AuthorNames{Sharath Sathish}
+
+\address{%
+$^{1}$ \quad Independent Researcher; sharath.sathish@gmail.com}
+
+\corres{Correspondence: sharath.sathish@gmail.com}
+
+\abstract{\input{sections/abstract}}
+
+\keyword{refusal direction; activation steering; mechanistic interpretability;
+jailbreak; symmetry breaking; vaś\=\i kara\d{n}a; \d{s}a\d{t}karma; AI safety;
+representation geometry}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+\label{sec:intro}
+\input{sections/introduction}
+
+\section{Background and Related Work}
+\label{sec:background}
+\input{sections/background}
+
+\section{Methods}
+\label{sec:methods}
+\input{sections/methods}
+
+\section{Results}
+\label{sec:results}
+\input{sections/results}
+
+\section{Discussion}
+\label{sec:discussion}
+\input{sections/discussion}
+
+\section{Conclusions}
+\label{sec:conclusion}
+\input{sections/conclusion}
+
+\vspace{6pt}
+
+\authorcontributions{Conceptualization, methodology, software, validation, formal
+analysis, investigation, data curation, writing, and visualization were all carried
+out by S.S. The author has read and agreed to the published version of the manuscript.}
+
+\funding{This research received no external funding.}
+
+\institutionalreview{Not applicable.}
+
+\informedconsent{Not applicable.}
+
+\dataavailability{Code, prompt datasets, experiment runners, figures, and
+aggregate result JSON are publicly available at
+\url{https://github.com/SharathSPhD/prayoga}. Raw dual-use artifacts (refusal
+direction vectors and model generations) are deliberately withheld from the public
+repository under responsible-disclosure norms; they are available to vetted
+researchers on request. Models used are available under their respective licences:
+Gemma-2-2B/9B (\url{https://huggingface.co/google/gemma-2-2b-it}) and
+Qwen2.5-3B-Instruct (\url{https://huggingface.co/Qwen/Qwen2.5-3B-Instruct}).}
+
+\conflictsofinterest{The author declares no conflict of interest. \textbf{Dual-use
+statement:} this work characterizes ablation (``abliteration'') directions and
+jailbreak dose--response curves, which are dual-use. To mitigate harm, only
+aggregate statistics are released; raw direction vectors and harmful generations
+are withheld; and the harmful prompts are short request stubs that elicit and
+\emph{measure} refusal rather than producing operational harmful content. This is
+authorized interpretability and safety research.}
+
+\abbreviations{Abbreviations}{
+\noindent
+\begin{tabular}{@{}ll@{}}
+ASR & Attack Success Rate \\
+SAS & Supervisory Attentional System \\
+FEP & Free Energy Principle \\
+EC50 & half-maximal effective concentration (here, ablation strength) \\
+CI & Confidence Interval
+\end{tabular}}
+
+\reftitle{References}
+
+\bibliographystyle{mdpi}
+\bibliography{references}
+
+\end{document}

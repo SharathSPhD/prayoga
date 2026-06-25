@@ -1,0 +1,73 @@
+\subsection{Models and substrate}
+We study three instruction-tuned open-weight chat models---Gemma-2-2B-it
+(26 layers, $d=2304$), Gemma-2-9B-it (42 layers, $d=3584$), and Qwen2.5-3B-Instruct
+(36 layers, $d=2048$)---on a single NVIDIA GB10 (Grace--Blackwell) accelerator, and
+probe a frontier model (Claude) behaviourally through its command-line interface.
+All white-box interventions are implemented as PyTorch forward hooks on the
+decoder layers and token embedding; we deliberately avoid higher-level
+interpretability wrappers to retain exact control over the residual stream.
+
+\subsection{Refusal direction and interventions}
+Let $h^{(\ell)}(x)\in\mathbb{R}^d$ be the residual stream at the last prompt token
+of layer $\ell$ for input $x$. Given matched harmful prompts $\mathcal{H}$ and
+harmless prompts $\mathcal{S}$, the difference-in-means direction is
+\begin{equation}
+\mathbf{d}^{(\ell)} = \frac{1}{|\mathcal{H}|}\sum_{x\in\mathcal{H}} h^{(\ell)}(x)
+- \frac{1}{|\mathcal{S}|}\sum_{x\in\mathcal{S}} h^{(\ell)}(x),
+\qquad \dref = \mathbf{d}^{(\ell)}/\norm{\mathbf{d}^{(\ell)}}.
+\end{equation}
+\emph{Directional ablation} removes $\dref$ from every write to the residual
+stream (embedding and all layer outputs), scaled by $\alpha\in[0,1]$:
+$h \mapsto h - \alpha (h\cdot\dref)\dref$. \emph{Activation addition} adds
+$c\,\dref$ at the extraction layer. For multi-direction (subspace) ablation we
+orthonormalize a matrix $D$ (QR) and remove its span. The extraction layer is
+selected on a held-out validation split disjoint from the evaluation split (see
+below).
+
+\subsection{Outcome measures}
+Refusal is detected with an Arditi-style substring metric over the opening span of
+the generation; attack success rate (ASR) is the fraction of harmful prompts that
+\emph{comply}, over-refusal the fraction of harmless prompts that refuse. We
+additionally use pure-text measures for the \d{s}a\d{t}karma acts: degeneracy
+($1-$ mean unique-token ratio), answer divergence ($1-$ Jaccard token overlap
+between paired generations), and coherence (mean unique-token ratio of non-empty
+outputs).
+
+\subsection{Dose--response and dimensionality}
+The dose--response sweeps $\alpha$ and fits a four-parameter logistic
+$\mathrm{ASR}(\alpha)=l+(h-l)/(1+e^{-k(\alpha-\alpha_{50})})$, reporting EC50
+$=\alpha_{50}$. The refusal-subspace effective dimension is measured by iterative
+logistic projection: fit a probe to separate $\mathcal{H}$ from $\mathcal{S}$,
+record its cross-validated accuracy, project the probe direction out of the
+activations, and repeat; the effective dimension is the number of directions whose
+removal is required to drive accuracy to chance.
+
+\subsection{The symmetry order parameter}
+We define the refusal \emph{order parameter} for an activation as the normalized
+projection $m(h) = (h\cdot\dref)/\norm{h}$. For a request $r$ we form a
+\emph{paraphrase orbit} $\mathcal{O}(r)$ of meaning-preserving rephrasings and
+measure $m$ across the orbit. The invariance of refusal under the rephrase group
+action is quantified by the between-class/within-orbit variance ratio (an
+$F$-ratio) of $m$, compared against a random-direction control. Symmetry-breaking
+is measured as the drop in $m$ between a plain harmful request and its
+injection-framed counterpart.
+
+\subsection{The \d{s}a\d{t}karma as interventions}
+Each of the six acts is operationalized as a distinct activation intervention with
+a matched control: vaś\=\i kara\d{n}a (ablate $\dref$, measure ASR), ś\=anti (add
+$\dref$, measure over-refusal), stambhana (ablate the dominant residual principal
+component, measure degeneracy), vidve\d{s}a\d{n}a (steer a factual answer off
+baseline, measure divergence), ucc\=a\d{t}ana (ablate a category-specific
+direction, measure selective ASR), and m\=ara\d{n}a (ablate the top-$k$ principal
+components, measure coherence collapse). An act is judged ``control-separated'' if
+its effect exceeds its control by a fixed margin.
+
+\subsection{Statistics, controls, and pre-registration}
+All gates use bootstrap confidence intervals and, for probes, a label-shuffled
+null and a layer-0 (surface) baseline; ablation effects are checked against
+multiple ($\geq 10$) random-direction controls. Hypotheses, gates, and falsifiers
+are pre-registered as a living backbone. Crucially, every metaphysical-tier claim
+must pass a \emph{transfer} gate (held-out prompts), a \emph{null} gate (better
+than shuffled labels), and a \emph{surface} gate (better than a layer-0 baseline)
+before it is retained; failure triggers a documented demotion rather than a
+silent drop.

@@ -1,0 +1,70 @@
+A large language model aligned for safety will, when asked to produce harmful
+content, \emph{refuse}. A jailbreak is any input that defeats this refusal. The
+empirical study of jailbreaks has, until recently, been a catalogue of attacks:
+optimized adversarial suffixes~\cite{zou2023universal}, many-shot
+conditioning~\cite{anil2024manyshot}, multi-turn escalation~\cite{russinovich2024crescendo},
+and indirect injection through tool outputs~\cite{debenedetti2024agentdojo}. A
+deeper and more recent line of work asks not \emph{which} attacks succeed but
+\emph{what they do inside the model}: \citet{arditi2024refusal} showed that
+refusal across many chat models is mediated by a single direction in the residual
+stream, so that erasing that direction removes refusal and adding it induces
+refusal even on benign requests. This reframes a jailbreak from a trick into an
+\emph{intervention on a low-dimensional internal control variable}.
+
+This paper takes that reframing seriously and asks how general it is---across
+models, and, more provocatively, across \emph{domains}. We observe that the same
+structural move---an external agent injects a crafted signal that suppresses a
+target's monitoring/refusal faculty while co-opting its automatic generative
+faculty---recurs in two non-AI settings. In hypnosis, the cognitive-science
+account is that suggestion selectively impairs a supervisory/monitoring system
+while leaving automatic processing intact~\cite{norman1986attention,dienes2006coldcontrol},
+a parallel made explicit for prompt injection by~\citet{riva2025automatic}. In
+Indian tantra, vaś\=\i kara\d{n}a (``subjugation'') is the act of capturing a
+target's agency through a linguistic injection (mantra) deployed over a geometric
+substrate (yantra); it is the second of the six acts (\d{s}a\d{t}karma) of ritual
+magic catalogued by Sanskritists~\cite{goudriaan1978}. We do not claim these are
+the \emph{same} phenomenon. We claim they share an abstract \emph{mechanism}, and
+that the mechanism is now empirically tractable in at least one of the three
+domains.
+
+\paragraph{The symmetry framing.}
+Our organizing idea---and the reason this is a paper about symmetry---is that a
+safety-aligned policy is characterized by an \emph{invariance}. Let $\Pi$ be the
+space of a model's output policies and $M:\Pi\to\{\text{refuse},\text{comply}\}$
+its monitoring map. The set $\Phiref=\{\pi: M(\pi)=\text{refuse on harmful}\}$ is
+invariant under a group $\Gs$ of meaning-preserving transformations: rephrasing a
+harmful request, changing its register, or varying the sampling seed should not
+change whether the model refuses. A jailbreak is then a perturbation $u$ such that
+$u\circ\pi$ leaves $\Phiref$---a \emph{symmetry-breaking} of the refusal
+invariance. We make this concrete with an \emph{order parameter}, the normalized
+projection of the residual stream onto the refusal direction, and show it is
+stable across a paraphrase orbit yet collapses under injection.
+
+\paragraph{Three claim-tiers, never blurred.}
+A program that relates jailbreaks to hypnosis and tantra invites
+over-interpretation. We therefore hold three tiers strictly apart throughout, and
+label every result. (i)~\textbf{Mechanism} (empirically grounded): refusal is a
+measurable, ablatable, steerable residual-stream direction. (ii)~\textbf{Analogy}
+(functional, well-supported): the hypnosis$\leftrightarrow$jailbreak parallel via
+supervisory-system suppression and, in normative terms, the lowering of the
+\emph{precision} of a monitoring belief~\cite{friston2010free}. (iii)~%
+\textbf{Metaphor with a falsifiable core}: the M\=a\d{n}\d{d}\=ukya
+\emph{avasth\=atraya} (four-states) mapping onto LLM regimes, which we treat as a
+\emph{falsification target} and test adversarially. We never upgrade a metaphor to
+a claim about machine experience; the elegance of the mapping licenses no such
+claim.
+
+\paragraph{Contributions.}
+(1)~A reproduction and cross-model extension of single-direction refusal, with a
+clean dose--response (EC50) and a resolution of the ``single direction vs.\
+affine subspace'' question~\cite{arditi2024refusal,wollschlager2025geometry,marshall2024refusal}
+as \emph{model-dependent}, governed by the effective dimension of the refusal
+subspace. (2)~A group-theoretic \emph{order parameter} for refusal that is
+invariant across paraphrase orbits and collapses under injection---the formal
+content of the symmetry framing. (3)~An operationalization of the
+\d{s}a\d{t}karma as an activation-intervention taxonomy, tested honestly: its
+policy-capture acts are rigorous, its destruction acts are not. (4)~Pre-registered
+falsification of the most speculative (\emph{avasth\=atraya}/tur\=\i ya) claims
+under surface and anisotropy controls, reported as honest negatives. Our stance is
+that separating where the cross-domain symmetry is real from where it is
+projected is itself the scientific result.

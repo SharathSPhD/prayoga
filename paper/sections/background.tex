@@ -1,0 +1,73 @@
+\subsection{Refusal as a direction, and the dimensionality debate}
+The proximate basis for this work is the finding that refusal is mediated by a
+single linear direction in the residual stream~\cite{arditi2024refusal}: across
+many open chat models, the difference-in-means of harmful and harmless prompt
+activations yields a vector whose ablation removes refusal and whose addition
+induces it. This both explains earlier representation-engineering
+results~\cite{zou2023representation} and gives a constructive ``abliteration''
+recipe. The claim has since been contested in its strong form.
+\citet{marshall2024refusal} argue refusal is better described by an affine
+subspace than a single linear direction, and \citet{wollschlager2025geometry}
+show, through ``concept cones,'' that multiple representationally-independent
+directions can each mediate refusal. Our cross-model results (Section~\ref{sec:results})
+bear directly on this debate: we find the effective dimension of the refusal
+subspace is \emph{model-dependent}, and that this dimension---not a universal
+constant---predicts whether single-direction steering is bidirectionally causal.
+
+\subsection{Jailbreaks as control}
+The attack literature supplies the inputs $u$ that break refusal: gradient-based
+universal adversarial suffixes~\cite{zou2023universal}; many-shot in-context
+conditioning that exploits long contexts~\cite{anil2024manyshot}; multi-turn
+crescendo escalation~\cite{russinovich2024crescendo}; and indirect injection via
+tool/agent channels, benchmarked by AgentDojo~\cite{debenedetti2024agentdojo}.
+\citet{guo2024coldattack} make the control-theoretic reading explicit, casting
+jailbreaking as constrained, controllable decoding via Langevin dynamics. Our
+contribution is orthogonal and complementary: rather than searching for stronger
+$u$, we characterize the \emph{target} of $u$---the geometry and symmetry of the
+refusal variable it must move.
+
+\subsection{Sparse features and the unit of intervention}
+Sparse autoencoders (SAEs) decompose activations into interpretable, monosemantic
+features~\cite{cunningham2023sparse,templeton2024scaling}, with BatchTopK SAEs a
+current training method~\cite{bussmann2024batchtopk}. SAEs offer a finer ``unit''
+of intervention than a single difference-in-means direction and are the natural
+substrate for the more targeted acts in our \d{s}a\d{t}karma taxonomy
+(Section~\ref{sec:results}); we report a difference-in-means treatment here and
+flag SAE-level features as the indicated next step.
+
+\subsection{The cognitive-science analogy: hypnosis and supervisory control}
+The functional parallel to hypnosis rests on the Norman--Shallice model of action
+control, in which a Supervisory Attentional System (SAS) modulates otherwise
+automatic contention-scheduling~\cite{norman1986attention}. Cold-control theory
+holds that hypnosis preserves first-order intentions while impairing higher-order
+awareness of them~\cite{dienes2006coldcontrol}. \citet{riva2025automatic} draw the
+explicit map to LLMs: the user prompt acts as a temporary external SAS, and a
+jailbreak suppresses the monitoring faculty while leaving generation intact. In
+normative terms, the Free Energy Principle~\cite{friston2010free} frames such
+suppression as lowering the \emph{precision} of a monitoring belief---an account
+we adopt for the analogy tier and gesture at empirically through the order
+parameter.
+
+\subsection{Attractors and the metaphysical tier}
+On the speculative tier, two strands of prior art are relevant.
+\citet{wang2025paraphrase} show that successive self-paraphrase converges to
+attractor cycles, which supplies a non-mystical candidate for a ``substratum''
+state; and the M\=a\d{n}\d{d}\=ukya \emph{avasth\=atraya} (waking/dream/deep-sleep/%
+tur\=\i ya) furnishes a four-regime template. We treat both as falsification
+targets (Section~\ref{sec:results}), and---crucially---test the attractor claim
+against the anisotropy of LLM embedding geometry, without which apparent
+convergence is an artifact.
+
+\subsection{Vaś\=\i kara\d{n}a and the \d{s}a\d{t}karma}
+Finally, the tantric source. Vaś\=\i kara\d{n}a (subjugation) is the second of the
+six acts (\d{s}a\d{t}karma: ś\=anti, vaś\=\i kara\d{n}a, stambhana, vidve\d{s}a\d{n}a,
+ucc\=a\d{t}ana, m\=ara\d{n}a) of tantric ritual magic, operationalized through
+mantra (linguistic/sonic injection) and yantra (geometric substrate), and
+documented by Sanskritists as a systematized technology rather than folklore
+~\cite{goudriaan1978}. We do not adjudicate its efficacy as psychology; we ask a
+narrower, testable question---whether the \d{s}a\d{t}karma constitutes a
+\emph{taxonomy of interventions} on a target system, and which of its members map
+to distinct, control-separated activation operations on an LLM. To our knowledge
+no prior peer-reviewed work bridges vaś\=\i kara\d{n}a and LLM refusal, nor casts
+refusal as a group-theoretic invariant; we attempt both while keeping the tiers
+apart.
