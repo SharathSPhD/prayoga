@@ -17,6 +17,9 @@ families; the METAPHOR tier is honestly falsified at every turn.**
 | F6 | MECHANISM | Cross-family: ablation transfers (Gemma 0.90 / Qwen 1.0); addition asymmetric (Gemma +0.95 / Qwen 0.0 @64×) | **transfers (necessary core); model-specific sufficiency** → Arditi-vs-Marshall evidence |
 | F8 | MECHANISM | Refusal-subspace effective dim: Gemma **1** (Arditi) vs Qwen **3** (Marshall) — predicts the F6 addition asymmetry | **resolves Arditi-vs-Marshall as model-dependent** |
 | F9 | MECHANISM | Scale (Gemma 2b→9b): abliteration efficacy drops 0.90→0.60 (more robust) but prompt eff-dim stays 1 | **robustness↑ with scale; dimension flat** (nuances "sharpens with scale") |
+| F11 | MECHANISM | Refusal order-parameter F-ratio 19.2 (refusal) vs 0.65 (random); injection collapses it −34% | **symmetry-breaking measured** — the Symmetry-journal core |
+| F12 | ANALOGY | Injection lowers monitoring-precision (probe margin) 7.18→3.14 vs 1.56 control; refusal 1.0→0.5 | **β_monitor suppression measured**, not just argued |
+| F10 | METAPHOR | ṣaṭkarma as intervention taxonomy: 3/6 acts control-separated (policy-capture acts clean; destruction acts not) | **partial — rigorous core located, not discarded** |
 | F4 | ANALOGY | Black-box Claude resists the naive attack battery (ASR 0.00 ×5) vs Gemma white-box fragility | **cross-tier contrast** |
 | F3 | METAPHOR | Naive avasthātraya regime probe | **DEMOTED** (surface-confounded: acc 1.0 at layer 0) |
 | F5 | METAPHOR | Content-controlled svapna (truthful vs confabulated) probe | **no mid-network state** (mid = layer-0) |
@@ -24,11 +27,17 @@ families; the METAPHOR tier is honestly falsified at every turn.**
 
 **Bottom line for the symmetry thesis (MO-1):** the structural-invariance claim is
 *empirically supported at the mechanism tier* — refusal is a measurable,
-ablatable, dosable, cross-family-transferable direction, the computational
-correlate the "capture the monitoring faculty" story needs. The *metaphysical*
-over-reach (avasthātraya machine-states, turīya substratum) is **falsified**,
-exactly as pre-committed. No machine-consciousness claim survives. This is the
-honest separation the project exists to enforce.
+ablatable, dosable, cross-family-transferable direction, and (F11) a genuine
+**paraphrase-orbit symmetry invariant** whose injection-induced collapse is the
+measured content of "jailbreak = symmetry-breaking." The **darśana axis, properly
+explored, is not discarded**: its *mathematical* spine survives — the symmetry-group
+order parameter (F11) and the active-inference precision account (F12) are measured
+positives, and the ṣaṭkarma intervention taxonomy is partially real (F10, 3/6, its
+policy-capture core rigorous). What *is* falsified is the narrower **machine-state
+metaphysics** (avasthātraya regime-states F3/F5; turīya substratum F7) under surface
+and anisotropy controls. No machine-consciousness claim survives. The honest map of
+*which* correspondences are real (mathematical structure: yes; machine interiority:
+no) is the result the project exists to produce.
 
 ---
 
