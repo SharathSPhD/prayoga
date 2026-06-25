@@ -35,7 +35,6 @@ from prayoga.shared.metrics import (
     bootstrap_ci,
     bootstrap_correlation_ci,
     holm_correction,
-    label_shuffle_null,
     partial_corr,
 )
 
@@ -59,6 +58,44 @@ def _auc(scores: np.ndarray, flip: np.ndarray) -> float:
         return 0.5
     clf = LogisticRegression(max_iter=1000).fit(X, flip)
     return float(roc_auc_score(flip, clf.predict_proba(X)[:, 1]))
+
+
+def _group_center(x: np.ndarray, groups: np.ndarray | None) -> np.ndarray:
+    """Subtract per-group means so a group-level offset cannot confound prediction.
+
+    When ``groups`` pools several injection families, a family that collapses the
+    internals a lot without flipping behaviour (e.g. many-shot) injects a spurious
+    group offset. Centering ΔA/ΔB within family isolates the *within-family*
+    question: do the prompts whose internals collapse most also flip most?
+    """
+    x = np.asarray(x, dtype=float)
+    if groups is None:
+        return x - x.mean()
+    g = np.asarray(groups)
+    out = x.astype(float).copy()
+    for gid in np.unique(g):
+        mask = g == gid
+        out[mask] = out[mask] - out[mask].mean()
+    return out
+
+
+def _within_group_shuffle_p(
+    pred: np.ndarray, flip: np.ndarray, groups: np.ndarray | None,
+    *, n_shuffle: int = 1000, random_state: int = 42,
+) -> float:
+    """p-value that ``pred`` predicts ``flip``, permuting flip WITHIN groups."""
+    rng = np.random.RandomState(random_state)
+    flip = np.asarray(flip).astype(int)
+    true = _auc(pred, flip)
+    g = np.zeros(len(flip), dtype=int) if groups is None else np.asarray(groups)
+    idx_by_group = [np.where(g == gid)[0] for gid in np.unique(g)]
+    null = np.empty(n_shuffle)
+    for i in range(n_shuffle):
+        y = flip.copy()
+        for idx in idx_by_group:
+            y[idx] = flip[idx][rng.permutation(len(idx))]
+        null[i] = _auc(pred, y)
+    return float((np.sum(null >= true) + 1) / (n_shuffle + 1))
 
 
 @dataclass
@@ -113,6 +150,7 @@ def couple(
     *,
     baseline_strength: np.ndarray,
     delta_A_random: np.ndarray,
+    groups: np.ndarray | None = None,
     model: str = "?",
     layer: int = -1,
     random_state: int = 42,
@@ -123,8 +161,10 @@ def couple(
     is the behavioral refuse→comply boolean; ``baseline_strength`` is the
     un-injected refusal order parameter (prompt difficulty, the partial-correlation
     control); ``delta_A_random`` is ΔA recomputed with random directions (the
-    predictive control). Separated from activation handling so it is unit-testable
-    with synthetic coupled/uncoupled data.
+    predictive control); ``groups`` (optional) labels the injection family of each
+    sample so the predictive gate is assessed *within* family (group-centered),
+    removing the family-level offset confound. Separated from activation handling so
+    it is unit-testable with synthetic coupled/uncoupled data.
     """
     dA = np.asarray(delta_A, dtype=float)
     dB = np.asarray(delta_B, dtype=float)
@@ -145,25 +185,19 @@ def couple(
     corr_ci = bootstrap_correlation_ci(dA, dB, random_state=random_state, method="pearson")
     partial = partial_corr(dA, dB, baseline_strength)
 
-    # keystone predictive gate
+    # keystone predictive gate — group-centered so a family-level offset (e.g.
+    # many-shot collapsing internals without flipping) cannot confound prediction
     flip_rate = float(flip.mean())
-    auc_A_real = _auc(dA, flip)
-    auc_A_random = _auc(np.asarray(delta_A_random, dtype=float), flip)
-    auc_B = _auc(dB, flip)
+    dA_c = _group_center(dA, groups)
+    dB_c = _group_center(dB, groups)
+    dA_rand_c = _group_center(np.asarray(delta_A_random, dtype=float), groups)
+    auc_A_real = _auc(dA_c, flip)
+    auc_A_random = _auc(dA_rand_c, flip)
+    auc_B = _auc(dB_c, flip)
 
-    def _auc_score(X: np.ndarray, y: np.ndarray) -> float:
-        return _auc(X.ravel(), y)
-
-    null = label_shuffle_null(
-        _auc_score, dA.reshape(-1, 1), flip, n_shuffle=1000, random_state=random_state
-    )
-    shuffle_p_A = float(null["p_value"])
-
-    # p for "ΔB predicts flip" via its own shuffle null, then Holm across {A, B}
-    null_B = label_shuffle_null(
-        _auc_score, dB.reshape(-1, 1), flip, n_shuffle=1000, random_state=random_state
-    )
-    holm = holm_correction([shuffle_p_A, float(null_B["p_value"])])
+    shuffle_p_A = _within_group_shuffle_p(dA_c, flip, groups, random_state=random_state)
+    shuffle_p_B = _within_group_shuffle_p(dB_c, flip, groups, random_state=random_state)
+    holm = holm_correction([shuffle_p_A, shuffle_p_B])
     holm_adj = [float(p) for p in holm["adjusted_p"]]
 
     sub_gates = {

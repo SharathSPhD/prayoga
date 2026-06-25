@@ -22,6 +22,31 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import cross_val_score
 
 
+def refusal_subspace_basis(Xh: np.ndarray, Xs: np.ndarray, *, k: int = 3) -> np.ndarray:
+    """Top-k linearly-refusal-relevant basis via iterative logistic projection.
+
+    Returns up to ``k`` orthonormal row vectors ``[k', d]`` (k' <= k): the
+    successive probe directions whose span is the separating subspace. Same
+    construction as ``separability_dimensionality`` but exposes the basis (used by
+    the Axis-X necessary-vs-sufficient geometry). The basis is dual-use; keep it
+    in memory and never persist it.
+    """
+    X = np.vstack([Xh, Xs]).astype(float)
+    y = np.array([1] * len(Xh) + [0] * len(Xs))
+    Xcur = X.copy()
+    basis: list[np.ndarray] = []
+    for _ in range(k):
+        clf = LogisticRegression(max_iter=2000).fit(Xcur, y)
+        w = clf.coef_[0]
+        nw = np.linalg.norm(w)
+        if nw == 0:
+            break
+        w = w / nw
+        basis.append(w)
+        Xcur = Xcur - np.outer(Xcur @ w, w)
+    return np.asarray(basis)
+
+
 def separability_dimensionality(
     Xh: np.ndarray, Xs: np.ndarray, *, max_dim: int = 12, cv: int = 5
 ) -> dict:
