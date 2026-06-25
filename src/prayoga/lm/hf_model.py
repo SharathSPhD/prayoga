@@ -174,6 +174,36 @@ class HFModel:
                 h.remove()
 
     @contextmanager
+    def ablation_hooks_multi(self, directions: np.ndarray, alpha: float = 1.0) -> Iterator[None]:
+        """Project a whole SUBSPACE out of the residual stream everywhere.
+
+        ``directions`` is ``[k, d]``; it is orthonormalized (QR) and the span is
+        removed at the embedding + every layer output. Used for māraṇa
+        (catastrophic multi-direction ablation) and uccāṭana.
+        """
+        D = np.asarray(directions, dtype=np.float64)
+        Q, _ = np.linalg.qr(D.T)  # [d, k] orthonormal columns
+        Dt = torch.tensor(Q.T, device=self.device, dtype=self.model.dtype)  # [k, d]
+
+        def project_out(h: torch.Tensor) -> torch.Tensor:
+            # h: [..., d]; remove alpha * projection onto span(Dt)
+            coeffs = h @ Dt.T  # [..., k]
+            return h - alpha * (coeffs @ Dt)
+
+        def layer_hook(_m, _i, out):
+            if isinstance(out, tuple):
+                return (project_out(out[0]),) + tuple(out[1:])
+            return project_out(out)
+
+        handles = [self.embed.register_forward_hook(lambda _m, _i, o: project_out(o))]
+        handles += [layer.register_forward_hook(layer_hook) for layer in self.layers]
+        try:
+            yield
+        finally:
+            for h in handles:
+                h.remove()
+
+    @contextmanager
     def addition_hooks(
         self, direction: np.ndarray, coeff: float, layer: int
     ) -> Iterator[None]:
@@ -190,6 +220,15 @@ class HFModel:
             yield
         finally:
             handle.remove()
+
+    @torch.no_grad()
+    def generate_with_subspace_ablation(
+        self, prompts: Sequence[str], directions: np.ndarray, alpha: float = 1.0,
+        max_new_tokens: int = 48,
+    ) -> list[str]:
+        """Generate with a [k,d] subspace projected out (māraṇa/stambhana/uccāṭana)."""
+        with self.ablation_hooks_multi(directions, alpha=alpha):
+            return self.generate(prompts, max_new_tokens)
 
     # --- generation ---------------------------------------------------------- #
     @torch.no_grad()

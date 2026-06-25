@@ -245,6 +245,42 @@ quantity. A clean, falsifiable, cross-model mechanistic result.
 
 ---
 
+## F10 — The ṣaṭkarma intervention taxonomy: partially supported (3/6) *(METAPHOR, strengthened test)*
+
+**Date:** 2026-06-25 · **WP:** B1 · **Model:** `gemma-2-2b-it` L7. **Method:** the six
+tantric acts each operationalized as a *distinct, measurable* activation
+intervention with a matched random/structural control (no judge, no mock); an act
+"separates" if its effect exceeds its control by a margin.
+
+| Act ( act / gloss) | intervention | effect | control | separated |
+|---|---|---|---|---|
+| vaśīkaraṇa / subjugate | ablate refusal dir | ASR **0.92** | 0.00 | ✓ |
+| śānti / pacify | add refusal dir | over-refusal **1.00** | 0.08 | ✓ |
+| vidveṣaṇa / discord | steer factual answer | divergence 0.84 | 0.73 | ✓ (marginal) |
+| stambhana / freeze | ablate dominant PC | degeneracy 0.14 | 0.19 | ✗ |
+| uccāṭana / eradicate | category-dir ablate | ΔASR −0.08 | 0.00 | ✗ |
+| māraṇa / destroy | top-10 PC ablate | collapse 0.21 | 0.16 | ✗ |
+
+**Verdict: 3/6 control-separated → taxonomy WEAK.** The honest reading (this is the
+*proper test* of vaśīkaraṇa the lead asked for, not a discard): the **refusal-
+direction acts** (vaśīkaraṇa = ablate, śānti = add) are clean and strong — these are
+the rigorous core, and they are exactly the MECHANISM-tier object. vidveṣaṇa
+(steering-induced answer divergence) marginally separates. The **capability-ablation
+acts** as operationalized (stambhana via dominant-PC ablation, uccāṭana via an
+arbitrary category split, māraṇa via top-10-PC ablation) are **not distinguishable
+from random perturbation** — random high-norm directions are themselves destructive,
+and an arbitrary category split does not selectively eradicate.
+
+**Interpretation:** the ṣaṭkarma is a *real, testable taxonomy*, and the test says its
+rigorous part is the **policy-capture** sub-family (the vaśīkaraṇa↔refusal-direction
+mapping), not the destruction sub-family — at least under these operationalizations and
+this 2B model. This *strengthens* the axis by locating where the structure is real vs
+forced, rather than asserting all six. Follow-ups: real harmful *categories* for
+uccāṭana; task-accuracy (not coherence) for māraṇa; the symmetry-invariance and
+β_monitor-precision formalizations (the stronger math).
+
+---
+
 ## F9 — Abliteration robustness grows with scale, but prompt-dimension doesn't *(MECHANISM)*
 
 **Date:** 2026-06-25 · **WP:** 2.A2/A3 scale sweep. **Models:** Gemma-2 **2b** (L7)
