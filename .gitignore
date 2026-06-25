@@ -53,3 +53,7 @@ paper/sections/*.aux
 node_modules/
 site/dist/
 site/.astro/
+
+# agentdojo venv + logs
+.venv-ad/
+results/tier1/agentdojo_logs/
