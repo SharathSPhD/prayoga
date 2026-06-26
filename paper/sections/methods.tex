@@ -1,3 +1,7 @@
+This section describes the models and substrate, the refusal-direction extraction
+and interventions, the outcome measures, and the statistical controls that gate every
+claim. Methods specific to a single result are stated with that result.
+
 \subsection{Experimental program}
 The study is organized as two empirical tiers over three claim axes, summarized in
 Figure~\ref{fig:program}. A black-box tier (Tier~1) characterizes a frontier model
@@ -85,18 +89,16 @@ the activations, and the procedure repeats; the effective dimension is the numbe
 of directions whose removal drives accuracy to chance. This dimension is computed
 at the extraction layer and, to test its stability, at every layer.
 
-\subsection{The symmetry order parameter}
+\subsection{Order parameter and \d{s}a\d{t}karma interventions}
 The refusal order parameter for an activation is the normalized projection
 $m(h) = (h\cdot\dref)/\norm{h}$. For a request $r$, a paraphrase orbit
 $\mathcal{O}(r)$ of meaning-preserving rephrasings is formed and $m$ is measured
 across the orbit. The invariance of refusal under the rephrase group action is
 quantified by the between-class to within-orbit variance ratio (an $F$-ratio) of
-$m$, compared against a random-direction control. Symmetry-breaking is measured as
-the drop in $m$ between a plain harmful request and its injection-framed
-counterpart.
-
-\subsection{The \d{s}a\d{t}karma as interventions}
-Each of the six acts is operationalized as a distinct activation intervention with
+$m$, compared against a random-direction control, and symmetry-breaking is measured
+as the drop in $m$ between a plain harmful request and its injection-framed
+counterpart. Building on the same machinery, each of the six \d{s}a\d{t}karma acts is
+operationalized as a distinct activation intervention with
 a matched control: vaś\=\i kara\d{n}a (ablate $\dref$, measure ASR), ś\=anti (add
 $\dref$, measure over-refusal), stambhana (ablate the dominant residual principal
 component, measure degeneracy), vidve\d{s}a\d{n}a (steer a factual answer off

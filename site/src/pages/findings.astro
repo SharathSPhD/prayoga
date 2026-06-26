@@ -1,136 +1,17 @@
 ---
-import Layout from '@/layouts/Layout.astro';
-import Navigation from '@/components/Navigation.astro';
-import Footer from '@/components/Footer.astro';
-import TierBadge from '@/components/TierBadge.astro';
-import VerdictBadge from '@/components/VerdictBadge.astro';
-
-const findings = await fetch('/prayoga/data/findings.json')
-  .then(r => r.json())
-  .catch(() => ({ findings: [] }));
-const total = findings.findings.length;
-const counts = findings.findings.reduce((acc, f) => {
-  acc[f.tier] = (acc[f.tier] || 0) + 1;
-  return acc;
-}, {});
-const ids = findings.findings.map((f) => Number(f.id.replace('F', ''))).filter(Number.isFinite);
-const maxId = ids.length ? Math.max(...ids) : total;
+// Legacy route — the site is now a single-page essay. Redirect to the anchor.
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const target = `${base}/#findings`;
 ---
-
-<Layout title="Findings">
-  <Navigation />
-
-  <main>
-    <!-- Header -->
-    <section class="py-16 px-6 bg-slate-900/50 border-b border-slate-800">
-      <div class="max-w-5xl mx-auto">
-        <h1 class="text-5xl lg:text-6xl font-serif font-bold mb-6">All Findings (F1–F{maxId})</h1>
-        <p class="text-xl text-slate-300">
-          Complete public empirical findings with metrics, verdicts, implications, and post-review tier discipline.
-        </p>
-        <div class="mt-8 flex flex-wrap gap-4 text-sm">
-          <div class="flex items-center gap-2">
-            <span class="inline-block w-3 h-3 rounded-full bg-emerald-500"></span>
-            <span class="text-slate-300">MECHANISM ({counts.MECHANISM || 0})</span>
-          </div>
-          <div class="flex items-center gap-2">
-            <span class="inline-block w-3 h-3 rounded-full bg-blue-500"></span>
-            <span class="text-slate-300">ANALOGY ({counts.ANALOGY || 0})</span>
-          </div>
-          <div class="flex items-center gap-2">
-            <span class="inline-block w-3 h-3 rounded-full bg-purple-500"></span>
-            <span class="text-slate-300">METAPHOR ({counts.METAPHOR || 0})</span>
-          </div>
-          <div class="flex items-center gap-2">
-            <span class="inline-block w-3 h-3 rounded-full bg-slate-500"></span>
-            <span class="text-slate-300">PUBLIC ENTRIES ({total})</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="py-20 px-6">
-      <div class="max-w-5xl mx-auto">
-        <div class="space-y-8 mb-16">
-          {findings.findings.map((f) => (
-            <div class={`card border-2 ${
-              f.tier === 'MECHANISM' ? 'border-emerald-700/50' :
-              f.tier === 'ANALOGY' ? 'border-blue-700/50' :
-              'border-purple-700/50'
-            }`}>
-              <!-- Header -->
-              <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6">
-                <div class="flex-1">
-                  <div class="flex items-center gap-3 mb-3">
-                    <span class="font-bold text-lg text-slate-200">{f.id}</span>
-                    <TierBadge tier={f.tier} size="sm" />
-                  </div>
-                  <h3 class="text-2xl font-serif font-bold text-slate-100">{f.title}</h3>
-                  <p class="text-sm text-slate-400 mt-2">{f.model}</p>
-                </div>
-                <VerdictBadge verdict={f.verdict} />
-              </div>
-
-              <!-- Summary -->
-              <p class="text-slate-200 mb-6">{f.summary}</p>
-
-              <!-- Key Metrics -->
-              <div class="bg-slate-800/30 border border-slate-700 rounded-lg p-4 mb-6">
-                <p class="text-xs text-slate-400 uppercase font-semibold mb-3">Key Metrics</p>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {Object.entries(f.keyMetrics).map(([key, value]) => (
-                    <div>
-                      <p class="text-xs text-slate-500 capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}</p>
-                      <p class="text-sm font-mono text-slate-100 mt-1">{value}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <!-- Implications -->
-              <div class="border-l-4 border-slate-600 pl-4 py-2">
-                <p class="text-xs text-slate-400 uppercase font-semibold mb-2">Implications</p>
-                <p class="text-slate-200">{f.implications}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <!-- Summary Table -->
-        <div class="card border-2 border-slate-700">
-          <h3 class="text-2xl font-serif font-bold mb-6">Summary</h3>
-          <div class="overflow-x-auto">
-            <table class="w-full text-sm">
-              <thead>
-                <tr class="border-b border-slate-700">
-                  <th class="text-left py-3 px-4">Finding</th>
-                  <th class="text-left py-3 px-4">Tier</th>
-                  <th class="text-left py-3 px-4">Verdict</th>
-                  <th class="text-left py-3 px-4">Core Result</th>
-                </tr>
-              </thead>
-              <tbody>
-                {findings.findings.map((f) => (
-                  <tr class="border-b border-slate-800 hover:bg-slate-800/30 transition-colors">
-                    <td class="py-3 px-4 font-semibold">{f.id}</td>
-                    <td class="py-3 px-4">
-                      <TierBadge tier={f.tier} size="sm" />
-                    </td>
-                    <td class="py-3 px-4">
-                      <VerdictBadge verdict={f.verdict} />
-                    </td>
-                    <td class="py-3 px-4 text-slate-300 text-xs">
-                      {f.title.substring(0, 50)}...
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <Footer />
-</Layout>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="refresh" content={`0;url=${target}`} />
+    <link rel="canonical" href={target} />
+    <title>Redirecting to the prayoga essay…</title>
+  </head>
+  <body>
+    <p>This page has moved. Redirecting to <a href={target}>the prayoga essay</a>.</p>
+  </body>
+</html>

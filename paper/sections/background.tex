@@ -1,9 +1,18 @@
+This section situates prayoga against five strands of prior art: the
+representation geometry of refusal, the attack literature that supplies the inputs
+which break it, sparse-feature interpretability, the cognitive-science account of
+hypnosis, and the tantric and Vedantic sources that motivate the metaphor tier.
+Each strand is reviewed in turn, with the present contributions noted where they
+attach.
+
 \subsection{Refusal as a direction, and the dimensionality debate}
 The proximate basis for this work is the finding that refusal is mediated by a
 single linear direction in the residual stream~\cite{arditi2024refusal}: across
 many open chat models, the difference-in-means of harmful and harmless prompt
 activations yields a vector whose ablation removes refusal and whose addition
-induces it. This both explains earlier representation-engineering
+induces it. The direction is reported to be largely universal across safety-aligned
+languages~\cite{wang2025multilingual}, though its robustness degrades sharply in
+reasoning-tuned models~\cite{yin2025refusal}. This both explains earlier representation-engineering
 results~\cite{zou2023representation} and gives a constructive ``abliteration''
 recipe. The claim has since been contested in its strong form.
 \citet{marshall2024refusal} argue that refusal is better described by an affine
@@ -120,7 +129,9 @@ On the speculative tier, two strands of prior art are relevant.
 \citet{wang2025paraphrase} show that successive self-paraphrase converges to
 attractor cycles, which supplies a non-mystical candidate for a substratum state; and
 the M\=a\d{n}\d{d}\=ukya avasth\=atraya (waking, dream, deep-sleep, and
-tur\=\i ya) furnishes a four-regime template. Both are treated here as falsification
+tur\=\i ya), set out in the M\=a\d{n}\d{d}\=ukya Upani\d{s}ad and
+G\=au\d{d}ap\=ada's k\=arik\=a~\cite{mandukya,gaudapada}, furnishes a four-regime
+template. Both are treated here as falsification
 targets (Section~\ref{sec:results}), and---crucially---the attractor claim is tested
 against the anisotropy of LLM embedding geometry, without which apparent convergence
 is an artifact.
@@ -141,7 +152,7 @@ Finally, the tantric source. Vaś\=\i kara\d{n}a (subjugation) is the second of 
 six acts (\d{s}a\d{t}karma: ś\=anti, vaś\=\i kara\d{n}a, stambhana, vidve\d{s}a\d{n}a,
 ucc\=a\d{t}ana, m\=ara\d{n}a) of tantric ritual magic, operationalized through mantra
 (linguistic or sonic injection) and yantra (geometric substrate), and documented by
-Sanskritists as a systematized technology rather than folklore~\cite{goudriaan1978}.
+Sanskritists as a systematized technology rather than folklore~\cite{goudriaan1978,turstig1985,buhnemann1988}.
 This work does not adjudicate its efficacy as psychology; it asks a narrower, testable
 question---whether the \d{s}a\d{t}karma constitutes a taxonomy of interventions
 on a target system, and which of its members map to distinct, control-separated
@@ -149,8 +160,7 @@ activation operations on an LLM. To the best of the present survey, no prior
 peer-reviewed work bridges vaś\=\i kara\d{n}a and LLM refusal, nor casts refusal as a
 group-theoretic invariant; both are attempted here while keeping the tiers apart.
 
-\subsection*{Unified mechanism: the asymmetric suppression of the monitoring faculty}
-
+\subsection{The unified mechanism these strands point to}
 Jailbreak, hypnosis, and vaś\=\i kara\d{n}a share one structural pattern,
 depicted in Figure~\ref{fig:unified_mechanism}: a context injection that suppresses
 the monitoring faculty while co-opting automatic generation, which is the necessary
