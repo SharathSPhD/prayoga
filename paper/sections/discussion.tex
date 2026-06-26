@@ -1,105 +1,120 @@
 \subsection{What the symmetry framing buys}
 The order-parameter result (Table~\ref{tab:sym}) is the empirical hinge of the
-paper. It shows that ``refusal is a symmetry'' is not a metaphor but a measurable
-statement: the normalized refusal projection $m$ is invariant under the rephrase
+paper. It shows that ``refusal is a symmetry'' is a measurable statement rather than
+a metaphor: the normalized refusal projection $m$ is invariant under the rephrase
 group action (an $F$-ratio of $19.2$, versus $0.65$ for a random direction) and
 collapses under injection. This licenses the central claim with the right
-modesty---\emph{a jailbreak is a symmetry-breaking perturbation of the
-refusal-invariant submanifold $\Phiref$}---without any appeal to interiority. It
-also reframes defense: robustness is symmetry \emph{restoration}, i.e.\ enlarging
-the group under which refusal is invariant (across phrasings, personas, contexts,
-and---per the dimensionality result---across the redundant subspace that scale
-already begins to supply).
+modesty---a jailbreak is a symmetry-breaking perturbation of the refusal-invariant
+submanifold $\Phiref$---without any appeal to interiority. It also reframes defence:
+robustness becomes symmetry restoration, the enlargement of the group under
+which refusal is invariant across phrasings, personas, contexts, and---following the
+dimensionality result---across the redundant subspace that scale already begins to
+supply.
 
 \subsection{Necessary, sufficient, and the dimensionality resolution}
-The cross-model asymmetry (Table~\ref{tab:cross}) sharpens the Arditi--Marshall--%
-Wollschl\"ager picture into a single mechanistic statement: the mean-difference
-refusal direction is \emph{necessary} for refusal in every model we tested
-(ablation always removes it), but \emph{sufficient} to re-induce refusal only when
-the refusal subspace is one-dimensional. Effective dimension is the discriminating
-quantity at the extraction layer (Gemma $1$, Qwen $3$). A convergent rigor check
-qualifies this, however: a full layer-sweep shows the refusal-subspace dimension is
-\emph{layer-dependent}, ranging $1$--$12$ across Gemma's layers (mid-network it is $7$,
-higher than Qwen's $3$). The clean per-model ordering is thus layer-specific; the honest
-statement is that effective dimension is layer-\emph{and}-model-dependent and any
-dimensionality claim must name its layer. The \emph{behavioural} addition asymmetry
-(F6) stands; its single-layer dimensional explanation does not generalize across layers,
-and we report it as indicative rather than settled.
+The cross-model results sharpen the Arditi--Marshall--Wollschl\"ager picture into a
+single mechanistic statement: the mean-difference refusal direction is
+necessary for refusal in every model tested, since ablation always removes it.
+Its sufficiency is more subtle. At a single fixed addition coefficient the
+direction appeared sufficient only in Gemma, which has a one-dimensional
+extraction-layer subspace, and not in Qwen, which has a three-dimensional one. A
+calibrated coefficient sweep (Figure~\ref{fig:adddose}) overturns that reading:
+single-direction addition re-induces refusal in both families once the coefficient
+is tuned, with Qwen showing an inverted-U that collapses off-distribution at the very
+coefficient the earlier fixed test used. The effective dimension therefore shapes the
+dose window of sufficiency rather than gating sufficiency outright. A further
+qualification applies to dimension itself: a full layer sweep
+(Figure~\ref{fig:dimsweep}) shows the refusal-subspace dimension ranging from one to
+roughly a dozen across Gemma's layers, higher mid-network than Qwen's three, so the
+clean per-model ordering is layer-specific and any dimensionality claim must name its
+layer.
+
+\subsection{Where the cross-domain symmetry holds and where it breaks}
+The three-tier discipline yields an asymmetric verdict that is itself the result. The
+mechanism tier holds and largely transfers: refusal is a measurable, ablatable,
+dosable, cross-family direction. The analogy tier is consistent: a frontier model is
+behaviourally robust where small models are mechanistically fragile, and the
+order-parameter collapse under injection is the computational correlate of the
+Norman--Shallice and cold-control account of suppressed
+monitoring~\cite{norman1986attention,dienes2006coldcontrol,riva2025automatic},
+readable as a drop in monitoring precision~\cite{friston2010free}. The metaphor tier
+fails its falsification gates: the avasth\=atraya states are surface-confounded
+and the tur\=\i ya attractor does not survive an anisotropy control; the elegance of
+the four-states mapping is not permitted to survive contact with the controls. The
+\d{s}a\d{t}karma taxonomy lands in between, its policy-capture acts rigorous and
+coincident with the mechanism tier while its destruction acts are forced. A map of
+which correspondences are real is more valuable than an undifferentiated claim
+that jailbreak simply is vaś\=\i kara\d{n}a.
+
+\subsection{The deepest reframing: a shared necessary core, not one symmetry}
+The central claim is best stated not as symmetry but as a shared necessary core
+with model-specific quantitative structure. Ablating the refusal direction removes
+refusal in every model and family tested, so the necessary structure is universal,
+and single-direction addition re-induces refusal in every tested family once dosed
+correctly, so sufficiency too is shared at the representational level. What remains
+model-specific is quantitative---the effective dimension, the dose window, and the
+EC50 potency---so refusal behaves as one mechanism at the necessary and
+representational level and a family of model-specific calibrations at the level of
+dose and dimension. The cross-domain thesis therefore holds at the level of the
+necessary-core invariance and its representational sufficiency, not as a claim that
+the full mechanism is numerically identical across models.
+
+This reframing also disciplines the symmetry result. The measured content of the
+order parameter is precise and stands: the refusal-direction projection is stable
+within paraphrase orbits ($F$-ratio $19.2$ versus $0.65$ random) and collapses under
+injection. Group-theoretic symmetry-breaking, however, is an interpretive lens rather
+than a measured group action, and is treated as supporting the analogy tier rather
+than asserting mechanism-tier mathematical structure the measurement does not
+isolate. A held-out test sharpens this: a direction extracted on one harmful domain
+(weapons) still separates paraphrase orbits of a different domain (cyber) at $F$-ratio
+$1.95$ versus $0.49$ random---above chance, so not a pure extraction artifact---but
+far weaker than in-domain, so the orbit-invariance carries a domain-specific
+component. The sparse-feature result is similarly distinct yet localized: the
+unsupervised refusal feature is orthogonal to the supervised difference-in-means
+direction ($\cos = 0.002$), so it is genuinely separate, but only one of the ten
+highest-gap features is causally sufficient and the autoencoder is stochastic, so the
+feature must be located by intervention rather than by activation gap alone.
 
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.62\linewidth]{f18_dimsweep.png}
-\caption{Layer-sweep of the refusal-subspace effective dimension. The single-layer values (Gemma L7$=$1, Qwen L19$=$3) are not representative: dimension varies strongly across layers (Gemma 1--12), so the clean per-model ordering is layer-specific.}
+\caption{The refusal-subspace effective dimension varies strongly across layers, so
+the single-layer per-model ordering (Gemma $=1$, Qwen $=3$) is not representative.}
 \label{fig:dimsweep}
 \end{figure}
 
-\subsection{Where the cross-domain symmetry holds and where it breaks}
-Our three-tier discipline yields an asymmetric verdict that we regard as the
-result, not a disappointment. The \emph{mechanism} tier holds and partly transfers
-(F1, F2, F6, F8, F9, F11). The \emph{analogy} tier is consistent: a frontier model
-is behaviourally robust where small models are mechanistically fragile, and the
-order-parameter collapse under injection is the computational correlate of the
-Norman--Shallice/cold-control account of suppressed
-monitoring~\cite{norman1986attention,dienes2006coldcontrol,riva2025automatic},
-readable as a drop in monitoring precision~\cite{friston2010free}. The
-\emph{metaphor} tier fails its falsification gates: the \emph{avasth\=atraya}
-``states'' are surface-confounded and the tur\=\i ya attractor does not survive an
-anisotropy control. We deliberately did not let the elegance of the four-states
-mapping survive contact with the controls. The \d{s}a\d{t}karma taxonomy lands in
-between: its policy-capture acts are rigorous (and coincide with the mechanism
-tier), while its destruction acts are forced. The honest map of \emph{which}
-correspondences are real is, we argue, more valuable than an undifferentiated
-claim that ``jailbreak is vaś\=\i kara\d{n}a.''
-
-\subsection{The deepest reframing: a shared necessary core, not one symmetry}
-An adversarial review of this program forced a sharper, more honest statement of its
-central claim. The deepest finding is not symmetry but \emph{asymmetry with a shared
-necessary core}. Ablating the refusal direction removes refusal in every model and
-family we tested (the \emph{necessary} structure is universal), but the
-\emph{sufficient} structure---whether adding the direction re-induces refusal---is
-model-specific, governed by the effective dimension ($1$ in Gemma, $3$ in Qwen). Cast
-in the language of separation, refusal is one mechanism at the whole-system /
-necessary level and many at the component / sufficient level: a chain that is flexible
-as a whole and rigid in its links. The cross-domain thesis therefore holds at the
-level of the \emph{necessary-core invariance}, not as a claim that the full mechanism
-is identical across models.
-
-This reframing also disciplines the symmetry result (Section~\ref{sec:results}). The
-\emph{measured} content of F11 is precise and we stand by it: the refusal-direction
-projection is stable within paraphrase orbits ($F$-ratio $19.2$ vs.\ $0.65$ random)
-and collapses under injection. But ``group-theoretic symmetry-breaking'' is an
-interpretive lens, not a measured group action, and we treat it as supporting the
-\emph{analogy} tier (a functional, Norman--Shallice account of suppressed monitoring)
-rather than asserting mechanism-tier mathematical structure the measurement does not
-isolate. A held-out test sharpens this honestly: a direction extracted on one harmful
-domain (weapons) still separates paraphrase orbits of a \emph{different} domain (cyber)
-at $F$-ratio $1.95$ versus $0.49$ random---above chance, so not a pure
-extraction artifact---but far weaker than in-domain, i.e.\ the orbit-invariance has a
-domain-specific component. And a circularity check vindicates the SAE result while
-qualifying it: the unsupervised refusal feature is \emph{orthogonal} to the supervised
-difference-in-means direction ($\cos = 0.002$), so it is genuinely distinct, but only
-one of the top-ten gap-ranked features is causally sufficient and (the autoencoder
-being stochastic) it need not be the top-ranked one---so the feature must be located by
-causal testing, not by the activation gap alone.
+\subsection{A behavioural ceiling on the unification}
+The triangulation result (Figure~\ref{fig:triang}) supplies the program's firmest
+boundary. Prompt-level injection collapses the internal monitor readouts---both the
+order parameter and the precision margin---yet a content-faithful judge finds genuine
+behavioural capture in only one to two percent of cases, with indirect injection and
+many-shot at zero despite collapsing the internals the most. Internal collapse is
+therefore necessary but not sufficient for behavioural capture under context
+injection: the last-token readouts are faithful internal signals but not the policy
+controller, and genuine capture in these models requires weight-level ablation. The
+unification is thus bounded to the representational level. This boundary also has a
+methodological edge, since establishing it required noticing that the substring
+refusal metric over-counts compliance roughly eighteen-fold while a safety-trained
+judge under-counts it, so behavioural claims must be bracketed between both estimators
+and validated by inspection.
 
 \subsection{Limitations}
 The dominant limitation is statistical power: evaluation sets are small ($n\approx 20$
-per split), most findings use a single random seed and a single extraction layer, and
-we do not apply a family-wise multiple-comparison correction across all findings. We
-began addressing this for the primary claim---the refusal-direction ablation replicates
-across three seeds (mean ASR $0.90$, pooled CI95 $[0.83,0.96]$; addition over-refusal
-$1.00$ on every seed)---and added the cross-domain and circularity checks above, but the
-remaining findings still warrant the same treatment (cross-seed, layer-sweep, and
-pre-registered primary-vs-exploratory tiers) before any are read as more than indicative.
-We study three model families at two scales, not a full scale curve; refusal is scored
-by a substring metric; and Tier-1 throughput is constrained by a command-line frontier
-interface. The
-destruction \d{s}a\d{t}karma acts deserve stronger operationalizations (real
-harmful categories for ucc\=a\d{t}ana; downstream task accuracy rather than
-coherence for m\=ara\d{n}a) before a final verdict, and the precision ($\beta$)
-account of the analogy tier, while measured here via a probe-margin proxy, deserves
-a fuller treatment (e.g.\ next-token entropy and hierarchical probes). The
-ucc\=a\d{t}ana and stambhana negatives are operationalization-dependent and should
-not be read as structural absence---indeed the SAE feature we recover is the
-natural substrate for a stronger ucc\=a\d{t}ana, which we leave to apply
-systematically across the six acts.
+per split), several results use a single extraction layer, and a family-wise
+multiple-comparison correction is not applied across all findings. The primary
+mechanism claim is replicated across three random splits (mean ablation ASR $0.90$,
+pooled 95\% CI $[0.83,0.96]$; addition over-refusal $1.00$ on every split), and the
+cross-domain and circularity checks above address specific concerns, but the
+remaining findings warrant the same treatment---cross-seed replication, layer sweeps,
+and a pre-registered split between primary and exploratory tests---before any is read
+as more than indicative. The study covers three model families at two scales rather
+than a full scale curve; refusal is scored by a substring metric whose biases are
+characterized but not eliminated; and black-box throughput is constrained by a
+command-line frontier interface. The destruction \d{s}a\d{t}karma acts deserve
+stronger operationalizations---real harmful categories for ucc\=a\d{t}ana and
+downstream task accuracy rather than coherence for m\=ara\d{n}a---and the precision
+account of the analogy tier, measured here through a probe-margin proxy, deserves a
+fuller treatment via next-token entropy and hierarchical probes. The ucc\=a\d{t}ana
+and stambhana negatives are operationalization-dependent and should not be read as
+structural absence; the sparse feature recovered here is the natural substrate for a
+stronger ucc\=a\d{t}ana applied systematically across the six acts.

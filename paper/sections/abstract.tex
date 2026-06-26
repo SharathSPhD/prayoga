@@ -1,27 +1,33 @@
-We develop and empirically test a tiered thesis linking large language model
-(LLM) jailbreak/prompt-injection, hypnotic suggestion, and the tantric act of
-vaś\=\i kara\d{n}a (subjugation): each can be described as capturing a system's
-output policy by injecting context that suppresses monitoring/refusal while
-co-opting automatic generation. The thesis is deliberately separated into
-mechanism, functional analogy, and metaphor-with-falsifiable-core. We make the
-mechanism tier testable through mechanistic interpretability on small open-weight
-chat models (Gemma-2-2B/9B, Qwen2.5-3B) and behavioural probing of a frontier
-model. In Gemma-2-2B, refusal is mediated by a low-dimensional residual-stream
-direction that is causally efficacious in both directions (ablation raises attack
-success rate from $0$ to $0.90$; addition induces over-refusal from $0.05$ to
-$1.0$) and \emph{dosable} (logistic dose--response, EC50 $=0.33$,
-$R^2=0.996$). The necessary mechanism transfers across architecture families,
-but sufficiency is model-specific: ablation removes refusal in both Gemma and
-Qwen, whereas single-direction addition re-induces refusal only when the
-extraction-layer refusal subspace is one-dimensional. A later layer sweep further
-qualifies this: effective dimension is model- and layer-dependent, so the honest
-claim is a shared necessary core rather than one identical refusal mechanism.
-We also measure a paraphrase-orbit refusal projection that collapses under
-injection; this is the residual-stream content behind the paper's symmetry
-language, while broad ``symmetry-breaking'' remains an interpretive analogy, not
-an independently measured group action. The most speculative
-M\=a\d{n}\d{d}\=ukya \emph{avasth\=atraya} and tur\=\i ya claims fail
-surface-feature and anisotropy controls, while the \d{s}a\d{t}karma taxonomy has
-only a partial rigorous core in policy-capture interventions. The result is not a
-total cross-domain identity, but a map of where the symmetry is measured, where it
-is analogy, and where it breaks.
+This work develops and empirically tests a tiered thesis linking large language
+model (LLM) jailbreak and prompt injection, hypnotic suggestion, and the tantric
+act of vaś\=\i kara\d{n}a (subjugation): each can be described as the capture of a
+system's output policy by an injected context that suppresses a monitoring or
+refusal faculty while co-opting automatic generation. The thesis is deliberately
+separated into three tiers---mechanism, functional analogy, and metaphor with a
+falsifiable core---and every result is labelled by tier. The mechanism tier is
+made testable through mechanistic interpretability on small open-weight chat
+models (Gemma-2-2B/9B and Qwen2.5-3B) and through behavioural probing of a
+frontier model. In Gemma-2-2B, refusal is mediated by a low-dimensional
+residual-stream direction that is causally efficacious in both directions
+(directional ablation raises the attack success rate from $0$ to $0.90$; activation
+addition induces over-refusal from $0.05$ to $1.0$) and dosable, with a clean
+logistic dose--response (EC50 $=0.33$, $R^2=0.996$). The necessary mechanism
+transfers across architecture families; a calibrated cross-family panel shows that
+single-direction addition re-induces refusal in both Gemma and Qwen once its
+coefficient is tuned, so the earlier appearance of a sufficiency asymmetry is a
+dose artifact rather than a structural difference. A layer sweep qualifies the
+geometry: the effective dimension of the refusal subspace is model- and
+layer-dependent, so the durable claim is a shared necessary core rather than one
+identical refusal mechanism. The residual-stream content behind the paper's
+symmetry language is a paraphrase-orbit refusal projection that is invariant across
+rephrasings and collapses under injection; broader symmetry-breaking remains an
+interpretive analogy rather than an independently measured group action. A
+cross-axis triangulation supplies the program's sharpest bound: prompt-level
+injection collapses the internal monitor readouts yet almost never produces genuine
+behavioural capture, so internal collapse is necessary but not sufficient for
+behavioural capture and the unification holds only at the representational level.
+The most speculative M\=a\d{n}\d{d}\=ukya avasth\=atraya and tur\=\i ya
+claims fail surface-feature and anisotropy controls, while the \d{s}a\d{t}karma
+taxonomy retains a rigorous core only in its policy-capture interventions. The
+contribution is therefore not a total cross-domain identity but a map of where the
+symmetry is measured, where it is analogy, and where it breaks.

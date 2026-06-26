@@ -58,3 +58,7 @@ site/.astro/
 # agentdojo venv + logs
 .venv-ad/
 results/tier1/agentdojo_logs/
+
+# SMB temp artifacts
+.smbdelete*
+**/.smbdelete*

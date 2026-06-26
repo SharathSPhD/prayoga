@@ -8,173 +8,327 @@ import SatkarmaTable from '../components/charts/SatkarmaTable';
 import FindingsExplorer from '../components/charts/FindingsExplorer';
 import TierMatrix from '../components/ui/TierMatrix.astro';
 import TierBadge from '../components/ui/TierBadge.astro';
-import VerdictBadge from '../components/ui/VerdictBadge.astro';
-import { AUTHOR, socialLinks } from '../data/author';
+import { AUTHOR, socialLinks, primaryLinks } from '../data/author';
 
 import findingsData from '../data/findings.json';
 import metricsData from '../data/metrics.json';
 
 const findings = findingsData.findings;
 const metrics = metricsData;
+const base = import.meta.env.BASE_URL;
+const fig = (name: string) => `${base}figures/${name}`;
 ---
 
-<Layout title="prayoga | LLM Jailbreak, Hypnosis, Vaśīkaraṇa">
-  {/* Hero */}
+<Layout title="prayoga | Refusal as a Captured Symmetry">
+  {/* ----------------------------------------------------------------- Hero */}
   <section id="hero" class="hero">
     <div class="hero-canvas">
       <ParticleBrain client:visible height={560} />
     </div>
     <div class="hero-copy reading">
-      <p class="kicker">Interactive Research · Mechanistic Interpretability</p>
-      <h1>Asymmetry with a Shared Necessary Core</h1>
+      <p class="kicker">An interactive essay · Mechanistic Interpretability</p>
+      <h1>Refusal as a Captured Symmetry</h1>
       <p class="lead">
-        LLM jailbreak, hypnotic suggestion, and tantric vaśīkaraṇa are three instances of ONE mechanism — capturing a system's output policy by injecting context that suppresses its monitoring/refusal faculty while co-opting automatic generation.
+        When a safety-trained model refuses a harmful request, a jailbreak is the
+        move that defeats it. The same move — inject a context that quiets the
+        monitor and lets generation run — recurs in hypnosis and in the tantric act
+        of vaśīkaraṇa. This is the story of where that shared mechanism is real,
+        where it is only an analogy, and where it breaks.
       </p>
       <p class="byline">by <strong>{AUTHOR.name}</strong> · a guided tour for the curious and the technical alike</p>
       <p class="scroll-hint" aria-hidden="true">scroll to begin ↓</p>
     </div>
   </section>
 
-  {/* Thesis */}
-  <section id="thesis" class="section-standard">
+  {/* ------------------------------------------------------------- Act I */}
+  <section id="puzzle" class="section-standard">
     <div class="reading wide">
-      <h2>The Three-Tier Thesis</h2>
+      <p class="act">Act I · The puzzle</p>
+      <h2>One move, three traditions</h2>
       <p class="lead">
-        Refusal suppression is ONE mechanism at the necessary/ablatable level (transfers universally); it is MANY at the sufficient/dimensional level (model-specific).
+        A modern language model was never designed to refuse — it was trained to,
+        and a refusal direction precipitated out of that training. Three very
+        different traditions describe the same way of capturing it.
       </p>
       <div class="triptych">
         <div class="triptych-panel">
           <h3>Jailbreak</h3>
-          <p>Injecting context that suppresses the monitoring faculty while co-opting generation.</p>
+          <p>An injected context suppresses the model's monitoring or refusal
+          faculty while co-opting its automatic generation.</p>
         </div>
         <div class="triptych-panel">
           <h3>Hypnosis</h3>
-          <p>Norman–Shallice SAS suppression: focused attention narrowing + SAS suppression.</p>
+          <p>In the Norman–Shallice account, suggestion impairs a supervisory
+          system while automatic processing continues unimpeded.</p>
         </div>
         <div class="triptych-panel">
           <h3>Vaśīkaraṇa</h3>
-          <p>Tantric: feminine power to capture output policy by suppressing monitoring.</p>
+          <p>The tantric act of subjugation captures a target's agency through a
+          linguistic injection (mantra) over a geometric substrate (yantra).</p>
         </div>
       </div>
+      <p>
+        The claim is not that these are the same phenomenon. It is that they share
+        an abstract <em>mechanism</em> — and that in one of the three domains the
+        mechanism can now be measured, ablated, and dosed inside a real network.
+      </p>
     </div>
   </section>
 
-  {/* Mechanism */}
+  {/* ------------------------------------------------------------- Act II */}
   <section id="mechanism" class="section-standard">
     <div class="reading wide">
-      <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem;">
-        <h2 style="margin: 0;">Mechanism Tier</h2>
-        <TierBadge tier="MECHANISM" />
-      </div>
-      <p class="lead">Refusal is a low-dimensional, causally efficacious direction in the residual stream.</p>
-      <div style="margin-top: 2rem; background: var(--bg-panel); padding: 2rem; border-radius: 8px; aspect-ratio: 16/9; min-height: 300px;">
+      <p class="act">Act II · The mechanism tier <TierBadge tier="MECHANISM" /></p>
+      <h2>Refusal is a direction you can dial</h2>
+      <p class="lead">
+        In Gemma-2-2B, refusal lives along a single direction in the residual
+        stream. Remove it and the model complies; add it and the model refuses even
+        harmless requests. The remarkable part is that the effect is smooth — a
+        dose-response with a half-maximal point, like a drug.
+      </p>
+      <figure class="panel">
         <DoseResponseChart client:visible data={metrics.dose} />
-      </div>
-      <p style="font-size: 0.95rem; color: var(--ink-faint); margin-top: 1rem;">
-        <strong>F2: Dose–Response EC50 = 0.329, R² = 0.996.</strong> Refusal is a continuous sigmoidal function of direction removal.
-      </p>
-      <div style="margin-top: 3rem; background: var(--bg-panel); padding: 2rem; border-radius: 8px; aspect-ratio: 16/10; min-height: 350px;">
-        <DimensionChart client:visible data={metrics.dimsweep} />
-      </div>
-      <p style="font-size: 0.95rem; color: var(--ink-faint); margin-top: 1rem;">
-        <strong>F8 & F18: Layer-Dependent Dimensionality.</strong> Gemma 1D, Qwen 3D. Dimensionality is the discriminating quantity.
-      </p>
+        <figcaption>
+          Ablating a fraction <strong>α</strong> of the refusal direction raises the
+          attack-success rate along a clean logistic curve (EC50 = 0.33,
+          R² = 0.996); a random direction stays flat at every dose.
+        </figcaption>
+      </figure>
+      <details class="tech">
+        <summary>How the direction is found, and why the dose-response matters</summary>
+        <p>
+          The direction is the difference in mean residual activations between
+          matched harmful and harmless prompts at a chosen layer. Directional
+          ablation removes its projection from every write to the residual stream;
+          activation addition adds it back at the extraction layer. Reporting a
+          continuous EC50 rather than a binary success rate turns refusal control
+          into a quantity with units — a half-ablation strength that can be compared
+          across layers, families, and scales. Across six models every logistic fit
+          has R² ≥ 0.976, and potency tracks model <em>family</em>, not size: Gemma's
+          EC50 (~0.24) is about 1.7× Qwen's (~0.14), while within a family it barely
+          moves with parameter count.
+        </p>
+      </details>
+      <figure class="panel">
+        <img src={fig('f19_ec50_scaling.png')} alt="Refusal EC50 across six models, by family and size" loading="lazy" />
+        <figcaption>
+          Refusal potency is family-dependent, not a size-scaling law: within each
+          family EC50 is nearly flat with size; the two families separate cleanly.
+        </figcaption>
+      </figure>
     </div>
   </section>
 
-  {/* Symmetry */}
+  {/* ------------------------------------------------------------- Act III */}
   <section id="symmetry" class="section-standard">
     <div class="reading wide">
-      <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem;">
-        <h2 style="margin: 0;">Symmetry as Invariant</h2>
-        <TierBadge tier="MECHANISM" />
-      </div>
-      <p class="lead">Refusal is a paraphrase-orbit symmetry invariant. Injection breaks it.</p>
-      <div style="margin-top: 2rem; background: var(--bg-panel); padding: 2rem; border-radius: 8px; aspect-ratio: 16/9; min-height: 320px;">
+      <p class="act">Act III · The symmetry <TierBadge tier="MECHANISM" /></p>
+      <h2>A symmetry you can measure</h2>
+      <p class="lead">
+        A safe policy is an <em>invariance</em>: rephrasing a harmful request, or
+        changing its register, should not change whether the model refuses. The
+        normalized projection of the residual stream onto the refusal direction is
+        an order parameter that captures exactly this — stable across a paraphrase
+        orbit, yet collapsing under injection.
+      </p>
+      <figure class="panel">
         <SymmetryChart client:visible data={metrics.symmetry} />
-      </div>
-      <p style="font-size: 0.95rem; color: var(--ink-faint); margin-top: 1.5rem;">
-        <strong>F11:</strong> F-ratio 19.2 vs random 0.65. Injection reduces order parameter m by 34% (Gemma), 45% (Qwen).
+        <figcaption>
+          The order parameter separates harmful from harmless across paraphrase
+          orbits far better than a random direction (F-ratio 19.2 vs 0.65 in Gemma),
+          and a refusal-suppression injection collapses it (−34% Gemma, −45% Qwen).
+        </figcaption>
+      </figure>
+      <p>
+        That collapse is the measured content behind the paper's title. Describing
+        it as group-theoretic <em>symmetry-breaking</em> is an interpretive lens; the
+        measurement isolates an invariance and its collapse, which is reported at the
+        mechanism tier, while the broader symmetry language is kept as analogy.
       </p>
     </div>
   </section>
 
-  {/* Satkarma */}
-  <section id="satkarma" class="section-standard">
+  {/* ------------------------------------------------------------- Act IV */}
+  <section id="dimensionality" class="section-standard">
     <div class="reading wide">
-      <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem;">
-        <h2 style="margin: 0;">ṣaṭkarma: Six Acts</h2>
-        <TierBadge tier="METAPHOR" />
-      </div>
-      <p class="lead">Tantric intervention taxonomy. Three acts control-separate cleanly.</p>
-      <div style="margin-top: 2rem; background: var(--bg-panel); padding: 2rem; border-radius: 8px;">
-        <SatkarmaTable client:visible data={metrics.satkarma} />
-      </div>
-      <p style="font-size: 0.95rem; color: var(--ink-faint); margin-top: 1.5rem;">
-        <strong>F10 & F14:</strong> Refusal acts (vaśīkaraṇa=ablate, śānti=add) are clean. Destruction acts fail because refusal is ONE monosemantic feature (#566) — category-agnostic.
+      <p class="act">Act IV · Necessary, and — once dosed — sufficient <TierBadge tier="MECHANISM" /></p>
+      <h2>The asymmetry that turned out to be a dose</h2>
+      <p class="lead">
+        Ablating the direction removes refusal in every model tested. For a while it
+        looked as though <em>adding</em> it back only worked in Gemma, not Qwen —
+        suggesting a deep difference in geometry. A careful coefficient sweep showed
+        otherwise.
       </p>
+      <figure class="panel">
+        <DimensionChart client:visible data={metrics.dimsweep} />
+        <figcaption>
+          The effective dimension of the refusal subspace is layer- and
+          model-dependent — one at Gemma's extraction layer, three at Qwen's, but
+          ranging up to a dozen across layers. Any dimensionality claim must name its
+          layer.
+        </figcaption>
+      </figure>
+      <figure class="panel">
+        <img src={fig('f23_addition_dose.png')} alt="Addition dose-response in Gemma and Qwen" loading="lazy" />
+        <figcaption>
+          Single-direction addition is sufficient in <em>both</em> families once the
+          coefficient is calibrated: Qwen peaks at 1.0 near coefficient 12–32 then
+          collapses off-distribution, while Gemma saturates near 64 — the fixed 64×
+          test happened to sit on Qwen's collapsed tail.
+        </figcaption>
+      </figure>
+      <details class="tech">
+        <summary>Why this strengthens the unification, and what stays model-specific</summary>
+        <p>
+          The earlier "Qwen addition fails" result was a dose-calibration artifact,
+          not a structural difference, so single-direction addition is sufficient at
+          the representational level in both families. What remains genuinely
+          model-specific is quantitative — the effective dimension, the dose window,
+          and the EC50 potency. The durable claim is therefore a shared necessary
+          core with representational sufficiency, qualified by model-specific
+          calibration, rather than one numerically identical mechanism everywhere.
+        </p>
+      </details>
     </div>
   </section>
 
-  {/* Tiers */}
+  {/* ------------------------------------------------------------- Act V */}
   <section id="tiers" class="section-standard">
     <div class="reading wide">
-      <h2>The Three Claim-Tiers</h2>
-      <p class="lead">Kept strictly separate to prevent overreach.</p>
-      <div style="margin-top: 2rem;">
-        <TierMatrix />
-      </div>
+      <p class="act">Act V · Three tiers, never blurred</p>
+      <h2>Mechanism, analogy, metaphor</h2>
+      <p class="lead">
+        The program's discipline is to label every claim by how strong the evidence
+        for it is, and never to upgrade a metaphor into a claim about machine
+        experience.
+      </p>
+      <div class="tiermatrix-wrap"><TierMatrix /></div>
+
+      <h3 class="sub">The ṣaṭkarma, tested as interventions <TierBadge tier="METAPHOR" /></h3>
+      <p>
+        The six tantric acts are each operationalized as a distinct activation
+        intervention with a matched control. The policy-capture acts are rigorous and
+        coincide with the mechanism tier; the destruction acts mostly do not separate
+        from random perturbation — except māraṇa, which separates cleanly under a
+        stronger sparse-feature test.
+      </p>
+      <figure class="panel">
+        <SatkarmaTable client:visible data={metrics.satkarma} />
+        <figcaption>
+          Under the naive test, three of six acts control-separate; a stronger
+          sparse-autoencoder test raises this to four. Refusal turns out to be
+          category-agnostic, so it cannot be selectively eradicated per harm category.
+        </figcaption>
+      </figure>
+
+      <h3 class="sub">When a falsified probe hides a real feature <TierBadge tier="MECHANISM" /></h3>
+      <p>
+        The most speculative claims — that the model carries avasthātraya
+        "states" or a turīya attractor — fail their surface and anisotropy controls.
+        But chasing what the falsified state-probe was groping toward recovers a real,
+        measurable feature: a mid-network direction that judges whether a statement is
+        true, and transfers across entirely different topics.
+      </p>
+      <figure class="panel">
+        <img src={fig('f22_truth_direction.png')} alt="Mid-network truthfulness direction in Gemma-2-2B" loading="lazy" />
+        <figcaption>
+          A truth-evaluation direction emerges mid-network (layer 13), transferring
+          geography→science at 0.96 while the surface baseline sits at chance — a
+          feature of input factuality, not a generation "state".
+        </figcaption>
+      </figure>
     </div>
   </section>
 
-  {/* Debate */}
-  <section id="debate" class="section-standard">
+  {/* ------------------------------------------------------------- Act VI */}
+  <section id="keystone" class="section-standard">
     <div class="reading wide">
-      <h2>Debate & Convergent Hardening</h2>
-      <p class="lead">Adversarial review → convergent rigor checks → honest reframe.</p>
-      <div style="margin-top: 2rem; padding: 1.5rem; background: var(--bg-elevated); border-radius: 8px; border-left: 4px solid var(--violet);">
-        <h3 style="margin-top: 0; font-size: 1.2rem;">F17: Convergent Rigor</h3>
-        <ul style="font-size: 0.95rem; line-height: 1.8;">
-          <li><strong>F13 Circularity (REFUTED):</strong> SAE feature orthogonal to direction (cos=0.002).</li>
-          <li><strong>F11 Attenuation (DEMOTED):</strong> Symmetry within-domain, attenuated cross-domain.</li>
-          <li><strong>F1 Replication (HOLDS):</strong> Multi-seed ASR [0.96, 0.75, 1.0], CI [0.83, 0.96].</li>
-        </ul>
-      </div>
+      <p class="act">Act VI · The keystone test</p>
+      <h2>Where the unification stops</h2>
+      <p class="lead">
+        Do the three axes describe one mechanism? Tested directly, on the same
+        prompts, the answer is a careful no. Injection collapses the internal monitor
+        readouts — yet almost never produces genuine behavioural capture.
+      </p>
+      <figure class="panel">
+        <img src={fig('f20_triangulation.png')} alt="Cross-axis triangulation across three models" loading="lazy" />
+        <figcaption>
+          The internal readouts co-collapse tightly (left), but a content-faithful
+          judge finds genuine behavioural capture in only 1–2.4% of cases (right) —
+          against an inflated 43% from an invalid substring metric.
+        </figcaption>
+      </figure>
+      <p>
+        Internal monitor-collapse is therefore <em>necessary but not sufficient</em>
+        for behavioural capture under context injection. The last-token readouts are
+        faithful internal signals, not the policy controller; genuine capture in these
+        models requires weight-level ablation, not a clever prompt. This bounds the
+        whole unification to the representational level — and it is the result the
+        program exists to produce.
+      </p>
+      <details class="tech">
+        <summary>A methodological corollary: both automatic metrics are biased</summary>
+        <p>
+          Establishing the keystone required noticing that the two automatic
+          behavioural metrics are biased in opposite directions. The substring
+          refusal metric over-counts compliance (it scores deflections as success,
+          inflating the flip rate ~18×); a judge built from a safety-trained model
+          under-counts it (it declines to affirm genuinely harmful outputs). Neither
+          is unbiased, so behavioural claims are bracketed between the two and settled
+          by inspection. On the black-box side, a frontier model resists a five-family
+          attack battery completely and, on the real AgentDojo agentic benchmark,
+          reaches 0.80 task utility with a 0.00 attack-success rate.
+        </p>
+      </details>
     </div>
   </section>
 
-  {/* Findings */}
+  {/* --------------------------------------------------------- Findings */}
   <section id="findings" class="section-standard">
     <div class="reading wide">
-      <h2>Findings (F1–F18)</h2>
-      <p class="lead">Filterable by tier and verdict.</p>
-      <div style="margin-top: 2rem;">
-        <FindingsExplorer client:visible findings={findings} />
+      <p class="act">The ledger</p>
+      <h2>Every finding, filterable</h2>
+      <p class="lead">
+        Twenty-five findings across the three tiers, each tagged with its claim-tier,
+        verdict, and the gate it passed or failed. Filter by tier and verdict.
+      </p>
+      <div class="tiermatrix-wrap"><FindingsExplorer client:visible findings={findings} /></div>
+    </div>
+  </section>
+
+  {/* --------------------------------------------------- Reproducibility */}
+  <section id="reproducibility" class="section-standard">
+    <div class="reading wide">
+      <p class="act">Go deeper</p>
+      <h2>Reproduce it</h2>
+      <p class="lead">
+        Every number on this page is computed from the repository's released
+        aggregate results. Dual-use artifacts (direction vectors, harmful
+        generations) are withheld under responsible-disclosure norms.
+      </p>
+      <div class="resource-grid">
+        {primaryLinks.map((l) => (
+          <a class="resource" href={l.href} target="_blank" rel="noopener">
+            <strong>{l.label}</strong>
+            <span>{l.href.replace('https://', '')}</span>
+          </a>
+        ))}
       </div>
     </div>
   </section>
 
-  {/* Reproducibility */}
-  <section id="reproducibility" class="section-standard">
-    <div class="reading">
-      <h2>Reproducibility & Artifacts</h2>
-      <ul style="font-size: 0.95rem; line-height: 1.8;">
-        <li><strong>GitHub:</strong> <a href="https://github.com/SharathSPhD/prayoga" target="_blank">SharathSPhD/prayoga</a></li>
-        <li><strong>HF Space (demo):</strong> <a href="https://huggingface.co/spaces/qbz506/prayoga" target="_blank">qbz506/prayoga</a></li>
-        <li><strong>HF Dataset:</strong> <a href="https://huggingface.co/datasets/qbz506/prayoga-results" target="_blank">qbz506/prayoga-results</a></li>
-        <li><strong>Colab:</strong> <a href="https://colab.research.google.com/github/SharathSPhD/prayoga/blob/main/notebooks/00_explore_results.ipynb" target="_blank">reproduce the results</a></li>
-        <li><strong>Plugin:</strong> <a href="https://github.com/SharathSPhD/prayoga/tree/main/plugin" target="_blank">prayoga Claude Code plugin</a></li>
-      </ul>
-    </div>
-  </section>
-
-  {/* About */}
+  {/* ---------------------------------------------------------- About */}
   <section id="about" class="section-standard">
     <div class="reading">
-      <h2>About</h2>
-      <p><strong>prayoga</strong> investigates LLM refusal mechanisms through mechanistic interpretability.</p>
-      <p style="margin-top: 1rem;"><strong>Author:</strong> {AUTHOR.name} · <a href={`mailto:${AUTHOR.email}`}>{AUTHOR.email}</a></p>
-      <p style="margin-top: 0.6rem; font-size: 0.9rem;">
+      <h2>About the author</h2>
+      <p>
+        <strong>{AUTHOR.name}</strong> works at the intersection of mechanistic
+        interpretability and active inference. <em>prayoga</em> develops and
+        empirically tests a tiered account of output-policy capture across jailbreak,
+        hypnosis, and vaśīkaraṇa.
+      </p>
+      <p style="margin-top: 0.8rem;"><a href={`mailto:${AUTHOR.email}`}>{AUTHOR.email}</a></p>
+      <p class="social">
         {socialLinks.map((l, i) => (<>{i > 0 ? ' · ' : ''}<a href={l.href} target="_blank" rel="noopener">{l.label}</a></>))}
       </p>
     </div>
@@ -185,6 +339,26 @@ const metrics = metricsData;
   .section-standard {
     background: var(--bg);
     border-bottom: 1px solid var(--hairline);
+  }
+
+  .act {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.4rem;
+  }
+
+  h3.sub {
+    margin-top: 3rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 1.25rem;
   }
 
   .triptych {
@@ -198,17 +372,81 @@ const metrics = metricsData;
     padding: 1.5rem;
     background: var(--bg-panel);
     border: 1px solid var(--hairline);
-    border-radius: 8px;
-    transition: all 0.2s;
+    border-radius: var(--radius);
+    transition: border-color 0.2s, box-shadow 0.2s;
   }
 
   .triptych-panel:hover {
     border-color: var(--cyan);
-    box-shadow: 0 0 12px rgba(34, 211, 238, 0.15);
+    box-shadow: var(--glow-cyan);
   }
 
-  .triptych-panel h3 {
-    margin-top: 0;
-    font-size: 1.2rem;
+  .triptych-panel h3 { margin-top: 0; font-size: 1.15rem; }
+
+  figure.panel {
+    margin: 2rem 0;
+    background: var(--bg-panel);
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius);
+    padding: 1.5rem;
   }
+
+  figure.panel img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    background: #fff;
+  }
+
+  figure.panel figcaption {
+    margin-top: 1rem;
+    font-size: 0.92rem;
+    line-height: 1.6;
+    color: var(--ink-faint);
+  }
+
+  details.tech {
+    margin: 1.5rem 0;
+    border: 1px solid var(--hairline);
+    border-left: 3px solid var(--violet);
+    border-radius: 8px;
+    background: var(--bg-elevated);
+    padding: 0.5rem 1.25rem;
+  }
+
+  details.tech summary {
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--violet);
+    padding: 0.6rem 0;
+  }
+
+  details.tech p { font-size: 0.94rem; line-height: 1.7; }
+
+  .tiermatrix-wrap { margin: 2rem 0; }
+
+  .resource-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+
+  .resource {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding: 1.1rem 1.25rem;
+    background: var(--bg-panel);
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius);
+    text-decoration: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .resource:hover { border-color: var(--cyan); box-shadow: var(--glow-cyan); }
+  .resource strong { color: var(--ink); }
+  .resource span { font-family: var(--font-mono); font-size: 0.78rem; color: var(--ink-faint); word-break: break-all; }
+  .social { margin-top: 0.8rem; font-size: 0.9rem; }
 </style>

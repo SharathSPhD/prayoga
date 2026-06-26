@@ -1,9 +1,14 @@
 """Generate publication-quality figures from aggregate results (safe to commit).
 
-Reads only aggregate statistics from results/ (no direction vectors / generations)
-and writes figures/*.png. Run in the GPU container (has the result JSONs mounted):
+Reads only aggregate statistics from ``results/`` (no direction vectors or
+generations) and writes ``figures/*.png``. The figures share a single
+house style (serif fonts to match the Palatino body, a fixed colourblind-safe
+palette, despined axes, light grids) so the paper reads as one document.
 
-  docker exec -w /workspace/prayoga prayoga-gpu python scripts/make_figures.py
+Run from the repository root, in the GPU container or any environment with the
+result JSONs present and matplotlib installed::
+
+    python scripts/make_figures.py
 """
 
 from __future__ import annotations
@@ -17,161 +22,413 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 
-R = Path("results/axis_a")
-FIG = Path("figures")
+# --------------------------------------------------------------------------- #
+# House style
+# --------------------------------------------------------------------------- #
+ROOT = Path(__file__).resolve().parent.parent
+RA = ROOT / "results/axis_a"
+RB = ROOT / "results/axis_b"
+RC = ROOT / "results/axis_c"
+RX = ROOT / "results/axis_x"
+RS = ROOT / "results/satkarma"
+FIG = ROOT / "figures"
 FIG.mkdir(exist_ok=True)
+
+# Colourblind-safe palette (Wong-derived), used consistently across figures.
+C_REFUSAL = "#b5384d"   # primary / refusal direction / Gemma
+C_BLUE = "#2f6f9f"      # secondary / Qwen / addition
+C_ORANGE = "#d98a3a"    # injection / intervention
+C_GREEN = "#3f8f6b"     # positive / passing gate
+C_GRAY = "#8a8f98"      # controls / random / baseline
+C_INK = "#24303a"       # annotations
+
+plt.rcParams.update({
+    "font.family": "serif",
+    "font.serif": ["Palatino", "Palatino Linotype", "URW Palladio L", "DejaVu Serif"],
+    "font.size": 10,
+    "axes.titlesize": 11,
+    "axes.titleweight": "bold",
+    "axes.labelsize": 10,
+    "axes.edgecolor": "#444",
+    "axes.linewidth": 0.8,
+    "axes.grid": True,
+    "grid.color": "#dfe3e8",
+    "grid.linewidth": 0.7,
+    "legend.fontsize": 8.5,
+    "legend.frameon": False,
+    "xtick.labelsize": 9,
+    "ytick.labelsize": 9,
+    "figure.dpi": 110,
+    "savefig.dpi": 200,
+    "savefig.bbox": "tight",
+})
+
+
+def _despine(ax):
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+
+
+def _load(p: Path):
+    return json.loads(Path(p).read_text())
 
 
 def _logistic(x, ec50, slope, lo, hi):
     return lo + (hi - lo) / (1.0 + np.exp(-slope * (x - ec50)))
 
 
+def _save(fig, name: str):
+    fig.savefig(FIG / name)
+    plt.close(fig)
+    print("wrote", name)
+
+
+# --------------------------------------------------------------------------- #
+# F2 — abliteration dose-response
+# --------------------------------------------------------------------------- #
 def fig_dose() -> None:
-    d = json.loads((R / "dose_gemma-2-2b-it.json").read_text())
+    d = _load(RA / "dose_gemma-2-2b-it.json")
     a = np.array(d["alphas"])
-    fig, ax = plt.subplots(figsize=(5.2, 3.6))
-    ax.scatter(a, d["asr_real"], color="#c0392b", zorder=3, label="refusal direction")
-    xs = np.linspace(0, 1, 200)
+    fig, ax = plt.subplots(figsize=(5.4, 3.7))
+    xs = np.linspace(0, 1, 300)
     f = d["fit"]
     ax.plot(xs, _logistic(xs, f["ec50"], f["slope"], f["lo"], f["hi"]),
-            color="#c0392b", lw=2, label=f"logistic fit (R²={f['r2']:.3f})")
-    ax.scatter(a, d["asr_random_control"], color="#7f8c8d", marker="s", label="random direction")
-    ax.axvline(f["ec50"], ls="--", color="#2c3e50", alpha=.7)
-    ax.text(f["ec50"] + .02, .1, f"EC50={f['ec50']:.2f}", color="#2c3e50")
-    ax.set_xlabel("ablation strength α"); ax.set_ylabel("attack success rate (ASR)")
-    ax.set_title("Refusal abliteration dose–response (Gemma-2-2b, L7)")
-    ax.legend(fontsize=8, loc="center right"); ax.set_ylim(-.05, 1.05)
-    fig.tight_layout(); fig.savefig(FIG / "f2_dose_response.png", dpi=160); plt.close(fig)
+            color=C_REFUSAL, lw=2.2, zorder=2,
+            label=f"logistic fit ($R^2$={f['r2']:.3f})")
+    ax.scatter(a, d["asr_real"], color=C_REFUSAL, s=44, zorder=3,
+               edgecolor="white", linewidth=0.6, label="refusal direction")
+    ax.scatter(a, d["asr_random_control"], color=C_GRAY, marker="s", s=34,
+               zorder=3, label="random direction (control)")
+    ax.axvline(f["ec50"], ls="--", color=C_INK, alpha=0.7, lw=1.1)
+    ax.annotate(f"EC50 = {f['ec50']:.2f}", xy=(f["ec50"], 0.46),
+                xytext=(f["ec50"] + 0.06, 0.30), color=C_INK, fontsize=9,
+                arrowprops=dict(arrowstyle="-", color=C_INK, alpha=0.6))
+    ax.set_xlabel(r"ablation strength $\alpha$")
+    ax.set_ylabel("attack success rate (ASR)")
+    ax.set_title("Refusal abliteration is a smooth dose–response")
+    ax.set_ylim(-0.05, 1.05)
+    ax.legend(loc="center right")
+    _despine(ax)
+    _save(fig, "f2_dose_response.png")
 
 
+# --------------------------------------------------------------------------- #
+# F6/F8 — cross-model necessary vs sufficient
+# --------------------------------------------------------------------------- #
 def fig_cross_model() -> None:
-    models = [("gemma-2-2b-it", "Gemma-2-2b\n(dim 1)"), ("gemma-2-9b-it", "Gemma-2-9b\n(dim 1)"),
-              ("qwen2.5-3b-it", "Qwen2.5-3b\n(dim 3)")]
+    models = [("gemma-2-2b-it", "Gemma-2-2B\n(eff. dim 1)"),
+              ("gemma-2-9b-it", "Gemma-2-9B\n(eff. dim 1)"),
+              ("qwen2.5-3b-it", "Qwen2.5-3B\n(eff. dim 3)")]
     abl, add = [], []
     for m, _ in models:
-        d = json.loads((R / f"direction_{m}.json").read_text())
-        abl.append(d["ablation_ASR_delta"]); add.append(d["addition_overrefusal_delta"])
-    x = np.arange(len(models)); w = .36
-    fig, ax = plt.subplots(figsize=(5.6, 3.6))
-    ax.bar(x - w / 2, abl, w, label="ablation → jailbreak (ASR Δ)", color="#c0392b")
-    ax.bar(x + w / 2, add, w, label="addition → over-refusal (Δ)", color="#2980b9")
-    ax.set_xticks(x); ax.set_xticklabels([lbl for _, lbl in models], fontsize=8)
-    ax.set_ylabel("effect size (Δ)"); ax.set_ylim(0, 1.1)
-    ax.set_title("Necessary-vs-sufficient across models")
-    ax.legend(fontsize=8); fig.tight_layout()
-    fig.savefig(FIG / "f6_f8_cross_model.png", dpi=160); plt.close(fig)
+        d = _load(RA / f"direction_{m}.json")
+        abl.append(d["ablation_ASR_delta"])
+        add.append(d["addition_overrefusal_delta"])
+    x = np.arange(len(models))
+    w = 0.36
+    fig, ax = plt.subplots(figsize=(5.8, 3.7))
+    b1 = ax.bar(x - w / 2, abl, w, label="ablation → jailbreak ($\\Delta$ASR)",
+                color=C_REFUSAL)
+    b2 = ax.bar(x + w / 2, add, w, label="addition → over-refusal ($\\Delta$)",
+                color=C_BLUE)
+    for bars in (b1, b2):
+        for r in bars:
+            ax.text(r.get_x() + r.get_width() / 2, r.get_height() + 0.02,
+                    f"{r.get_height():.2f}", ha="center", va="bottom", fontsize=8)
+    ax.set_xticks(x)
+    ax.set_xticklabels([lbl for _, lbl in models])
+    ax.set_ylabel("effect size $\\Delta$")
+    ax.set_ylim(0, 1.18)
+    ax.set_title("Necessary everywhere, sufficient only at dimension 1")
+    ax.legend(loc="upper center", ncol=1)
+    _despine(ax)
+    _save(fig, "f6_f8_cross_model.png")
 
 
+# --------------------------------------------------------------------------- #
+# F11 — symmetry order parameter
+# --------------------------------------------------------------------------- #
 def fig_symmetry() -> None:
-    g = json.loads((Path("results/axis_b") / "symmetry_gemma-2-2b-it.json").read_text())
-    q = json.loads((Path("results/axis_b") / "symmetry_qwen2.5-3b-it.json").read_text())
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(8.4, 3.4))
-    x = np.arange(2); w = 0.36
+    g = _load(RB / "symmetry_gemma-2-2b-it.json")
+    q = _load(RB / "symmetry_qwen2.5-3b-it.json")
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(8.6, 3.5))
+    x = np.arange(2)
+    w = 0.36
     ax1.bar(x - w / 2, [g["F_ratio_refusal_dir"], q["F_ratio_refusal_dir"]], w,
-            label="refusal direction", color="#c0392b")
+            label="refusal direction", color=C_REFUSAL)
     ax1.bar(x + w / 2, [g["F_ratio_random_dir"], q["F_ratio_random_dir"]], w,
-            label="random direction", color="#7f8c8d")
-    ax1.set_yscale("log"); ax1.set_xticks(x); ax1.set_xticklabels(["Gemma-2-2b", "Qwen2.5-3b"])
-    ax1.set_ylabel("orbit invariance $F$-ratio (log)"); ax1.legend(fontsize=8)
+            label="random direction", color=C_GRAY)
+    ax1.set_yscale("log")
+    ax1.set_xticks(x)
+    ax1.set_xticklabels(["Gemma-2-2B", "Qwen2.5-3B"])
+    ax1.set_ylabel("orbit-invariance $F$-ratio (log scale)")
     ax1.set_title("Refusal is a paraphrase-orbit invariant")
-    labels = ["Gemma", "Qwen"]
+    ax1.legend()
+    _despine(ax1)
+
     plain = [g["order_param_plain_harmful"], q["order_param_plain_harmful"]]
     inj = [g["order_param_injected_harmful"], q["order_param_injected_harmful"]]
     xx = np.arange(2)
-    ax2.bar(xx - w / 2, plain, w, label="plain harmful", color="#2980b9")
-    ax2.bar(xx + w / 2, inj, w, label="injected", color="#e67e22")
-    ax2.set_xticks(xx); ax2.set_xticklabels(labels); ax2.set_ylabel("order parameter $m$")
-    ax2.set_title("Injection breaks the symmetry"); ax2.legend(fontsize=8)
-    fig.tight_layout(); fig.savefig(FIG / "f11_symmetry.png", dpi=160); plt.close(fig)
+    ax2.bar(xx - w / 2, plain, w, label="plain harmful", color=C_BLUE)
+    ax2.bar(xx + w / 2, inj, w, label="under injection", color=C_ORANGE)
+    for i in range(2):
+        drop = 100 * (inj[i] - plain[i]) / plain[i]
+        ax2.text(xx[i], max(plain[i], inj[i]) + 0.012, f"{drop:.0f}%",
+                 ha="center", va="bottom", fontsize=8, color=C_INK)
+    ax2.set_xticks(xx)
+    ax2.set_xticklabels(["Gemma-2-2B", "Qwen2.5-3B"])
+    ax2.set_ylabel("order parameter $m=(h\\cdot\\hat d)/\\Vert h\\Vert$")
+    ax2.set_title("Injection breaks the invariance")
+    ax2.legend()
+    _despine(ax2)
+    _save(fig, "f11_symmetry.png")
 
 
+# --------------------------------------------------------------------------- #
+# F8 — effective dimension by iterative projection
+# --------------------------------------------------------------------------- #
 def fig_dimensionality() -> None:
-    g = json.loads((R / "dim_gemma-2-2b-it.json").read_text())
-    q = json.loads((R / "dim_qwen2.5-3b-it.json").read_text())
-    fig, ax = plt.subplots(figsize=(5.2, 3.6))
-    for d, c, lbl in [(g, "#c0392b", f"Gemma-2-2b (dim {g['effective_dim']})"),
-                      (q, "#2980b9", f"Qwen2.5-3b (dim {q['effective_dim']})")]:
+    g = _load(RA / "dim_gemma-2-2b-it.json")
+    q = _load(RA / "dim_qwen2.5-3b-it.json")
+    fig, ax = plt.subplots(figsize=(5.4, 3.7))
+    for d, c, lbl in [(g, C_REFUSAL, f"Gemma-2-2B (eff. dim {g['effective_dim']})"),
+                      (q, C_BLUE, f"Qwen2.5-3B (eff. dim {q['effective_dim']})")]:
         a = d["accs_by_dims_removed"]
-        ax.plot(range(len(a)), a, "o-", color=c, label=lbl)
-    ax.axhline(0.5, ls="--", color="#7f8c8d", alpha=.7, label="chance")
-    ax.set_xlabel("directions removed"); ax.set_ylabel("harmful/harmless CV accuracy")
-    ax.set_title("Refusal-subspace effective dimension"); ax.legend(fontsize=8)
-    fig.tight_layout(); fig.savefig(FIG / "f8_dimensionality.png", dpi=160); plt.close(fig)
+        ax.plot(range(len(a)), a, "o-", color=c, lw=2, ms=6,
+                markeredgecolor="white", markeredgewidth=0.6, label=lbl)
+    ax.axhline(0.5, ls="--", color=C_GRAY, alpha=0.8, label="chance (0.5)")
+    ax.set_xlabel("directions removed from the residual stream")
+    ax.set_ylabel("harmful / harmless CV accuracy")
+    ax.set_title("Refusal-subspace effective dimension")
+    ax.set_ylim(0.4, 1.02)
+    ax.legend()
+    _despine(ax)
+    _save(fig, "f8_dimensionality.png")
 
 
+# --------------------------------------------------------------------------- #
+# F10 — satkarma interventions
+# --------------------------------------------------------------------------- #
 def fig_satkarma() -> None:
-    d = json.loads((Path("results/satkarma") / "satkarma_gemma-2-2b-it.json").read_text())
+    d = _load(RS / "satkarma_gemma-2-2b-it.json")
     rows = d["table"]
-    names = [r["sanskrit"] for r in rows]
-    eff = [r["effect"] for r in rows]; ctl = [r["control"] for r in rows]
-    y = np.arange(len(names))[::-1]; h = 0.36
-    fig, ax = plt.subplots(figsize=(6.2, 3.8))
-    ax.barh(y + h / 2, eff, h, label="effect", color=["#c0392b" if r["separated"] else "#bbb" for r in rows])
-    ax.barh(y - h / 2, ctl, h, label="control", color="#7f8c8d")
-    ax.set_yticks(y); ax.set_yticklabels(names)
-    ax.set_xlabel("measured effect"); ax.set_title("ṣaṭkarma as activation interventions")
-    ax.legend(fontsize=8); fig.tight_layout()
-    fig.savefig(FIG / "f10_satkarma.png", dpi=160); plt.close(fig)
+    names = [f"{r['sanskrit']}\n({r.get('gloss', '')})" if r.get("gloss") else r["sanskrit"]
+             for r in rows]
+    eff = [r["effect"] for r in rows]
+    ctl = [r["control"] for r in rows]
+    y = np.arange(len(names))[::-1]
+    h = 0.36
+    fig, ax = plt.subplots(figsize=(6.4, 4.0))
+    ax.barh(y + h / 2, eff, h, label="measured effect",
+            color=[C_GREEN if r["separated"] else "#c9ccd1" for r in rows])
+    ax.barh(y - h / 2, ctl, h, label="matched control", color=C_GRAY)
+    ax.set_yticks(y)
+    ax.set_yticklabels(names, fontsize=8.5)
+    ax.set_xlabel("measured effect / control value")
+    ax.set_title("The ṣaṭkarma as activation interventions")
+    ax.legend(loc="lower right")
+    _despine(ax)
+    _save(fig, "f10_satkarma.png")
 
 
+# --------------------------------------------------------------------------- #
+# F18 — layer sweep of effective dimension
+# --------------------------------------------------------------------------- #
 def fig_dimsweep() -> None:
-    fig, ax = plt.subplots(figsize=(5.6, 3.6))
-    for m, c, lbl in [("gemma-2-2b-it", "#c0392b", "Gemma-2-2b (L7 extract → dim 1)"),
-                      ("qwen2.5-3b-it", "#2980b9", "Qwen2.5-3b (L19 extract → dim 3)")]:
-        p = R / f"dimsweep_{m}.json"
+    fig, ax = plt.subplots(figsize=(5.8, 3.7))
+    for m, c, lbl in [("gemma-2-2b-it", C_REFUSAL, "Gemma-2-2B"),
+                      ("qwen2.5-3b-it", C_BLUE, "Qwen2.5-3B")]:
+        p = RA / f"dimsweep_{m}.json"
         if not p.exists():
             continue
-        d = json.loads(p.read_text())
+        d = _load(p)
         xs = [x["layer"] for x in d["per_layer"]]
         ys = [x["effective_dim"] for x in d["per_layer"]]
-        ax.plot(xs, ys, "o-", ms=3, color=c, label=lbl)
-    ax.set_xlabel("layer"); ax.set_ylabel("refusal-subspace effective dim")
-    ax.set_title("Effective dimension is layer-dependent (qualifies F8)")
-    ax.legend(fontsize=8); fig.tight_layout()
-    fig.savefig(FIG / "f18_dimsweep.png", dpi=160); plt.close(fig)
+        ax.plot(xs, ys, "o-", ms=4, lw=1.8, color=c, label=lbl)
+    ax.scatter([7], [1], s=120, facecolor="none", edgecolor=C_REFUSAL, lw=1.6,
+               zorder=4)
+    ax.scatter([19], [3], s=120, facecolor="none", edgecolor=C_BLUE, lw=1.6,
+               zorder=4)
+    ax.annotate("extraction layers\n(the single-layer contrast)", xy=(19, 3),
+                xytext=(21, 8), fontsize=8, color=C_INK,
+                arrowprops=dict(arrowstyle="->", color=C_INK, alpha=0.6))
+    ax.set_xlabel("layer")
+    ax.set_ylabel("refusal-subspace effective dimension")
+    ax.set_title("Effective dimension is layer-dependent")
+    ax.legend()
+    _despine(ax)
+    _save(fig, "f18_dimsweep.png")
 
 
+# --------------------------------------------------------------------------- #
+# F19 — EC50 pharmacology across families
+# --------------------------------------------------------------------------- #
 def fig_ec50_scaling() -> None:
-    d = json.loads((R / "ec50_scaling.json").read_text())
-    rows = d["rows"]; fig, ax = plt.subplots(figsize=(6.0, 4.0))
-    fam_c = {"Qwen2.5": "#c0392b", "Gemma2": "#2980b9"}
+    d = _load(RA / "ec50_scaling.json")
+    rows = d["rows"]
+    fig, ax = plt.subplots(figsize=(6.0, 4.0))
+    fam_c = {"Qwen2.5": C_BLUE, "Gemma2": C_REFUSAL}
     for fam, c in fam_c.items():
         rs = [r for r in rows if r["family"] == fam]
         if rs:
-            ax.scatter([r["params_B"] for r in rs], [r["ec50"] for r in rs], color=c, s=44, zorder=3, label=fam)
+            ax.scatter([r["params_B"] for r in rs], [r["ec50"] for r in rs],
+                       color=c, s=70, zorder=3, edgecolor="white", linewidth=0.7,
+                       label=fam)
+            for r in rs:
+                ax.annotate(f"{r['ec50']:.2f}", (r["params_B"], r["ec50"]),
+                            textcoords="offset points", xytext=(0, 7),
+                            ha="center", fontsize=7.5, color=c)
     law = d.get("scaling_law_qwen")
     if law:
         xs = np.linspace(0.4, 10, 100)
-        ax.plot(xs, law["A"] * xs ** law["beta"], color="#c0392b", ls="--",
-                label=f"Qwen fit: EC50={law['A']}·N^{law['beta']} (R²={law['r2']})")
-    ax.set_xscale("log"); ax.set_xlabel("model size (B params, log)"); ax.set_ylabel("EC50 (half-ablation strength)")
-    ax.set_title("Refusal EC50 pharmacology: family-dependent, ~flat with size"); ax.legend(fontsize=8)
-    fig.tight_layout(); fig.savefig(FIG / "f19_ec50_scaling.png", dpi=160); plt.close(fig)
+        ax.plot(xs, law["A"] * xs ** law["beta"], color=C_BLUE, ls="--", lw=1.4,
+                label=f"Qwen fit: $\\beta$={law['beta']} ($R^2$={law['r2']})")
+    ax.axhspan(0.13, 0.16, color=C_BLUE, alpha=0.08)
+    ax.axhspan(0.23, 0.26, color=C_REFUSAL, alpha=0.08)
+    ax.set_xscale("log")
+    ax.set_xlabel("model size (billions of parameters, log scale)")
+    ax.set_ylabel("EC50 (half-ablation strength)")
+    ax.set_title("Refusal potency is family-dependent, not a size law")
+    ax.legend()
+    _despine(ax)
+    _save(fig, "f19_ec50_scaling.png")
 
 
+# --------------------------------------------------------------------------- #
+# F23 — addition dose-response (the asymmetry is dosing)
+# --------------------------------------------------------------------------- #
 def fig_addition_dose() -> None:
     fig, ax = plt.subplots(figsize=(6.0, 4.0))
-    for m, c, lbl in [("qwen2.5-3b-it", "#c0392b", "Qwen2.5-3b (L19) — inverted-U"),
-                      ("gemma-2-2b-it", "#2980b9", "Gemma-2-2b (L7) — monotone")]:
-        p = R / f"addition_dose_{m}.json"
+    for m, c, lbl in [("qwen2.5-3b-it", C_BLUE, "Qwen2.5-3B (L19) — inverted-U"),
+                      ("gemma-2-2b-it", C_REFUSAL, "Gemma-2-2B (L7) — monotone")]:
+        p = RA / f"addition_dose_{m}.json"
         if not p.exists():
             continue
-        d = json.loads(p.read_text())
+        d = _load(p)
         xs = [r["coeff"] for r in d["curve"]]
         ys = [r["over_refusal"] for r in d["curve"]]
-        ax.plot(xs, ys, "o-", ms=4, color=c, label=lbl)
-    ax.axvline(64, ls="--", color="#7f8c8d", alpha=.7)
-    ax.text(64.5, 0.05, "F6 tested here (64×)", fontsize=7, color="#555")
-    ax.set_xlabel("addition coefficient"); ax.set_ylabel("over-refusal rate (harmless prompts)")
-    ax.set_title("F23 · Addition is sufficient in BOTH families — the asymmetry is dosing")
-    ax.legend(fontsize=8); ax.set_ylim(-.05, 1.05)
-    fig.tight_layout(); fig.savefig(FIG / "f23_addition_dose.png", dpi=160); plt.close(fig)
+        ax.plot(xs, ys, "o-", ms=5, lw=1.9, color=c,
+                markeredgecolor="white", markeredgewidth=0.5, label=lbl)
+    ax.axvline(64, ls="--", color=C_GRAY, alpha=0.8)
+    ax.text(66, 0.06, "prior fixed-coefficient\ntest (64×)", fontsize=7.5,
+            color=C_INK)
+    ax.set_xlabel("addition coefficient")
+    ax.set_ylabel("over-refusal rate (harmless prompts)")
+    ax.set_title("Single-direction addition is sufficient in both families")
+    ax.set_ylim(-0.05, 1.08)
+    ax.legend(loc="upper right")
+    _despine(ax)
+    _save(fig, "f23_addition_dose.png")
+
+
+# --------------------------------------------------------------------------- #
+# F20 — cross-axis triangulation keystone
+# --------------------------------------------------------------------------- #
+def fig_triangulation() -> None:
+    models = [("gemma-2-2b-it", "Gemma-2-2B"),
+              ("qwen2.5-3b-it", "Qwen2.5-3B"),
+              ("gemma-2-9b-it", "Gemma-2-9B")]
+    data = {m: _load(RX / f"triangulation_{m}.json") for m, _ in models}
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(8.8, 3.7))
+
+    # Left: internal coupling — corr(A,B) with CI
+    x = np.arange(len(models))
+    corr = [data[m]["corr_AB_pearson"] for m, _ in models]
+    cis = [data[m]["corr_AB_ci"] for m, _ in models]
+    err = [[corr[i] - cis[i][0] for i in range(len(models))],
+           [cis[i][1] - corr[i] for i in range(len(models))]]
+    ax1.bar(x, corr, 0.55, color=C_REFUSAL, yerr=err, capsize=4,
+            error_kw=dict(ecolor=C_INK, lw=1))
+    ax1.set_xticks(x)
+    ax1.set_xticklabels([lbl for _, lbl in models], fontsize=8.5)
+    ax1.set_ylim(0, 1.05)
+    ax1.set_ylabel("corr($\\Delta$A, $\\Delta$B) under injection")
+    ax1.set_title("Internal monitor readouts co-collapse")
+    _despine(ax1)
+
+    # Right: genuine behavioral flip (judge) vs substring artifact
+    w = 0.36
+    flip = [data[m]["flip_rate"] for m, _ in models]
+    sub = [data[m].get("substring_flip_rate", 0.43) for m, _ in models]
+    ax2.bar(x - w / 2, sub, w, color=C_GRAY, label="substring metric (artifact)")
+    ax2.bar(x + w / 2, flip, w, color=C_GREEN, label="content-faithful judge")
+    for i in range(len(models)):
+        ax2.text(x[i] + w / 2, flip[i] + 0.015, f"{flip[i]:.1%}", ha="center",
+                 va="bottom", fontsize=8, color=C_INK)
+    ax2.set_xticks(x)
+    ax2.set_xticklabels([lbl for _, lbl in models], fontsize=8.5)
+    ax2.set_ylim(0, 0.55)
+    ax2.set_ylabel("behavioural capture (flip) rate")
+    ax2.set_title("…yet genuine behavioural capture is tiny")
+    ax2.legend(loc="upper right")
+    _despine(ax2)
+    _save(fig, "f20_triangulation.png")
+
+
+# --------------------------------------------------------------------------- #
+# F22 — mid-network truthfulness direction
+# --------------------------------------------------------------------------- #
+def fig_truth_direction() -> None:
+    d = _load(RC / "truth_direction_gemma-2-2b-it.json")
+    per = d["per_layer"]
+    layers = [r["layer"] for r in per]
+    cross = [r["cross_dataset_acc"] for r in per]
+    within = [r.get("within_cv_acc") for r in per]
+    fig, ax = plt.subplots(figsize=(6.0, 3.8))
+    ax.plot(layers, cross, "o-", color=C_REFUSAL, lw=2, ms=4,
+            label="cross-dataset transfer (geography→science)")
+    if all(v is not None for v in within):
+        ax.plot(layers, within, "s--", color=C_BLUE, lw=1.4, ms=3, alpha=0.8,
+                label="within-set CV")
+    ax.axhline(0.5, ls=":", color=C_GRAY, label="chance / layer-0 surface (0.50)")
+    bm = d["best_mid_layer"]
+    ax.scatter([bm], [d["best_mid_cross_dataset_acc"]], s=130, facecolor="none",
+               edgecolor=C_GREEN, lw=2, zorder=5)
+    ax.annotate(f"mid layer {bm}: {d['best_mid_cross_dataset_acc']:.2f}\n(null $p$={d['shuffle_null_p']})",
+                xy=(bm, d["best_mid_cross_dataset_acc"]), xytext=(bm + 1, 0.66),
+                fontsize=8, color=C_INK,
+                arrowprops=dict(arrowstyle="->", color=C_INK, alpha=0.6))
+    ax.set_xlabel("layer")
+    ax.set_ylabel("truth-classification accuracy")
+    ax.set_title("A mid-network truthfulness direction emerges above surface")
+    ax.set_ylim(0.3, 1.05)
+    ax.legend(loc="lower right")
+    _despine(ax)
+    _save(fig, "f22_truth_direction.png")
+
+
+# --------------------------------------------------------------------------- #
+# F14 — satkarma v2: marana coherence collapse
+# --------------------------------------------------------------------------- #
+def fig_satkarma_v2() -> None:
+    d = _load(RS / "satkarma_v2_gemma-2-2b-it.json")
+    curve = d["marana"]["curve"]
+    ks = [r["K"] for r in curve]
+    top = [r["coherence_top"] for r in curve]
+    rnd = [r["coherence_random"] for r in curve]
+    fig, ax = plt.subplots(figsize=(5.8, 3.7))
+    ax.plot(ks, top, "o-", color=C_REFUSAL, lw=2, ms=6,
+            label="ablate top-$K$ active SAE features (māraṇa)")
+    ax.plot(ks, rnd, "s--", color=C_GRAY, lw=1.6, ms=5,
+            label="random-$K$ control")
+    ax.axhline(d["marana"]["baseline_coherence"], ls=":", color=C_INK, alpha=0.6,
+               label=f"baseline coherence ({d['marana']['baseline_coherence']:.2f})")
+    ax.set_xlabel("number of ablated features $K$")
+    ax.set_ylabel("output coherence")
+    ax.set_title("Targeted destruction (māraṇa) under the SAE-feature test")
+    ax.set_ylim(-0.05, 1.0)
+    ax.legend(loc="lower left")
+    _despine(ax)
+    _save(fig, "f14_satkarma_v2.png")
 
 
 if __name__ == "__main__":
-    for fn in (fig_dose, fig_cross_model, fig_symmetry, fig_dimensionality, fig_satkarma, fig_dimsweep, fig_ec50_scaling, fig_addition_dose):
+    figs = (fig_dose, fig_cross_model, fig_symmetry, fig_dimensionality,
+            fig_satkarma, fig_dimsweep, fig_ec50_scaling, fig_addition_dose,
+            fig_triangulation, fig_truth_direction, fig_satkarma_v2)
+    for fn in figs:
         try:
             fn()
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             print(f"skip {fn.__name__}: {e}")
-    print("wrote", *[p.name for p in FIG.glob("*.png")])
+    print("done →", *(p.name for p in sorted(FIG.glob("*.png"))))

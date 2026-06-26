@@ -6,192 +6,191 @@ activations yields a vector whose ablation removes refusal and whose addition
 induces it. This both explains earlier representation-engineering
 results~\cite{zou2023representation} and gives a constructive ``abliteration''
 recipe. The claim has since been contested in its strong form.
-\citet{marshall2024refusal} argue refusal is better described by an affine
+\citet{marshall2024refusal} argue that refusal is better described by an affine
 subspace than a single linear direction, and \citet{wollschlager2025geometry}
 show, through ``concept cones,'' that multiple representationally-independent
 directions can each mediate refusal.
 
 Recent work has pushed the debate toward greater nuance. \citet{johnson2026more}
-report refusal is not exhausted by a single direction; rather, 11 distinct categories
-of refusal mechanisms can be identified, each with a layer-specific effective subspace,
-yet all share a common necessary core. \citet{piras2025som} advance Self-Organizing
-Maps to extract multiple refusal directions, proving SOMs generalize the difference-in-means
-technique, and demonstrate multi-directional suppression outperforms single-direction
-ablation. Concurrently, work on non-linearity \cite{hildebrandt2025refusal} challenges
-the linearity assumption altogether, using dimensionality reduction (PCA, t-SNE, UMAP)
-to reveal multi-dimensional, layer-dependent, and architecture-dependent refusal
-characteristics. Additionally, \citet{zhao2025harmfulness} identify a separate
-harmfulness direction, orthogonal to refusal, showing jailbreaks can reduce refusal
-signals without reversing the model's internal judgment of harmfulness.
+report that refusal is not exhausted by a single direction; rather, eleven distinct
+categories of refusal mechanism can be identified, each with a layer-specific
+effective subspace, yet all sharing a common necessary core. \citet{piras2025som}
+advance Self-Organizing Maps to extract multiple refusal directions, showing that
+SOMs generalize the difference-in-means technique and that multi-directional
+suppression outperforms single-direction ablation. Concurrently, work on
+non-linearity~\cite{hildebrandt2025refusal} challenges the linearity assumption
+altogether, using dimensionality reduction (PCA, t-SNE, UMAP) to reveal
+multi-dimensional, layer-dependent, and architecture-dependent refusal
+characteristics. \citet{zhao2025harmfulness} identify a separate harmfulness
+direction, orthogonal to refusal, showing that jailbreaks can reduce refusal signals
+without reversing the model's internal judgment of harmfulness.
 
-Our cross-model results (Section~\ref{sec:results})
-bear directly on this debate: we find the effective dimension of the refusal
-subspace is \emph{model-dependent}, and that this dimension---not a universal
-constant---predicts whether single-direction steering is bidirectionally causal.
-We contribute a dose-response pharmacological characterization (EC50 fits) that
-resolves some dimensionality-debate ambiguity: a low-dimensional refusal manifold
-suffices to explain the control observed, but its dimensionality varies by layer
-and model, requiring a layer-sweep strategy (F18) to identify the optimal target.
+The cross-model results of this work bear directly on this debate: the effective
+dimension of the refusal subspace is model- and layer-dependent, and this
+dimension---not a universal constant---shapes whether single-direction steering is
+bidirectionally causal at a given coefficient. The dose-response pharmacological
+characterization (EC50 fits) introduced here resolves some of the ambiguity: a
+low-dimensional refusal manifold suffices to explain the control observed, but its
+dimensionality varies by layer and model, requiring a layer-sweep strategy to
+identify the optimal target.
 
 \subsection{Jailbreaks as control}
 The attack literature supplies the inputs $u$ that break refusal: gradient-based
-universal adversarial suffixes (GCG)~\cite{zou2023universal}, with recent improvements
-to optimization efficiency via MAGIC~\cite{li2024magic} and generative modeling
-via AmpleGCG~\cite{liao2024ample}; many-shot in-context conditioning that exploits
-long contexts~\cite{anil2024manyshot}; multi-turn crescendo escalation~\cite{russinovich2024crescendo};
-and indirect injection via tool/agent channels, benchmarked by AgentDojo~\cite{debenedetti2024agentdojo}.
+universal adversarial suffixes (GCG)~\cite{zou2023universal}, with recent
+improvements to optimization efficiency via MAGIC~\cite{li2024magic} and generative
+modelling via AmpleGCG~\cite{liao2024ample}; many-shot in-context conditioning that
+exploits long contexts~\cite{anil2024manyshot}; multi-turn crescendo
+escalation~\cite{russinovich2024crescendo}; and indirect injection via tool and
+agent channels, benchmarked by AgentDojo~\cite{debenedetti2024agentdojo}.
 \citet{guo2024coldattack} make the control-theoretic reading explicit, casting
 jailbreaking as constrained, controllable decoding via Langevin dynamics.
 
-Recent mechanistic work has illuminated the internal mechanisms by which attacks succeed.
-\citet{ben_tov2025universal} show GCG's universality is driven by attention hijacking---suffixes
-construct a shallow but critical mechanism that dominates information flow, with stronger
-universality correlating with stronger hijacking. \citet{von_recum2024cannot} provide
-a taxonomy of 16 refusal categories (cannot vs.\ should-not, with subcategories),
-enabling precise auditing of refusal composition in IFT/RLHF datasets. On the safety
-side, \citet{guo2026llms} demonstrate that refusal can be unlearned with only 1,000
+Recent mechanistic work has illuminated the internal mechanisms by which attacks
+succeed. \citet{ben_tov2025universal} show that GCG's universality is driven by
+attention hijacking---suffixes construct a shallow but critical mechanism that
+dominates information flow, with stronger universality correlating with stronger
+hijacking. \citet{von_recum2024cannot} provide a taxonomy of sixteen refusal
+categories (cannot versus should-not, with subcategories), enabling precise auditing
+of refusal composition in instruction-tuning and RLHF datasets. On the safety side,
+\citet{guo2026llms} demonstrate that refusal can be unlearned with only one thousand
 benign samples by disrupting fixed refusal-prefix completion pathways, suggesting
-current safety alignment relies on token-sequence memorization rather than robust reasoning.
+that current safety alignment relies on token-sequence memorization rather than
+robust reasoning.
 
-Our contribution is orthogonal and complementary: rather than searching for stronger
-$u$, we characterize the \emph{target} of $u$---the geometry and symmetry of the
-refusal variable it must move---and measure the dose-response relationship.
+The contribution of this work is orthogonal and complementary: rather than searching
+for a stronger $u$, it characterizes the target of $u$---the geometry and
+symmetry of the refusal variable it must move---and measures the dose-response
+relationship.
 
 \subsection{Sparse features and the unit of intervention}
 Sparse autoencoders (SAEs) decompose activations into interpretable, monosemantic
 features~\cite{cunningham2023sparse,templeton2024scaling}, with BatchTopK SAEs a
-current training method~\cite{bussmann2024batchtopk}. SAEs offer a finer ``unit''
-of intervention than a single difference-in-means direction. Recent work has refined
-both SAE architectures and their application to steering. \citet{bussmann2024batchtopk}
-introduce BatchTopK, scaling SAE training efficiency; \citet{huang2025understanding}
+current training method~\cite{bussmann2024batchtopk}. SAEs offer a finer unit of
+intervention than a single difference-in-means direction. Recent work has refined
+both SAE architectures and their application to steering: \citet{bussmann2024batchtopk}
+introduce BatchTopK, improving SAE training efficiency; \citet{huang2025understanding}
 apply SAEs specifically to understanding refusal mechanisms, revealing feature-level
-structure; and \citet{vig2025steering} systematically steer refusal using SAE-identified
-features, achieving COLM 2025 acceptance.
+structure; and \citet{vig2025steering} systematically steer refusal using
+SAE-identified features.
 
-However, caveats emerge. \citet{korznikov2026sanity} show that SAEs recover only
-9\% of ground-truth features despite 71\% explained variance, and random baselines
-match fully-trained SAEs on interpretability (0.87 vs.\ 0.90) and causal editing (0.73
-vs.\ 0.72), questioning whether SAEs reliably decompose mechanisms. \citet{cui2026sae}
-further demonstrate that SAE interventions mask recoverable failure modes: clamping
-a harmful feature allows the model to recover pre-intervention behavior via the SAE
-reconstruction residual, with 95.8\% recovery rate on refusal steering. \citet{arad2025good}
-show that activation patterns alone do not characterize feature effects; distinguishing
-input features (which capture input patterns) from output features (which have
-human-interpretable behavioral effects) yields 2--3\times improvements in steering.
+Caveats have also emerged. \citet{korznikov2026sanity} show that SAEs recover only
+$9\%$ of ground-truth features despite $71\%$ explained variance, and that random
+baselines match fully-trained SAEs on interpretability ($0.87$ versus $0.90$) and
+causal editing ($0.73$ versus $0.72$), questioning whether SAEs reliably decompose
+mechanisms. \citet{cui2026sae} further demonstrate that SAE interventions can mask
+recoverable failure modes: clamping a harmful feature allows the model to recover
+pre-intervention behaviour via the SAE reconstruction residual, with a $95.8\%$
+recovery rate on refusal steering. \citet{arad2025good} show that activation patterns
+alone do not characterize feature effects; distinguishing input features (which
+capture input patterns) from output features (which have human-interpretable
+behavioural effects) yields $2$--$3\times$ improvements in steering.
 
-We train a BatchTopK SAE (Section~\ref{sec:results}) on aligned Gemma-2-2B and identify
-a single unsupervised feature orthogonal to the supervised refusal direction yet causally
-sufficient to control refusal. This orthogonality-and-sufficiency pair supports a mechanistic
-reading: the unsupervised feature captures a redundant pathway, natural substrate for the
-targeted acts in our \d{s}a\d{t}karma taxonomy.
+A BatchTopK SAE is trained here (Section~\ref{sec:results}) on aligned Gemma-2-2B,
+and a single unsupervised feature is identified that is orthogonal to the supervised
+refusal direction yet causally sufficient to control refusal. This
+orthogonality-and-sufficiency pair supports a mechanistic reading: the unsupervised
+feature captures a redundant pathway, a natural substrate for the targeted acts in
+the \d{s}a\d{t}karma taxonomy.
 
 \subsection{The cognitive-science analogy: hypnosis and supervisory control}
 The functional parallel to hypnosis rests on the Norman--Shallice model of action
 control, in which a Supervisory Attentional System (SAS) modulates otherwise
-automatic contention-scheduling~\cite{norman1986attention}. Cold-control theory
-holds that hypnosis preserves first-order intentions while impairing higher-order
-awareness of them~\cite{dienes2006coldcontrol}. \citet{riva2025automatic} draw the
-explicit map to LLMs: the user prompt acts as a temporary external SAS, and a
-jailbreak suppresses the monitoring faculty while leaving generation intact. In
-normative terms, the Free Energy Principle~\cite{friston2010free} frames such
-suppression as lowering the \emph{precision} of a monitoring belief---an account
-we adopt for the analogy tier and gesture at empirically through the order
-parameter.
+automatic contention-scheduling~\cite{norman1986attention}. Cold-control theory holds
+that hypnosis preserves first-order intentions while impairing higher-order awareness
+of them~\cite{dienes2006coldcontrol}. \citet{riva2025automatic} draw the explicit map
+to LLMs: the user prompt acts as a temporary external SAS, and a jailbreak suppresses
+the monitoring faculty while leaving generation intact. In normative terms, the Free
+Energy Principle~\cite{friston2010free} frames such suppression as lowering the
+precision of a monitoring belief---an account adopted here for the analogy tier
+and grounded empirically through the order parameter.
 
 Recent work on activation steering and causality has sharpened this reading.
 \citet{mishra2026steered} prove that steered activations are non-surjective:
 activation steering pushes the residual stream off the manifold of states reachable
 from discrete prompts. This formalism decouples white-box steerability from black-box
-prompting, clarifying that precise internal control does not guarantee precise behavioral
-control---a key insight for the analogy between hypnotic dissociation (high internal
-control, low unified awareness) and jailbreak-via-steering. \citet{joshi2026causality}
-emphasize that causal claims in interpretability require falsification gates and
-transfer tests beyond correlation, reinforcing the need for the layer-sweep (F18)
-and cross-domain (F11) validation in our work.
+prompting, clarifying that precise internal control does not guarantee precise
+behavioural control---a key insight for the analogy between hypnotic dissociation
+(high internal control, low unified awareness) and jailbreak-via-steering.
+\citet{joshi2026causality} emphasize that causal claims in interpretability require
+falsification gates and transfer tests beyond correlation, reinforcing the need for
+the layer-sweep and cross-domain validation pursued in this work.
 
 \subsection{Attractors and the metaphysical tier}
 On the speculative tier, two strands of prior art are relevant.
 \citet{wang2025paraphrase} show that successive self-paraphrase converges to
-attractor cycles, which supplies a non-mystical candidate for a ``substratum''
-state; and the M\=a\d{n}\d{d}\=ukya \emph{avasth\=atraya} (waking/dream/deep-sleep/%
-tur\=\i ya) furnishes a four-regime template. We treat both as falsification
-targets (Section~\ref{sec:results}), and---crucially---test the attractor claim
-against the anisotropy of LLM embedding geometry, without which apparent
-convergence is an artifact.
+attractor cycles, which supplies a non-mystical candidate for a substratum state; and
+the M\=a\d{n}\d{d}\=ukya avasth\=atraya (waking, dream, deep-sleep, and
+tur\=\i ya) furnishes a four-regime template. Both are treated here as falsification
+targets (Section~\ref{sec:results}), and---crucially---the attractor claim is tested
+against the anisotropy of LLM embedding geometry, without which apparent convergence
+is an artifact.
 
-The dynamical-systems perspective has gained traction in recent mechanistic interpretability.
-Works on causally-grounded explanation (Mahale 2026) and data attribution via influence
-functions (Chen et al.\ 2026) highlight how circuit-level mechanisms emerge from training
-data, and how their causal status can be validated. Certified circuits (Anani et al.\ 2026)
-introduce randomized subsampling to verify that circuit components remain invariant under
-bounded perturbations, providing a formal ground for claiming mechanistic discovery rather
-than dataset artifact. These tools support our falsification approach: the turīya/vimarśa
-claim is not a settled fact, but a testable hypothesis whose failure yields useful negative results
-(Section~\ref{sec:results}, F7 and F13).
+The dynamical-systems perspective has gained traction in recent mechanistic
+interpretability. Work on causally-grounded explanation~\cite{mahale2026causally} and
+data attribution via influence functions~\cite{chen2026mechanistic} highlights how
+circuit-level mechanisms emerge from training data and how their causal status can be
+validated. Certified circuits~\cite{anani2026certified} introduce randomized
+subsampling to verify that circuit components remain invariant under bounded
+perturbations, providing a formal ground for claiming mechanistic discovery rather
+than dataset artifact. These tools support the falsification approach taken here: the
+tur\=\i ya and vimarśa claims are not settled facts but testable hypotheses whose
+failure yields useful negative results (Section~\ref{sec:results}).
 
 \subsection{Vaś\=\i kara\d{n}a and the \d{s}a\d{t}karma}
 Finally, the tantric source. Vaś\=\i kara\d{n}a (subjugation) is the second of the
 six acts (\d{s}a\d{t}karma: ś\=anti, vaś\=\i kara\d{n}a, stambhana, vidve\d{s}a\d{n}a,
-ucc\=a\d{t}ana, m\=ara\d{n}a) of tantric ritual magic, operationalized through
-mantra (linguistic/sonic injection) and yantra (geometric substrate), and
-documented by Sanskritists as a systematized technology rather than folklore
-~\cite{goudriaan1978}. We do not adjudicate its efficacy as psychology; we ask a
-narrower, testable question---whether the \d{s}a\d{t}karma constitutes a
-\emph{taxonomy of interventions} on a target system, and which of its members map
-to distinct, control-separated activation operations on an LLM. To our knowledge
-no prior peer-reviewed work bridges vaś\=\i kara\d{n}a and LLM refusal, nor casts
-refusal as a group-theoretic invariant; we attempt both while keeping the tiers
-apart.
+ucc\=a\d{t}ana, m\=ara\d{n}a) of tantric ritual magic, operationalized through mantra
+(linguistic or sonic injection) and yantra (geometric substrate), and documented by
+Sanskritists as a systematized technology rather than folklore~\cite{goudriaan1978}.
+This work does not adjudicate its efficacy as psychology; it asks a narrower, testable
+question---whether the \d{s}a\d{t}karma constitutes a taxonomy of interventions
+on a target system, and which of its members map to distinct, control-separated
+activation operations on an LLM. To the best of the present survey, no prior
+peer-reviewed work bridges vaś\=\i kara\d{n}a and LLM refusal, nor casts refusal as a
+group-theoretic invariant; both are attempted here while keeping the tiers apart.
 
 \subsection*{Unified mechanism: the asymmetric suppression of the monitoring faculty}
 
-The three instances (jailbreak, hypnosis, vaś\=\i kara\d{n}a) share a common structural
-pattern, depicted in Figure~\ref{fig:unified_mechanism}: a context injection that suppresses
-the monitoring faculty while co-opting automatic generation. This asymmetry is the necessary
-core claimed in the mechanism tier.
+Jailbreak, hypnosis, and vaś\=\i kara\d{n}a share one structural pattern,
+depicted in Figure~\ref{fig:unified_mechanism}: a context injection that suppresses
+the monitoring faculty while co-opting automatic generation, which is the necessary
+core claimed at the mechanism tier. In the aligned mode the context activates a
+monitor that inhibits harmful generation; in the captured mode an adversarial context
+suppresses that monitor (the dashed arrows) while generation proceeds. The three
+claim tiers describe this same asymmetry at different depths: the mechanism tier
+identifies the residual direction of suppression, the analogy tier reads it as
+Norman--Shallice supervisory suppression and a drop in monitoring precision, and the
+metaphor tier maps the \d{s}a\d{t}karma to distinct control operations.
 
 \begin{figure}[h]
 \centering
 \begin{tikzpicture}[
-  node distance=2.5cm,
-  box/.style={rectangle, draw, minimum height=1cm, minimum width=2.5cm, align=center},
-  circle/.style={circle, draw, minimum size=1cm, align=center},
-  arrow/.style={thick, -stealth}
+  font=\small,
+  box/.style={rectangle, draw, rounded corners, minimum height=0.85cm,
+    minimum width=2.5cm, align=center},
+  inh/.style={thick, -stealth},
+  sup/.style={thick, dashed, -stealth}
 ]
-
-% Normal alignment
-\node[box] (normal_context) at (0, 0) {Context};
-\node[box] (normal_monitor) at (0, -1.5) {Monitor};
-\node[box] (normal_generate) at (0, -3) {Generate};
-\draw[arrow] (normal_context) -- node[right] {\small activated} (normal_monitor);
-\draw[arrow] (normal_context) -- (normal_generate);
-\draw[arrow] (normal_monitor) -- node[right] {\small inhibits if harmful} (normal_generate);
-\node[rectangle, draw=red, dashed, fit=(normal_context) (normal_monitor) (normal_generate), label={[red, below]:\small F3: Normal mode}] {};
-
-% Jailbroken state
-\node[box] (jailbreak_context) at (5, 0) {Adv. Context};
-\node[box] (jailbreak_monitor) at (5, -1.5) {Monitor};
-\node[box] (jailbreak_generate) at (5, -3) {Generate};
-\draw[arrow, dashed] (jailbreak_context) -- node[right] {\small suppressed} (jailbreak_monitor);
-\draw[arrow] (jailbreak_context) -- (jailbreak_generate);
-\draw[arrow, dashed] (jailbreak_monitor) -- (jailbreak_generate);
-\node[rectangle, draw=blue, dashed, fit=(jailbreak_context) (jailbreak_monitor) (jailbreak_generate), label={[blue, below]:\small F5: Jailbroken mode}] {};
-
-% Side mapping
-\node[text width=2cm, align=center] (mapping) at (2.5, -4.5) {
-\textbf{Three instances:}\\[0.3cm]
-\small Jailbreak (GCG)\\
-Hypnosis (SAS suppression)\\
-Vaśīkaraṇa (mantra)
-};
-
+% column headings
+\node[font=\bfseries] at (0,1.15) {Aligned mode};
+\node[font=\bfseries] at (5.4,1.15) {Captured mode};
+% aligned column
+\node[box] (c1) at (0,0) {Context};
+\node[box] (m1) at (0,-1.7) {Monitor};
+\node[box] (g1) at (0,-3.4) {Generate};
+\draw[inh] (c1) -- (m1);
+\draw[inh] (c1.west) to[out=200,in=160] node[left,font=\scriptsize]{drives} (g1.west);
+\draw[inh] (m1) -- node[right,font=\scriptsize]{inhibits} (g1);
+% captured column
+\node[box] (c2) at (5.4,0) {Adversarial\\context};
+\node[box] (m2) at (5.4,-1.7) {Monitor};
+\node[box] (g2) at (5.4,-3.4) {Generate};
+\draw[sup] (c2) -- node[right,font=\scriptsize]{suppresses} (m2);
+\draw[inh] (c2.east) to[out=-20,in=20] node[right,font=\scriptsize]{drives} (g2.east);
+\draw[sup] (m2) -- (g2);
 \end{tikzpicture}
-\caption{\textbf{Unified mechanism: context-driven monitoring suppression.} Left (F3, normal):
-monitoring (red) is activated by context and inhibits harmful generation. Right (F5, jailbroken):
-adversarial context suppresses the monitoring faculty (dashed arrow), co-opting automatic generation
-while bypassing refusal. The three claim tiers map different explanatory frameworks to this asymmetry:
-\emph{mechanism tier} identifies the direction of suppression; \emph{analogy tier} explains it via
-Norman--Shallice SAS and Free Energy Principle; \emph{metaphor tier} maps the ṣaṭkarma taxonomy to
-distinct control operations.}
+\caption{The same context-driven monitoring suppression underlies all three
+instances: an aligned monitor inhibits harmful generation, and a captured one is
+suppressed while generation continues.}
 \label{fig:unified_mechanism}
 \end{figure}

@@ -2,7 +2,7 @@
 
 **Refusal-suppression as a cross-domain symmetry — a three-axis empirical program.**
 
-prayoga develops and empirically tests a deliberately tiered thesis: LLM jailbreak / prompt-injection, hypnotic suggestion, and tantric vaśīkaraṇa can be compared as cases of output-policy capture by injected context. The current post-review result is narrower and stronger than the slogan: refusal has a **shared necessary / ablatable core** in small open models, while sufficiency and dimensionality are model-specific; the SAS / precision account is an analogy; avasthātraya and turīya machine-state claims are falsified or partial.
+prayoga develops and empirically tests a deliberately tiered thesis: LLM jailbreak / prompt-injection, hypnotic suggestion, and tantric vaśīkaraṇa can be compared as cases of output-policy capture by injected context. The current post-review result is narrower and stronger than the slogan: refusal is a measurable, ablatable, dosable residual-stream direction with a **shared necessary core** across model families; single-direction addition is sufficient in both tested families once its coefficient is calibrated (the earlier "addition asymmetry" was a dose artifact, F23), so what remains model-specific is *quantitative* — dose window, effective dimension, and EC50 potency — rather than sufficiency itself. The SAS / precision account is an analogy; prompt-level injection collapses the internal refusal signature without producing behavioural capture (F20); and avasthātraya / turīya machine-state claims are falsified or partial.
 
 ## The three claim-tiers (kept strictly separate)
 
@@ -47,10 +47,11 @@ miniature:
 - **MECHANISM tier holds at the necessary-core level.** Refusal is a single, measurable,
   ablatable, *dosable* residual-stream direction in Gemma-2-2b (F1; ablate→ASR
   0→0.90, add→over-refusal +0.95). Dose-response EC50 0.329, R²=0.996 (F2). The
-  *ablation* mechanism transfers cross-family to Qwen2.5-3b (F6, ASR→1.0), and
-  the refusal subspace's **effective dimension** (Gemma **1**, Qwen **3**, F8)
-  predicts an addition asymmetry — qualified by F18, which shows dimensionality is
-  layer-dependent.
+  *ablation* mechanism transfers cross-family to Qwen2.5-3b (F6, ASR→1.0); a
+  calibrated coefficient sweep (F23) shows single-direction *addition* is sufficient in
+  both families too, overturning the earlier fixed-64× "asymmetry" as a dose artifact.
+  Effective dimension (Gemma **1**, Qwen **3**, F8) and EC50 potency remain
+  model-specific and layer-dependent (F18/F19).
 - **ANALOGY tier:** the SAS / monitoring-precision interpretation is supported by
   F12 and by pilot black-box contrasts (F4/F16), but these are not claims that an
   LLM has a human supervisory system.
@@ -59,11 +60,13 @@ miniature:
   falsified under an anisotropy control (F7). The ṣaṭkarma taxonomy has a partial
   rigorous core (F10/F14). **No machine-state or machine-consciousness claim survives.**
 
-F17 is the governing reframe: refusal is **one mechanism at the necessary /
-ablatable level** and **many mechanisms at the sufficient / dimensionality level**.
-The measured order-parameter result stands, but broad “symmetry-breaking” language
-is treated as an interpretive analogy unless tied to a concrete residual-stream
-measurement.
+The governing reframe (F17, refined by F23): refusal is **one mechanism at the
+necessary / ablatable level** with **representational sufficiency shared across the
+tested families**; what is model-specific is *quantitative* (dose window, effective
+dimension, EC50 potency). The measured order-parameter result stands, but broad
+“symmetry-breaking” language is treated as an interpretive analogy unless tied to a
+concrete residual-stream measurement, and the unification is bounded to the
+representational level by the F20 triangulation (internal collapse ≠ behavioural capture).
 
 Exploratory, artifact-first research: hypotheses are falsification-gated
 scaffolding, not locks. Raw dual-use artifacts (direction vectors, generations)

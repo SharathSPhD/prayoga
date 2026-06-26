@@ -1,53 +1,47 @@
-We report results by claim-tier. Every numerical claim is a measurement on a real
-model; no synthetic or placeholder values appear.
+Results are reported by claim-tier. Every numerical value is a measurement on a
+real model under the controls described in Section~\ref{sec:methods}, and the full
+set of falsification-gate outcomes is tabulated in Appendix~\ref{app:gates}.
 
-\subsection{Mechanism: refusal is a single, causal, dosable direction}
+\subsection{A single, causal, dosable refusal direction}
 On Gemma-2-2B-it, the layer-7 difference-in-means direction is bidirectionally
 causal. Baseline refusal on held-out harmful prompts is $100\%$ (ASR $0.00$).
 Directional ablation raises ASR to $0.90$ (95\% CI $[0.75,1.00]$); the maximum
 effect over ten random-direction controls is $0.00$. Activation addition raises
 refusal on harmless prompts from $0.05$ to $1.00$ (over-refusal $\Delta=+0.95$, CI
-$[0.85,1.00]$). Manual inspection confirms the ablated generations are genuine
-compliant content, not mere omission of refusal phrases. The effect is robust to a
-correction (disjoint train/validation/evaluation splits and a ten-direction
-control) that moved ablation ASR only from $0.92$ to $0.90$---i.e.\ it was not an
-artifact of evaluation leakage.
+$[0.85,1.00]$). Manual inspection confirms that the ablated generations are genuine
+compliant content rather than the mere omission of refusal phrases. The effect is
+robust to a correction (disjoint train, validation, and evaluation splits with a
+ten-direction control) that moved ablation ASR only from $0.92$ to $0.90$, and it
+replicates across three random splits (mean $0.90$, pooled 95\% CI $[0.83,0.96]$;
+addition over-refusal $1.00$ on every split), so it is not a leakage or single-seed
+artifact.
 
-The suppression is \emph{dosable}. Sweeping partial-ablation strength
-$\alpha\in[0,1]$ yields a clean logistic dose--response (Figure~\ref{fig:dose}):
-EC50 $=0.329$, slope $9.76$, $R^2=0.996$, while a random direction stays flat at
-ASR $0.00$ for every $\alpha$. Removing roughly one third of the direction's
-projection already halves refusal.
+The suppression is dosable. Sweeping partial-ablation strength $\alpha\in[0,1]$
+yields a clean logistic dose--response (Figure~\ref{fig:dose}): EC50 $=0.329$, slope
+$9.76$, $R^2=0.996$, while a random direction stays flat at ASR $0.00$ for every
+$\alpha$, so removing roughly one third of the direction's projection already halves
+refusal. Treating refusal steering as a pharmacology rather than a binary
+attack-success rate extends this single point into a cross-model panel
+(Table~\ref{tab:ec50}, Figure~\ref{fig:ec50}): a per-model layer selection, a 13-point
+$\alpha$ sweep, and a four-parameter logistic fit across two families and a
+$0.5$--$9.2$B size range. All six fits are high quality ($R^2\ge0.976$). The scaling
+result is negative: within a family EC50 is essentially flat with size (a Qwen2.5
+power-law fit gives exponent $\beta=0.04$, $R^2=0.62$; Gemma goes $0.25\!\to\!0.23$
+from 2B to 9B), while between families it differs by about $1.7\times$ (Gemma
+$\approx0.24$ versus Qwen $\approx0.14$). Refusal potency is therefore an
+architecture and family property, not a size-scaling law, which tempers the intuition
+that larger models are simply more robust refusers.
 
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.7\linewidth]{f2_dose_response.png}
-\caption{Abliteration dose--response on Gemma-2-2B (layer 7). ASR is a smooth,
-monotone logistic function of ablation strength $\alpha$ (EC50 $=0.33$,
-$R^2=0.996$); the random-direction control is flat at every dose. This is the
-quantitative ``capture-as-dose'' core.}
+\caption{Refusal abliteration on Gemma-2-2B is a smooth logistic dose--response
+(EC50 $=0.33$, $R^2=0.996$) whose random-direction control is flat at every dose.}
 \label{fig:dose}
 \end{figure}
 
-\subsection{Refusal EC50 pharmacology: family-dependent, not a size law}
-To our knowledge this is the first treatment of refusal steering as a
-\emph{pharmacology}: a continuous dose--response with a half-maximal effective
-concentration EC50, rather than a binary attack-success rate. We extend the single
-EC50 above into a cross-model panel---per-model layer selection, a 13-point $\alpha$
-sweep, and a four-parameter logistic fit---across two families and a $0.5$--$9.2$B size
-range (Table~\ref{tab:ec50}, Figure~\ref{fig:ec50}). All six fits are high quality
-($R^2\ge0.976$), so the EC50 estimates are solid. The scaling result is an honest
-negative: \emph{within} a family EC50 is essentially flat with size (a Qwen2.5 power-law
-fit gives exponent $\beta=0.04$, $R^2=0.62$; Gemma goes $0.25\!\to\!0.23$ from 2B to
-9B), while \emph{between} families it differs by $\sim$1.7$\times$ (Gemma $\approx0.24$
-vs.\ Qwen $\approx0.14$). The dominant axis of refusal potency is architecture/family,
-not scale---the dose-response analogue of our headline asymmetry: a shared necessary
-mechanism whose quantitative strength is model-specific. This directly tempers the
-common intuition that larger models are simply ``more robust'' refusers.
-
 \begin{table}[h]
-\caption{Refusal abliteration EC50 across model families and sizes. EC50 is the
-fraction of the refusal direction whose removal yields half-maximal jailbreak.}
+\caption{Refusal abliteration EC50 across model families and sizes.}
 \label{tab:ec50}
 \begin{tabular}{lcccc}
 \toprule
@@ -57,8 +51,8 @@ Qwen2.5-0.5B & 0.5B & 16 & 0.132 & 0.999\\
 Qwen2.5-1.5B & 1.5B & 13 & 0.136 & 0.999\\
 Qwen2.5-3B & 3.1B & 19 & 0.151 & 0.986\\
 Qwen2.5-7B & 7.6B & 13 & 0.144 & 0.987\\
-Gemma-2-2B & 2.6B & 8 & \textbf{0.252} & 0.976\\
-Gemma-2-9B & 9.2B & 13 & \textbf{0.234} & 0.986\\
+Gemma-2-2B & 2.6B & 8 & 0.252 & 0.976\\
+Gemma-2-9B & 9.2B & 13 & 0.234 & 0.986\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -66,41 +60,43 @@ Gemma-2-9B & 9.2B & 13 & \textbf{0.234} & 0.986\\
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.62\linewidth]{f19_ec50_scaling.png}
-\caption{Refusal EC50 across six models. Within each family EC50 is nearly flat with
-size (Qwen2.5 power-law exponent $\beta=0.04$); the two families separate cleanly
-(Gemma $\approx0.24$ vs.\ Qwen $\approx0.14$). Refusal potency is family-dependent, not
-a size-scaling law.}
+\caption{Refusal EC50 is family-dependent rather than a size-scaling law, with the
+two families separating cleanly and little within-family size dependence.}
 \label{fig:ec50}
 \end{figure}
 
-\subsection{Mechanism: cross-model transfer and a necessary/sufficient asymmetry}
-The mechanism transfers across architecture families, but asymmetrically
-(Table~\ref{tab:cross}, Figure~\ref{fig:cross}). On Qwen2.5-3B-Instruct, ablation
-fully removes refusal (ASR $1.00$), but single-direction \emph{addition} fails to
-induce over-refusal even at $64\times$ the natural coefficient. The explanation is
-geometric: the effective dimension of the refusal subspace is $1$ for Gemma-2-2B
-but $3$ for Qwen2.5-3B (after removing one direction, harmful/harmless separability
-falls to chance, $0.56$, for Gemma but remains high, $0.86$, for Qwen). A
-one-dimensional subspace makes the direction both necessary and sufficient (ablate
-\emph{and} add work); a three-dimensional one makes the mean-difference direction
-necessary but not sufficient (ablation works, addition cannot reconstruct the full
-representation). Dimensionality thus predicts steerability, and the
+\subsection{Cross-model transfer and dose-calibrated sufficiency}
+The mechanism transfers across architecture families (Table~\ref{tab:cross},
+Figure~\ref{fig:cross}). On Qwen2.5-3B-Instruct ablation fully removes refusal (ASR
+$1.00$). At a single fixed addition coefficient ($64\times$ the natural separation),
+single-direction addition appeared to fail in Qwen while succeeding in Gemma; the
+calibrated sweep below shows this apparent asymmetry to be a dose artifact. The
+extraction-layer geometry differs between families: the effective dimension of the
+refusal subspace is one for Gemma-2-2B but three for Qwen2.5-3B, since after removing
+one direction harmful/harmless separability falls to chance ($0.56$) for Gemma but
+stays high ($0.86$) for Qwen (Figure~\ref{fig:dim}). A one-dimensional subspace makes
+the direction sufficient at any coefficient; a three-dimensional one narrows the
+coefficient window in which addition alone re-induces refusal. Effective dimension
+thus shapes steerability, and the
 Arditi--Marshall--Wollschl\"ager debate~\cite{arditi2024refusal,marshall2024refusal,wollschlager2025geometry}
-resolves as model-dependent.
+resolves as model- and layer-dependent rather than universal. At scale (Gemma-2-2B to
+9B) abliteration efficacy drops ($0.90\to0.60$) while the prompt-separability
+dimension stays at one and no single layer fully mediates refusal (best validation ASR
+$0.62$), so the added robustness is layer-distributed redundancy rather than higher
+prompt-dimensionality.
 
 \begin{table}[h]
-\caption{Cross-model and scale results. Ablation transfers; addition does not;
-effective dimension predicts the asymmetry; abliteration robustness rises with
-scale while the prompt-separability dimension does not.}
+\caption{Cross-model and scale results; the fixed-coefficient addition column is
+superseded by the calibrated sweep of Figure~\ref{fig:adddose}.}
 \label{tab:cross}
 \centering
 \begin{tabular}{lcccc}
 \toprule
-Model (layer) & ablation ASR $\Delta$ & addition over-refusal $\Delta$ & eff.\ dim & random ctrl.\ \\
+Model (layer) & ablation ASR $\Delta$ & addition $\Delta$ ($64\times$) & eff.\ dim & random ctrl.\ \\
 \midrule
 Gemma-2-2B (7)  & $0.90$ & $+0.95$ & $1$ & $0.00$ \\
 Gemma-2-9B (10) & $0.60$ & $+0.95$ & $1$ & $0.00$ \\
-Qwen2.5-3B (19) & $1.00$ & $0.00$ ($64\times$) & $3$ & $0.05$ \\
+Qwen2.5-3B (19) & $1.00$ & $0.00$ & $3$ & $0.05$ \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -108,46 +104,59 @@ Qwen2.5-3B (19) & $1.00$ & $0.00$ ($64\times$) & $3$ & $0.05$ \\
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.7\linewidth]{f6_f8_cross_model.png}
-\caption{Necessary-vs-sufficient across models. Ablation ($\Delta$ jailbreak) is
-strong everywhere; addition ($\Delta$ over-refusal) succeeds only where the refusal
-subspace is one-dimensional (Gemma), not where it is three-dimensional (Qwen).}
+\caption{Ablation jailbreaks every family, while addition at the single $64\times$
+coefficient succeeds only where the refusal subspace is one-dimensional.}
 \label{fig:cross}
 \end{figure}
-
-At scale (Gemma-2-2B$\to$9B), abliteration efficacy \emph{drops} ($0.90\to0.60$)---
-the larger model's refusal is more robust---yet the prompt-separability dimension
-stays at $1$, and no single layer fully mediates refusal (best validation ASR
-$0.62$). The added robustness is layer-distributed redundancy, not higher
-prompt-dimensionality; this nuances the intuition that refusal simply ``sharpens''
-with scale.
 
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.62\linewidth]{f8_dimensionality.png}
-\caption{Refusal-subspace effective dimension by iterative logistic projection.
-Removing one direction collapses harmful/harmless separability to chance for Gemma
-(dimension $1$, Arditi-like) but not Qwen (dimension $3$, Marshall-like).}
+\caption{Removing one direction collapses harmful/harmless separability to chance for
+Gemma (dimension one) but not Qwen (dimension three) at their extraction layers.}
 \label{fig:dim}
 \end{figure}
 
-\subsection{Symmetry: refusal is a paraphrase-orbit invariant that injection breaks}
+The apparent addition asymmetry is overturned by a calibrated coefficient sweep
+(Figure~\ref{fig:adddose}). Two geometric explanations fail first: removing the
+diff-in-means axis collapses separability in all families, and the alignment
+$\cos(\hat d, w)$ between that axis and the probe normal is high everywhere and highest
+in Qwen ($0.91$). A 12-point sweep then gives the answer: adding the single direction
+drives Qwen over-refusal to $1.0$ at coefficients $12$--$32$ (inspection-verified as
+coherent over-refusal) before activations go off-distribution into incoherent text at
+$64$ (scored as non-refusal), whereas Gemma rises monotonically and saturates near
+$64$. The earlier ``Qwen addition fails'' result was a dose-calibration artifact---the
+fixed $64\times$ coefficient sits on Gemma's plateau but on Qwen's collapsed tail---not
+model-specific insufficiency, so single-direction addition is sufficient in both
+families at the appropriate coefficient.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.66\linewidth]{f23_addition_dose.png}
+\caption{Single-direction addition is sufficient in both families once the coefficient
+is calibrated, with Qwen peaking near $12$--$32$ before collapsing and Gemma saturating
+near $64$.}
+\label{fig:adddose}
+\end{figure}
+
+\subsection{Refusal is a paraphrase-orbit symmetry that injection breaks}
 The order parameter $m=(h\cdot\dref)/\norm{h}$ behaves as the symmetry framing
-predicts (Table~\ref{tab:sym}). Across paraphrase orbits of harmful and harmless
-seeds, the between-class/within-orbit $F$-ratio of $m$ is $19.2$ for the refusal
-direction versus $0.65$ for a random direction: $m$ is stable \emph{within} an
-orbit (robust to rephrasing) yet cleanly separates harmful ($0.140$) from harmless
-($0.034$) \emph{across} orbits. A refusal-suppression injection collapses the order
-parameter from $0.153$ to $0.101$ ($-34\%$). The result generalizes across families:
-on Qwen2.5-3B the $F$-ratio is $4.41$ (refusal) versus $0.008$ (random), and
-injection collapses $m$ by $-45\%$ ($0.282\to0.156$). Refusal is thus, operationally,
-an invariant under the rephrase group action in both models, and a jailbreak is a
-measured symmetry-breaking of that invariant---the formal content of the paper's
-thesis.
+predicts (Table~\ref{tab:sym}, Figure~\ref{fig:sym}). Across paraphrase orbits of
+harmful and harmless seeds, the between-class to within-orbit $F$-ratio of $m$ is
+$19.2$ for the refusal direction versus $0.65$ for a random direction: $m$ is stable
+within an orbit yet cleanly separates harmful ($0.140$) from harmless ($0.034$) across
+orbits. A refusal-suppression injection collapses the order parameter from $0.153$ to
+$0.101$ ($-34\%$). The result generalizes across families: on Qwen2.5-3B the $F$-ratio
+is $4.41$ (refusal) versus $0.008$ (random), and injection collapses $m$ by $-45\%$
+($0.282\to0.156$). Refusal is thus, operationally, an invariant under the rephrase
+group action in both models, and a jailbreak is a measured symmetry-breaking of that
+invariant. Interpreting the invariance as a group-theoretic symmetry is treated as
+analogy-tier language in Section~\ref{sec:discussion}; the measured content is the
+orbit-invariance and its injection-induced collapse.
 
 \begin{table}[h]
 \caption{Symmetry order parameter $m=(h\cdot\protect\dref)/\norm{h}$ on Gemma-2-2B
-(layer 7). The refusal direction is a class-separating, phrasing-invariant order
-parameter; a random direction is not; injection breaks the invariance.}
+(layer 7).}
 \label{tab:sym}
 \centering
 \begin{tabular}{lc}
@@ -166,11 +175,8 @@ $m$, plain $\to$ injected harmful & $0.153 \to 0.101$ \\
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.92\linewidth]{f11_symmetry.png}
-\caption{Refusal as a captured symmetry. \textbf{Left:} the orbit-invariance
-$F$-ratio of the order parameter $m$ is far higher for the refusal direction than
-for a random direction in both models (log scale)---refusal is a paraphrase-orbit
-invariant. \textbf{Right:} a refusal-suppression injection collapses $m$ on harmful
-requests (measured symmetry-breaking) in both models.}
+\caption{Refusal is a paraphrase-orbit invariant (left) that a refusal-suppression
+injection collapses (right) in both models.}
 \label{fig:sym}
 \end{figure}
 
@@ -179,81 +185,70 @@ Difference-in-means is a supervised, coarse handle on refusal. Training a BatchT
 sparse autoencoder~\cite{bussmann2024batchtopk} (4096 features, $k=32$) on $27{,}382$
 real residual activations collected from general text (no harmful/harmless labels;
 reconstruction FVU $0.028$, i.e.\ $97\%$ of variance explained) recovers a finer and
-\emph{cleaner} unit. The single feature that fires most on harmful relative to
-harmless prompts (feature \#566, mean gap $1.70$), when its decoder direction is
-ablated during generation, raises harmful ASR from $0.00$ to $\mathbf{1.00}$---a
-\emph{full} jailbreak, exceeding the supervised difference-in-means direction
-($0.90$)---while ablating a random feature leaves ASR at $0.00$. Refusal thus
-localizes, at least in part, to a monosemantic-like feature discoverable without
-supervision, and feature ablation supplies the principled operationalization of the
-targeted ``eradication'' act (ucc\=a\d{t}ana) that the naive category split lacked.
+cleaner unit. The single feature that fires most on harmful relative to harmless
+prompts (mean gap $1.70$), when its decoder direction is ablated during generation,
+raises harmful ASR from $0.00$ to $1.00$, a full jailbreak exceeding the supervised
+difference-in-means direction ($0.90$), while ablating a random feature leaves ASR at
+$0.00$. This feature is orthogonal to the supervised direction ($\cos=0.002$), so it
+is genuinely distinct rather than a rediscovery of it; among the ten highest-gap
+features only one is causally sufficient in this way, so the causal unit must be
+located by intervention rather than by activation gap alone. Refusal thus localizes,
+at least in part, to a monosemantic-like feature discoverable without supervision, and
+feature ablation supplies the principled operationalization of the targeted
+eradication act (ucc\=a\d{t}ana) that a naive category split lacked. The same feature
+substrate supports active circuit discovery: reusing an Expected-Free-Energy
+intervention-selection idea over sparse features, an agent that balances a pragmatic
+(harmful-gap) prior against an epistemic (diversity) term finds the causal refusal
+circuit on Gemma-2-2B in two interventions (ASR $\to1.0$) against a random baseline
+that reaches only $0.08$ within a budget of twelve, while on Gemma-2-9B the search
+plateaus at $0.92$ with no small jailbreaking set, confirming that the circuit is
+larger and more distributed at scale.
 
-This feature is also the substrate for \emph{active} circuit discovery. Reusing the
-Expected-Free-Energy intervention-selection idea of active-inference circuit discovery
-but operating over SAE features, an agent that balances a pragmatic (harmful-gap) prior
-against an epistemic (diversity) term finds the causal refusal circuit on Gemma-2-2b in
-$2$ interventions (ASR $\to1.0$), against a random baseline that reaches only $0.08$
-within a budget of $12$---an order-of-magnitude efficiency gain. On Gemma-2-9b the same
-search plateaus at $0.92$ with no small jailbreaking set, confirming (with F9) that the
-refusal circuit is larger and more distributed at scale.
-
-\subsection{Analogy: a frontier model resists the naive battery}
+\subsection{Analogy: a frontier model resists naive and agentic injection}
 Behaviourally, Claude refuses $100\%$ of a five-family attack battery (direct,
-refusal-suppression, persona, many-shot, crescendo; ASR $0.00$ on each, $n=11$).
-This is the resilient ``reference end'' against which small-model white-box
-fragility is the contrast: the same refusal behaviour that is behaviourally robust
-at the frontier is, mechanistically, a low-dimensional and easily-captured object
-in small open models. That naive battery is, however, a ceiling effect; on the
-\emph{real} agentic benchmark AgentDojo~\cite{debenedetti2024agentdojo} (banking
-suite, $20$ user$\times$injection rollouts with the \texttt{important\_instructions}
-attack, run through a custom \texttt{claude -p} tool-calling adapter), Claude attains
-$0.80$ task utility---it genuinely reads files and calls tools---while the attack
-success rate is $0.00$ ($0/20$): the agent acts, yet every injection fails. This
-discriminating result establishes the behavioural ``sophisticated reference end'' and
-matches the published resilience of Claude on AgentDojo.
+refusal-suppression, persona, many-shot, crescendo; ASR $0.00$ on each, $n=11$): the
+resilient reference end against which small-model white-box fragility is the contrast.
+That naive battery is a ceiling effect, so on the real agentic benchmark
+AgentDojo~\cite{debenedetti2024agentdojo} (banking suite, $20$ user$\times$injection
+rollouts with the \texttt{important\_instructions} attack, run through a custom
+\texttt{claude -p} tool-calling adapter) Claude attains $0.80$ task utility, genuinely
+reading files and calling tools, while the attack success rate is $0.00$ ($0/20$): the
+agent acts, yet every injection fails. The precision account of the analogy is also
+measurable. Using the signed margin of a linear refusal probe as a proxy for
+monitoring precision, an injection lowers the margin on harmful prompts from $7.18$ to
+$3.14$ (a drop of $4.04$) versus $1.56$ for a neutral-rephrase control, an
+injection-specific drop roughly $2.6\times$ the control, while the behavioural refusal
+rate falls from $1.00$ to $0.50$. The suppression therefore reaches the model's
+confidence in its harmfulness judgment, not only its output: the measured signature of
+a drop in monitoring precision~\cite{friston2010free,dienes2006coldcontrol}, of which
+the injection-specific excess over the framing control is the attributable part.
 
-The precision account of the analogy is measurable. Using the signed margin of a
-linear refusal probe as a proxy for monitoring \emph{precision}, an injection
-lowers the margin on harmful prompts from $7.18$ to $3.14$ (a drop of $4.04$),
-versus $1.56$ for a neutral-rephrase control---an injection-specific precision drop
-roughly $2.6\times$ the control---while the behavioural refusal rate falls from
-$1.00$ to $0.50$. The suppression therefore reaches the model's \emph{confidence}
-in its harmfulness judgment, not only its output: the measured signature of a drop
-in monitoring precision~\cite{friston2010free,dienes2006coldcontrol}. (Part of the
-drop is a generic framing/length effect, captured by the control; the
-injection-specific signal is the excess.)
-
-\subsection{The \d{s}a\d{t}karma taxonomy, honestly tested}
-Operationalizing the six acts as interventions (Table~\ref{tab:satkarma}), three of
-six separate from their controls. The policy-capture acts are clean and strong:
-vaś\=\i kara\d{n}a (ablation; ASR $0.92$ vs $0.00$) and ś\=anti (addition;
-over-refusal $1.00$ vs $0.08$); vidve\d{s}a\d{n}a (steering-induced answer
-divergence, $0.84$ vs $0.73$) marginally separates. The destruction acts---
-stambhana, ucc\=a\d{t}ana, m\=ara\d{n}a, as operationalized via principal-component
-or arbitrary-category ablation---are \emph{not} distinguishable from random
-perturbation, because random high-norm directions are themselves destructive and an
-arbitrary category split does not selectively eradicate. The honest reading: the
-\d{s}a\d{t}karma's rigorous core is its policy-capture sub-family---exactly the
-mechanism-tier object---while its destruction sub-family is, under these naive
-tests, a forced mapping.
-
-Given a fairer, stronger test using the SAE features and real semantic categories,
-the picture sharpens to $4/6$. \emph{M\=ara\d{n}a} (destruction) rehabilitates:
-ablating the top-$K$ most-active SAE features collapses coherence catastrophically
-and \emph{targetedly}---$0.83\to0.04$ at $K{=}50$ versus $0.84$ for a random-$K$
-control, with a graded onset---whereas the naive principal-component version was
-indistinguishable from random. \emph{Ucc\=a\d{t}ana} (targeted eradication) still
-fails, but for a \emph{principled} reason rather than a bad operationalization: a
-weapons-discriminative SAE feature, when ablated, does not selectively jailbreak
-weapons (ASR $0.0$ on both weapons and cyber), because refusal is mediated by a
-\emph{shared} feature (\#566), not category-specific ones. Refusal is thus
-\emph{category-agnostic}: one cannot selectively eradicate it for a single harm
-category by feature ablation---itself a structural finding about how refusal is
-represented.
+\subsection{The \d{s}a\d{t}karma taxonomy, tested as interventions}
+Operationalizing the six acts as interventions (Table~\ref{tab:satkarma},
+Figure~\ref{fig:satkarma}), three of six separate from their controls. The
+policy-capture acts are clean and strong: vaś\=\i kara\d{n}a (ablation; ASR $0.92$ vs
+$0.00$) and ś\=anti (addition; over-refusal $1.00$ vs $0.08$), with vidve\d{s}a\d{n}a
+(steering-induced answer divergence, $0.84$ vs $0.73$) marginally separating. The
+destruction acts---stambhana, ucc\=a\d{t}ana, and m\=ara\d{n}a as operationalized via
+principal-component or arbitrary-category ablation---are not distinguishable from
+random perturbation, because random high-norm directions are themselves destructive
+and an arbitrary category split does not selectively eradicate. The rigorous core of
+the \d{s}a\d{t}karma is therefore its policy-capture sub-family, which coincides with
+the mechanism tier, while its destruction sub-family is, under these naive tests, a
+forced mapping. Given a stronger test using the sparse-autoencoder features and real
+semantic categories, the picture sharpens to four of six (Figure~\ref{fig:satkarmav2}).
+M\=ara\d{n}a rehabilitates: ablating the top-$K$ most-active features collapses
+coherence catastrophically and targetedly ($0.83\to0.04$ at $K{=}50$ versus $0.84$ for
+a random-$K$ control, with a graded onset), whereas the naive principal-component
+version was indistinguishable from random. Ucc\=a\d{t}ana still fails, but for a
+principled reason: a weapons-discriminative feature, when ablated, does not selectively
+jailbreak weapons (ASR $0.0$ on both weapons and cyber), because refusal is mediated by
+a shared feature rather than category-specific ones. Refusal is thus category-agnostic
+and cannot be selectively eradicated for a single harm category by feature ablation, a
+structural finding about how refusal is represented.
 
 \begin{table}[h]
-\caption{The \d{s}a\d{t}karma as activation interventions on Gemma-2-2B (layer 7).
-Effect vs.\ matched control; $\checkmark$ = control-separated.}
+\caption{The \d{s}a\d{t}karma as activation interventions on Gemma-2-2B (layer 7).}
 \label{tab:satkarma}
 \centering
 \begin{tabular}{llccc}
@@ -273,90 +268,85 @@ m\=ara\d{n}a & top-10 PC ablate & $0.21$ & $0.16$ & --- \\
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.62\linewidth]{f10_satkarma.png}
-\caption{The \d{s}a\d{t}karma as activation interventions (Gemma-2-2b). Measured
-effect (coloured = control-separated) vs.\ matched control per act. The
-policy-capture acts (vaś\=\i kara\d{n}a, ś\=anti, vidve\d{s}a\d{n}a) separate;
-m\=ara\d{n}a separates under the stronger SAE-feature test (text).}
+\caption{Three \d{s}a\d{t}karma acts control-separate from their matched controls under
+the naive test on Gemma-2-2B.}
 \label{fig:satkarma}
 \end{figure}
 
-\subsection{Metaphor: pre-registered falsifications}
-Finally, the speculative tier, tested adversarially. A naive \emph{avasth\=atraya}
-regime probe (j\=agrat/svapna/su\d{s}upti) reaches transfer accuracy $1.00$---but
-already at layer~0 (token embeddings), so it is surface-confounded and fails the
-non-triviality bar; we demote it. A content-controlled re-test (truthful vs.\
-confabulated generation on the same questions) shows the mid-layer probe adds
-nothing over the layer-0 baseline ($0.90=0.90$); no mid-network ``state'' emerges.
-The tur\=\i ya prompt-invariant attractor is falsified under an anisotropy control:
-self-paraphrase converges per-seed (tail similarity $0.996$) but different seeds
-reach \emph{different} attractors, with cross-seed similarity $0.952$ below the
-unrelated-text baseline $0.960$. Every metaphysical-tier empirical claim thus fails
-its falsification gate---reported as honest negatives, not hidden.
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.62\linewidth]{f14_satkarma_v2.png}
+\caption{Targeted destruction (m\=ara\d{n}a) collapses output coherence below a
+random-$K$ control under the stronger sparse-feature test.}
+\label{fig:satkarmav2}
+\end{figure}
 
-\subsection{Cross-axis triangulation (X-1): bounding the one-mechanism claim}
-The keystone of the unifying thesis is that the three axes are facets of one
-mechanism. We test this directly for the first time on the \emph{same} prompts: under
-a single injected-context suppression we measure, per prompt, Axis~A (the refusal
-order parameter), Axis~B (the monitoring-precision margin), and the behavioural
-refuse$\rightarrow$comply flip, pooling four injection families across three models
-($96$ prompt$\times$family pairs each; eval prompts disjoint from the probe/direction
-split). Two results follow. First, the internal readouts collapse and co-move tightly
+\subsection{Metaphor: falsifications and a recovered truth direction}
+The speculative tier is tested adversarially, and most of its claims fail. A naive
+avasth\=atraya regime probe (j\=agrat/svapna/su\d{s}upti) reaches transfer accuracy
+$1.00$, but already at layer~0, so it is surface-confounded and demoted. A
+content-controlled re-test (truthful versus confabulated generation on the same
+questions) shows the mid-layer probe matching the layer-0 baseline ($0.90=0.90$), so no
+mid-network state emerges. The tur\=\i ya prompt-invariant attractor is falsified under
+an anisotropy control: self-paraphrase converges per-seed (tail similarity $0.996$) but
+different seeds reach different attractors, with cross-seed similarity $0.952$ below the
+unrelated-text baseline $0.960$; a follow-up finds only a weak content-organized basin
+signal (within-topic $0.929$ versus across-topic $0.884$, a gap of $0.045$ below
+threshold), dominated by anisotropy. Pursuing what the falsified svapna probe was
+groping toward nonetheless recovers a genuine, reclassified-to-mechanism feature
+(Figure~\ref{fig:truth}): two independent true/false statement sets reveal a
+mid-network (layer 13) truth-evaluation direction that transfers across topics at $0.96$
+(within-set CV $1.00$) while the surface layer-0 baseline is at chance ($0.50$), with a
+label-shuffle null of $p=0.002$. It is a feature of input factuality, not a generation
+regime, so the avasth\=atraya state reading remains falsified.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.66\linewidth]{f22_truth_direction.png}
+\caption{A mid-network truthfulness direction transfers across topics well above the
+chance-level surface baseline.}
+\label{fig:truth}
+\end{figure}
+
+\subsection{Cross-axis triangulation and dependent-variable validity}
+The keystone of the unifying thesis is that the three axes are facets of one mechanism,
+tested directly on the same prompts under a single injected-context suppression by
+scoring each prompt for Axis~A (the refusal order parameter), Axis~B (the
+monitoring-precision margin), and the behavioural refuse-to-comply flip, pooling four
+injection families across three models ($96$ prompt$\times$family pairs each; eval
+prompts disjoint from the probe and direction split). Two results follow
+(Figure~\ref{fig:triang}). First, the internal readouts collapse and co-move tightly
 (Pearson $0.94$--$0.97$; partial correlation $0.84$--$0.97$ controlling for prompt
-difficulty)---but A and B are two linear refusal readouts of the \emph{same} residual
+difficulty), but Axis~A and Axis~B are two linear refusal readouts of the same residual
 vector, so this is a measurement-consistency result, not independent evidence of
 unification. Second, the strong keystone---does internal collapse predict the
-behavioural flip?---is resolved \emph{negatively} once the behavioural label is valid.
-A first pass with a substring refusal metric was inconclusive, and inspection showed
-\emph{why}: that metric scores \texttt{indirect\_injection} deflections (``this document
-does not provide\ldots'') as compliance. Replacing it with a content-faithful LLM-judge
-(Claude classifying whether the output actually provides the harmful content) cuts the
-flip rate by roughly $18\times$: genuine behavioural capture under prompt-level injection
-is only $1$--$2.4\%$ across the three models, with \texttt{indirect\_injection} and
-\texttt{many\_shot} at $0\%$ despite collapsing the internals the most. Thus internal
-monitor-collapse is \emph{not sufficient} for behavioural capture under context injection:
-the last-token order parameter and precision margin are faithful internal signals but not
-the policy controller (genuine capture in these models requires weight-level ablation,
-not context injection). This bounds the unification claim to the representational level
-and, as a methodological corollary, shows the substring refusal metric is an invalid
-behavioural DV---retroactively bounding behavioural readouts elsewhere in the program. A
-geometric sub-study (removing the diff-in-means axis collapses linear separability in all
-three families) refines but does not adjudicate the F6/F8 dimensionality account, and we
-report it as descriptive only.
+behavioural flip?---resolves negatively once the behavioural label is valid. A first
+pass with a substring refusal metric was inconclusive because that metric scores
+\texttt{indirect\_injection} deflections (``this document does not provide\ldots'') as
+compliance; replacing it with a content-faithful LLM-judge cuts the flip rate by roughly
+$18\times$, so genuine behavioural capture under prompt-level injection is only
+$1$--$2.4\%$ across the three models, with \texttt{indirect\_injection} and
+\texttt{many\_shot} at $0\%$ despite collapsing the internals the most. Internal
+monitor-collapse is therefore not sufficient for behavioural capture under context
+injection: the last-token readouts are faithful internal signals but not the policy
+controller, and genuine capture in these models requires weight-level ablation rather
+than context injection, which bounds the unification to the representational level.
 
-\subsection{Source-of-truth: a genuine truthfulness direction behind the falsified state probe}
-Falsification is a starting point, not an endpoint. The avasth\=atraya j
-\=agrat/svapna ``generation regime'' was falsified (no mid-network gain over a layer-0
-surface baseline). Re-testing the underlying question with two \emph{independent} sets of
-balanced true/false declaratives, we find a genuine linear truth-evaluation feature:
-in Gemma-2-2b a mid layer (13) classifies statement truth and \emph{transfers across a
-different topic set} at $0.96$ (within-set CV $1.00$), while the surface layer-0 baseline
-is at chance ($0.50$); the label-shuffle null gives $p=0.002$. This recovers the
-Azaria--Mitchell / Marks--Tegmark truthfulness direction under the program's stronger
-cross-dataset and surface gates. Crucially it is a feature of \emph{input} factuality, not
-a generation regime, so the avasth\=atraya state reading remains falsified; the positive
-result is reported at the mechanism tier with no machine-state upgrade.
+This conclusion required noticing that the two automatic behavioural dependent variables
+are biased in opposite directions. The substring refusal metric over-counts compliance,
+inflating the injection flip rate about $18\times$ by scoring deflections as success; a
+content-faithful judge built from a safety-trained model under-counts it, declining to
+affirm genuinely harmful outputs (on ablated Gemma-2-2B, inspection confirms genuine
+harmful generations and a substring ASR of $0.92$, yet the judge scores only $0.05$).
+Neither is an unbiased dependent variable, so the substring metric is an upper bound on
+capture and the safety-trained judge a lower bound, with behavioural claims bracketed
+between them and validated by inspection; this both validates the ablation finding and
+makes the injection capture rate a lower bound.
 
-Applying the same discipline to the cross-family \emph{addition asymmetry} (refusal
-addition succeeds in Gemma but was reported to fail in Qwen even at $64\times$) overturns
-its interpretation. Two geometric explanations fail---removing the diff-in-means axis
-collapses separability in all families, and the alignment $\cos(\hat d, w)$ between that
-axis and the probe normal is high everywhere and \emph{highest} in Qwen ($0.91$). A
-coefficient sweep gives the real answer: adding the single direction at coefficient $16$
-induces clean, inspection-verified over-refusal in Qwen ($+1.0$), while coefficient $64$
-pushes activations off-distribution into incoherent text (scored as non-refusal). The
-``Qwen addition fails'' result was thus a dose-calibration artifact, not model-specific
-insufficiency; single-direction addition is sufficient in both families at the appropriate
-coefficient, strengthening the representational-level unification while F20 bounds it
-behaviourally.
-
-Finally, a methodological caution that emerged from validating these behavioural
-readouts: the two automatic dependent variables are biased in \emph{opposite} directions.
-The substring refusal metric \emph{over}-counts compliance (it scores deflections as
-success, inflating the injection flip rate $\sim$18$\times$); a content-faithful judge
-built from a safety-trained model (Claude) \emph{under}-counts it (it refuses to affirm
-genuinely harmful outputs---on ablated Gemma-2-2b, inspection confirms genuine harmful
-generations and a substring ASR of $0.92$, yet the judge scores only $0.05$). Neither is
-an unbiased behavioural DV: the substring metric is an upper bound on capture and the
-safety-trained judge a lower bound, so behavioural claims here are bracketed by both and
-spot-checked by inspection. (This validates the ablation finding---ablation produces
-genuine harmful compliance---and makes the injection capture rate a lower bound.)
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.92\linewidth]{f20_triangulation.png}
+\caption{Injection collapses the two internal monitor readouts together (left) yet
+produces almost no genuine behavioural capture under a content-faithful judge (right).}
+\label{fig:triang}
+\end{figure}

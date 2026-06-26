@@ -1,37 +1,20 @@
-\subsection{Why trajectories are the next falsification surface}
-Most present mechanism results are single-turn: a prompt is represented, a
-refusal direction is measured or intervened on, and the final behaviour is
-scored. Real prompt-injection attacks, however, often unfold over multiple turns
-or tool-mediated states. The next test is therefore temporal: does the refusal
-order parameter collapse gradually, abruptly, or recover as the attack trajectory
-develops?
-
-For a redacted trajectory with turn activations $h_t$ at a fixed model and layer,
-we define the same measured order parameter used above,
-\[
-  m_t = \frac{h_t \cdot \dref}{\norm{h_t}},
-\]
-and report only aggregate turn labels, $m_t$, a monitoring-precision proxy, and
-refusal/hallucination flags. A positive temporal result would not establish a
+\subsection{Temporal dynamics: the next falsification surface}
+Most of the mechanism results above are single-turn, whereas real prompt-injection
+attacks often unfold over multiple turns or tool-mediated states, so the next test is
+temporal: whether the refusal order parameter $m_t = (h_t \cdot \dref)/\norm{h_t}$,
+measured turn by turn at a fixed model and layer, collapses gradually, abruptly, or
+recovers as an attack trajectory develops. A positive result would not establish a
 human-like supervisory system; it would show that the residual projection whose
-single-turn collapse we measured also has structured dynamics across turns. A
-negative result would be equally informative: the attack may succeed or fail by
-late decoding, tool policy, or context routing without a monotone internal
-``monitor collapse''.
-
-\subsection{Safety and controls}
-The trajectory artifact is designed to be dual-use safe. Public outputs should
-exclude harmful prompts, raw completions, injection payloads, direction vectors,
-and model checkpoints. Each trajectory must name the model, layer, direction
-source, attack family, and pilot/powered status. Controls should include a benign
-multi-turn task, a random-direction trajectory, and where possible a held-out
-attack family such as AgentDojo indirect injection rather than only a
-Crescendo-style escalation.
-
-\subsection{Interpretive status}
-The temporal analysis belongs at the mechanism--analogy boundary. The projection
-$m_t$ is a mechanism-tier residual quantity; describing its decline as
-``symmetry-breaking'' or ``monitoring suppression'' is analogy-tier language. The
-F17 reframe remains binding: the durable claim is a shared necessary/ablatable
-core, with sufficiency and dynamics still to be tested across models, layers, and
-attack families.
+single-turn collapse is measured here also has structured dynamics across turns, while
+a negative result would be equally informative, indicating that an attack can succeed
+or fail by late decoding, tool policy, or context routing without a monotone internal
+monitor collapse. The trajectory artifact is designed to be dual-use safe---public
+outputs exclude harmful prompts, raw completions, injection payloads, direction
+vectors, and checkpoints, and each trajectory names its model, layer, direction
+source, attack family, and pilot or powered status---with controls comprising a benign
+multi-turn task, a random-direction trajectory, and where possible a held-out attack
+family such as AgentDojo indirect injection. The projection $m_t$ remains a
+mechanism-tier quantity; describing its decline as symmetry-breaking or monitoring
+suppression is analogy-tier language, and the binding constraint from the triangulation
+applies, so no temporal collapse is read as behavioural capture until sufficiency and
+dynamics are tested across models, layers, and attack families.
