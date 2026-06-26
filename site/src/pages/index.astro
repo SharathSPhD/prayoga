@@ -15,8 +15,8 @@ import metricsData from '../data/metrics.json';
 
 const findings = findingsData.findings;
 const metrics = metricsData;
-const base = import.meta.env.BASE_URL;
-const fig = (name: string) => `${base}figures/${name}`;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const fig = (name: string) => `${base}/figures/${name}`;
 ---
 
 <Layout title="prayoga | Refusal as a Captured Symmetry">
