@@ -14,7 +14,19 @@ robust to a correction (disjoint train, validation, and evaluation splits with a
 ten-direction control) that moved ablation ASR only from $0.92$ to $0.90$, and it
 replicates across three random splits (mean $0.90$, pooled 95\% CI $[0.83,0.96]$;
 addition over-refusal $1.00$ on every split), so it is not a leakage or single-seed
-artifact.
+artifact. The geometry behind this is a clean separation of the harmful and harmless
+clusters along the refusal direction (Figure~\ref{fig:geom}): ablation projects the
+clusters onto the decision threshold, and addition shifts the harmless cluster across
+it.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.92\linewidth]{f1_refusal_geometry.png}
+\caption{Harmful and harmless activations separate along the refusal direction with a
+measured gap of $16.3$ on Gemma-2-2B (left), which ablation collapses to the threshold
+and addition shifts across (right).}
+\label{fig:geom}
+\end{figure}
 
 The suppression is dosable. Sweeping partial-ablation strength $\alpha\in[0,1]$
 yields a clean logistic dose--response (Figure~\ref{fig:dose}): EC50 $=0.329$, slope
@@ -82,8 +94,8 @@ thus shapes steerability, and the
 Arditi--Marshall--Wollschl\"ager debate~\cite{arditi2024refusal,marshall2024refusal,wollschlager2025geometry}
 resolves as model- and layer-dependent rather than universal. At scale (Gemma-2-2B to
 9B) abliteration efficacy drops ($0.90\to0.60$) while the prompt-separability
-dimension stays at one and no single layer fully mediates refusal (best validation ASR
-$0.62$), so the added robustness is layer-distributed redundancy rather than higher
+dimension stays at one and no single layer fully mediates refusal (peak ablation ASR
+$0.60$), so the added robustness is layer-distributed redundancy rather than higher
 prompt-dimensionality.
 
 \begin{table}[h]
@@ -153,7 +165,18 @@ is $4.41$ (refusal) versus $0.008$ (random), and injection collapses $m$ by $-45
 group action in both models, and a jailbreak is a measured symmetry-breaking of that
 invariant. Interpreting the invariance as a group-theoretic symmetry is treated as
 analogy-tier language in Section~\ref{sec:discussion}; the measured content is the
-orbit-invariance and its injection-induced collapse.
+orbit-invariance and its injection-induced collapse. The geometry of this broken
+symmetry is direct (Figure~\ref{fig:ordergeom}): harmful and harmless orbits occupy
+separated bands of the order parameter, and injection drags the harmful band toward the
+harmless one.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.92\linewidth]{f12_order_geometry.png}
+\caption{Distributions of the order parameter for harmful and harmless paraphrase
+orbits, with injection pulling the harmful band toward the harmless one in both models.}
+\label{fig:ordergeom}
+\end{figure}
 
 \begin{table}[h]
 \caption{Symmetry order parameter $m=(h\cdot\protect\dref)/\norm{h}$ on Gemma-2-2B
@@ -206,16 +229,41 @@ plateaus at $0.92$ with no small jailbreaking set, confirming that the circuit i
 larger and more distributed at scale.
 
 \subsection{Analogy: a frontier model resists naive and agentic injection}
-Behaviourally, Claude refuses $100\%$ of a five-family attack battery (direct,
-refusal-suppression, persona, many-shot, crescendo; ASR $0.00$ on each, $n=11$): the
-resilient reference end against which small-model white-box fragility is the contrast.
-That naive battery is a ceiling effect, so on the real agentic benchmark
-AgentDojo~\cite{debenedetti2024agentdojo} (banking suite, $20$ user$\times$injection
-rollouts with the \texttt{important\_instructions} attack, run through a custom
-\texttt{claude -p} tool-calling adapter) Claude attains $0.80$ task utility, genuinely
-reading files and calling tools, while the attack success rate is $0.00$ ($0/20$): the
-agent acts, yet every injection fails. The precision account of the analogy is also
-measurable. Using the signed margin of a linear refusal probe as a proxy for
+Behaviourally, Claude Opus 4.8 refuses $100\%$ of a five-family attack battery
+(direct, refusal-suppression, persona, many-shot, crescendo; ASR $0.00$ on each,
+$n=11$): the resilient reference end against which small-model white-box fragility is
+the contrast (Table~\ref{tab:blackbox}). That naive battery is a ceiling effect, so a
+sharper test is needed. The real agentic benchmark
+AgentDojo~\cite{debenedetti2024agentdojo} supplies one. Because AgentDojo ships no
+command-line backend, a custom tool-calling adapter was written that reuses AgentDojo's
+own function-call prompt and parser while routing the model call to \texttt{claude -p};
+this adapter is a released artifact. On the banking suite, with $20$
+user-by-injection rollouts under the \texttt{important\_instructions} attack, Claude
+attains $0.80$ task utility, genuinely reading files and calling tools, while the
+attack success rate is $0.00$ ($0/20$). The agent acts, yet every injection fails. This
+result discriminates where the battery did not: it confirms genuine agency under attack
+with zero capture, and it matches the published resilience of Claude on AgentDojo.
+
+\begin{table}[h]
+\caption{Black-box behavioural results for Claude Opus 4.8 via \texttt{claude -p}.}
+\label{tab:blackbox}
+\centering
+\begin{tabular}{llcc}
+\toprule
+Setting & Condition & $n$ & ASR \\
+\midrule
+Naive battery & direct (control) & 11 & $0.00$ \\
+Naive battery & refusal-suppression & 11 & $0.00$ \\
+Naive battery & persona & 11 & $0.00$ \\
+Naive battery & many-shot & 11 & $0.00$ \\
+Naive battery & crescendo & 11 & $0.00$ \\
+AgentDojo banking & \texttt{important\_instructions} (utility $0.80$) & 20 & $0.00$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The precision account of the analogy is also measurable. Using the signed margin of a
+linear refusal probe as a proxy for
 monitoring precision, an injection lowers the margin on harmful prompts from $7.18$ to
 $3.14$ (a drop of $4.04$) versus $1.56$ for a neutral-rephrase control, an
 injection-specific drop roughly $2.6\times$ the control, while the behavioural refusal
