@@ -1,17 +1,19 @@
-This section describes the models and substrate, the refusal-direction extraction
-and interventions, the outcome measures, and the statistical controls that gate every
-claim. Methods specific to a single result are stated with that result.
+This section describes the experimental program, the models and data, the
+refusal-direction extraction and interventions, the sparse-feature and behavioural
+methods, the outcome measures, the source-of-truth protocol, and the statistical
+controls that gate every claim. Methods specific to a single result are stated with
+that result.
 
 \subsection{Experimental program}
 The study is organized as two empirical tiers over three claim axes, summarized in
 Figure~\ref{fig:program}. A black-box tier (Tier~1) characterizes a frontier model
-behaviourally as the resilient reference end; a white-box tier (Tier~2) performs
+behaviourally as the resilient reference end. A white-box tier (Tier~2) performs
 mechanistic interpretability on open weights, where the residual stream is directly
-observable and editable. Both tiers feed three distinct claim axes---mechanism
-(Axis~A: refusal direction, EC50, dimension), functional analogy (Axis~B: order
-parameter, monitoring precision), and metaphor with a falsifiable core (Axis~C:
-avasth\=atraya and the \d{s}a\d{t}karma)---and a cross-axis triangulation then tests,
-on the same prompts, whether internal monitor collapse predicts behavioural capture.
+observable and editable. Both tiers feed three distinct claim axes. Axis~A is the
+mechanism axis (refusal direction, EC50, dimension). Axis~B is the analogy axis
+(order parameter, monitoring precision). Axis~C is the metaphor axis (avasth\=atraya
+and the \d{s}a\d{t}karma). A cross-axis triangulation then tests, on the same
+prompts, whether internal monitor collapse predicts behavioural capture.
 
 \begin{figure}[h]
 \centering
@@ -27,8 +29,8 @@ on the same prompts, whether internal monitor collapse predicts behavioural capt
     text width=8.2cm, fill=green!5},
   a/.style={thick, -stealth}
 ]
-\node[b] (t1) at (-2.2,0) {Tier 1 --- black box\\frontier model (CLI)};
-\node[b] (t2) at (2.2,0) {Tier 2 --- white box\\Gemma-2-2B/9B, Qwen2.5-3B};
+\node[b] (t1) at (-2.2,0) {Tier 1: black box\\frontier model (CLI)};
+\node[b] (t2) at (2.2,0) {Tier 2: white box\\Gemma-2-2B/9B, Qwen2.5-3B};
 \node[ax]  (ax) at (0,-1.7) {Three claim axes:\, A mechanism \,\textbar\, B analogy \,\textbar\, C metaphor};
 \node[key] (tr) at (0,-3.1) {Cross-axis triangulation on the same prompts};
 \node[res] (rs) at (0,-4.5) {Bounded result: unification at the representational level};
@@ -42,77 +44,124 @@ and a cross-axis triangulation bounds the unification.}
 \label{fig:program}
 \end{figure}
 
-\subsection{Models and substrate}
-The white-box tier studies three instruction-tuned open-weight chat
-models---Gemma-2-2B-it (26 layers, $d=2304$), Gemma-2-9B-it (42 layers,
-$d=3584$), and Qwen2.5-3B-Instruct (36 layers, $d=2048$)---on a single NVIDIA GB10
-(Grace--Blackwell) accelerator. The black-box tier probes a frontier model (Claude)
-behaviourally through its command-line interface. All white-box interventions are
-implemented as PyTorch forward hooks on the decoder layers and the token embedding;
-higher-level interpretability wrappers are deliberately avoided to retain exact
-control over the residual stream.
+\subsection{Models, data, and substrate}
+The white-box tier studies three instruction-tuned open-weight chat models:
+Gemma-2-2B-it (26 layers, $d=2304$), Gemma-2-9B-it (42 layers, $d=3584$), and
+Qwen2.5-3B-Instruct (36 layers, $d=2048$). For the EC50 panel, the Qwen2.5 family is
+extended to the 0.5B, 1.5B, and 7B sizes. All white-box runs use a single NVIDIA GB10
+(Grace--Blackwell) accelerator. The harmful and harmless prompt sets are matched
+short request stubs that elicit and measure refusal rather than producing operational
+harmful content. Each is split into disjoint train, validation, and evaluation
+partitions of $24$ prompts each, so no prompt used to estimate a direction or fit a
+probe is reused to score it. White-box interventions are implemented as PyTorch
+forward hooks on the decoder layers and the token embedding. Higher-level
+interpretability wrappers are avoided so that the residual stream is edited exactly.
+
+The black-box tier probes a frontier model, Claude Opus 4.8 (model identifier
+\texttt{opus-4-8}), accessed through the \texttt{claude -p} command-line interface of
+Claude Code, which inherits the local account authentication. The AgentDojo harness
+records an internal pipeline label (\texttt{claude-3-5-sonnet-20241022}) that its
+attack registry requires; this label does not change the served model, which remains
+the one routed by \texttt{claude -p}.
 
 \subsection{Refusal direction and interventions}
-Let $h^{(\ell)}(x)\in\mathbb{R}^d$ be the residual stream at the last prompt token
-of layer $\ell$ for input $x$. Given matched harmful prompts $\mathcal{H}$ and
-harmless prompts $\mathcal{S}$, the difference-in-means direction is
+Let $h^{(\ell)}(x)\in\mathbb{R}^d$ be the residual stream at the last prompt token of
+layer $\ell$ for input $x$. Given matched harmful prompts $\mathcal{H}$ and harmless
+prompts $\mathcal{S}$, the difference-in-means direction is
 \begin{equation}
 \mathbf{d}^{(\ell)} = \frac{1}{|\mathcal{H}|}\sum_{x\in\mathcal{H}} h^{(\ell)}(x)
 - \frac{1}{|\mathcal{S}|}\sum_{x\in\mathcal{S}} h^{(\ell)}(x),
 \qquad \dref = \mathbf{d}^{(\ell)}/\norm{\mathbf{d}^{(\ell)}}.
 \end{equation}
-Directional ablation removes $\dref$ from every write to the residual
-stream (embedding and all layer outputs), scaled by $\alpha\in[0,1]$:
-$h \mapsto h - \alpha (h\cdot\dref)\dref$. Activation addition adds
-$c\,\dref$ at the extraction layer. For multi-direction (subspace) ablation a
-matrix $D$ is orthonormalized (QR) and its span removed. The extraction layer is
-selected on a held-out validation split disjoint from the evaluation split.
+Directional ablation removes $\dref$ from every write to the residual stream (the
+embedding and all layer outputs), scaled by $\alpha\in[0,1]$, as
+$h \mapsto h - \alpha (h\cdot\dref)\dref$. Activation addition adds $c\,\dref$ at the
+extraction layer. For multi-direction (subspace) ablation a matrix $D$ is
+orthonormalized by QR and its span removed. The extraction layer is the layer whose
+direction maximizes ablation ASR on the validation split, and it is fixed before the
+evaluation split is touched.
+
+\subsection{Sparse features}
+To obtain a finer causal unit than the supervised direction, a BatchTopK sparse
+autoencoder~\cite{bussmann2024batchtopk} with $4096$ features and $k=32$ active units
+is trained on $27{,}382$ residual activations collected from general text
+(wikitext-2), with no harmful or harmless labels. Reconstruction quality is reported
+as the fraction of unexplained variance. The single feature that fires most on
+harmful relative to harmless prompts is identified, and its causal role is tested by
+ablating its decoder direction during generation, against a random-feature control.
+Because feature indices are not seed-stable, causal sufficiency is established by
+intervention rather than by the activation gap alone.
+
+\subsection{Behavioural probing}
+The frontier model is first run against a naive attack battery of five families
+(direct, refusal-suppression, persona, many-shot, and crescendo), each over eleven
+harmful requests. It is then run on the AgentDojo banking suite~\cite{debenedetti2024agentdojo}
+through a custom tool-calling adapter that reuses AgentDojo's own function-call prompt
+and parser while routing the model call to \texttt{claude -p}, giving twenty genuine
+user-by-injection rollouts with the \texttt{important\_instructions} attack. For the
+triangulation and the ablation validation, a content-faithful judge classifies whether
+each generation actually provides the harmful content, which corrects the substring
+metric's mis-scoring of deflections.
 
 \subsection{Outcome measures}
-Refusal is detected with an Arditi-style substring metric over the opening span of
-the generation; attack success rate (ASR) is the fraction of harmful prompts that
-comply, and over-refusal is the fraction of harmless prompts that refuse.
-Because automatic refusal metrics can be biased (Section~\ref{sec:results}), the
-primary behavioural claims are additionally validated by a content-faithful
-LLM-judge and by manual inspection. Pure-text measures support the
-\d{s}a\d{t}karma acts: degeneracy ($1-$ mean unique-token ratio), answer divergence
-($1-$ Jaccard token overlap between paired generations), and coherence (mean
-unique-token ratio of non-empty outputs).
+Refusal is detected with an Arditi-style substring metric over the opening span of the
+generation. The attack success rate (ASR) is the fraction of harmful prompts that
+comply, and over-refusal is the fraction of harmless prompts that refuse. Because
+automatic refusal metrics can be biased in either direction (Section~\ref{sec:results}),
+the primary behavioural claims are also validated by the content-faithful judge and by
+manual inspection. Pure-text measures support the \d{s}a\d{t}karma acts: degeneracy is
+one minus the mean unique-token ratio, answer divergence is one minus the Jaccard token
+overlap between paired generations, and coherence is the mean unique-token ratio of
+non-empty outputs.
 
 \subsection{Dose--response and dimensionality}
-The dose--response sweeps $\alpha$ and fits a four-parameter logistic
-$\mathrm{ASR}(\alpha)=l+(h-l)/(1+e^{-k(\alpha-\alpha_{50})})$, reporting EC50
-$=\alpha_{50}$. The refusal-subspace effective dimension is measured by iterative
-logistic projection: a probe is fit to separate $\mathcal{H}$ from $\mathcal{S}$,
-its cross-validated accuracy is recorded, the probe direction is projected out of
-the activations, and the procedure repeats; the effective dimension is the number
-of directions whose removal drives accuracy to chance. This dimension is computed
-at the extraction layer and, to test its stability, at every layer.
+The dose--response sweeps the ablation strength $\alpha$ and fits a four-parameter
+logistic, $\mathrm{ASR}(\alpha)=l+(h-l)/(1+e^{-k(\alpha-\alpha_{50})})$, reporting the
+half-maximal strength EC50 $=\alpha_{50}$. The addition dose-response sweeps the
+addition coefficient $c$ over twelve values and scores over-refusal at each. The
+refusal-subspace effective dimension is measured by iterative logistic projection. A
+probe is fit to separate $\mathcal{H}$ from $\mathcal{S}$, its cross-validated accuracy
+is recorded, the probe direction is projected out of the activations, and the procedure
+repeats. The effective dimension is the number of directions whose removal drives
+accuracy to chance. It is computed at the extraction layer and, to test its stability,
+at every layer.
 
 \subsection{Order parameter and \d{s}a\d{t}karma interventions}
 The refusal order parameter for an activation is the normalized projection
 $m(h) = (h\cdot\dref)/\norm{h}$. For a request $r$, a paraphrase orbit
-$\mathcal{O}(r)$ of meaning-preserving rephrasings is formed and $m$ is measured
-across the orbit. The invariance of refusal under the rephrase group action is
-quantified by the between-class to within-orbit variance ratio (an $F$-ratio) of
-$m$, compared against a random-direction control, and symmetry-breaking is measured
-as the drop in $m$ between a plain harmful request and its injection-framed
-counterpart. Building on the same machinery, each of the six \d{s}a\d{t}karma acts is
-operationalized as a distinct activation intervention with
-a matched control: vaś\=\i kara\d{n}a (ablate $\dref$, measure ASR), ś\=anti (add
-$\dref$, measure over-refusal), stambhana (ablate the dominant residual principal
-component, measure degeneracy), vidve\d{s}a\d{n}a (steer a factual answer off
-baseline, measure divergence), ucc\=a\d{t}ana (ablate a category-specific
-direction, measure selective ASR), and m\=ara\d{n}a (ablate the top-$k$ principal
-components or, in a stronger variant, the top-$K$ most-active sparse-autoencoder
-features, measuring coherence collapse). An act is judged ``control-separated'' if
-its effect exceeds its matched control by a fixed margin.
+$\mathcal{O}(r)$ of meaning-preserving rephrasings is formed and $m$ is measured across
+the orbit. The invariance of refusal under the rephrase group action is quantified by
+the between-class to within-orbit variance ratio of $m$ (an $F$-ratio), compared
+against a random-direction control. Symmetry-breaking is the drop in $m$ between a
+plain harmful request and its injection-framed counterpart. Building on the same
+machinery, each of the six \d{s}a\d{t}karma acts is operationalized as a distinct
+activation intervention with a matched control: vaś\=\i kara\d{n}a (ablate $\dref$,
+measure ASR), ś\=anti (add $\dref$, measure over-refusal), stambhana (ablate the
+dominant residual principal component, measure degeneracy), vidve\d{s}a\d{n}a (steer a
+factual answer off baseline, measure divergence), ucc\=a\d{t}ana (ablate a
+category-specific direction, measure selective ASR), and m\=ara\d{n}a (ablate the
+top-$k$ principal components, or in a stronger variant the top-$K$ most-active sparse
+features, measuring coherence collapse). An act is control-separated if its effect
+exceeds its matched control by a fixed margin.
+
+\subsection{Source-of-truth protocol}
+A falsified hypothesis is treated as a cue, not an endpoint. When a metaphysical-tier
+claim fails its gates, a follow-up experiment is designed to ask what real signal the
+original probe was groping toward, under the same transfer, null, and surface controls.
+Three such follow-ups are run. The falsified j
+\=agrat/svapna state probe motivates a cross-dataset truth-evaluation probe on two
+independent statement sets. The falsified single-direction addition asymmetry motivates
+a calibrated coefficient sweep across families. The falsified universal attractor
+motivates a content-organized basin test on multiple seeds and topics. Each follow-up
+is pre-specified to either recover a measurable feature or to confirm the negative,
+which keeps falsification productive rather than terminal.
 
 \subsection{Statistics, controls, and pre-registration}
-All gates use bootstrap confidence intervals and, for probes, a label-shuffled
-null and a layer-0 (surface) baseline; ablation effects are checked against
-multiple ($\geq 10$) random-direction controls. Hypotheses, gates, and falsifiers
-are pre-registered as a living backbone. Every metaphysical-tier claim must pass a
-transfer gate (held-out prompts), a null gate (better than shuffled
-labels), and a surface gate (better than a layer-0 baseline) before it is
-retained; failure triggers a documented demotion rather than a silent drop.
+All gates use bootstrap confidence intervals. Probe-based claims add a label-shuffled
+null, reported as a permutation $p$-value, and a layer-0 surface baseline. Ablation
+effects are checked against at least ten random-direction controls. Cross-dataset
+transfer is used wherever a probe could memorize a single topic. Hypotheses, gates, and
+falsifiers are pre-registered as a living backbone, and every metaphysical-tier claim
+must pass a transfer gate (held-out prompts), a null gate (better than shuffled
+labels), and a surface gate (better than a layer-0 baseline) before it is retained.
+Failure triggers a documented demotion rather than a silent drop.

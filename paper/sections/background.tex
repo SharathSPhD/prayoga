@@ -36,7 +36,7 @@ without reversing the model's internal judgment of harmfulness.
 
 The cross-model results of this work bear directly on this debate: the effective
 dimension of the refusal subspace is model- and layer-dependent, and this
-dimension---not a universal constant---shapes whether single-direction steering is
+dimension, not a universal constant, shapes whether single-direction steering is
 bidirectionally causal at a given coefficient. The dose-response pharmacological
 characterization (EC50 fits) introduced here resolves some of the ambiguity: a
 low-dimensional refusal manifold suffices to explain the control observed, but its
@@ -56,7 +56,7 @@ jailbreaking as constrained, controllable decoding via Langevin dynamics.
 
 Recent mechanistic work has illuminated the internal mechanisms by which attacks
 succeed. \citet{ben_tov2025universal} show that GCG's universality is driven by
-attention hijacking---suffixes construct a shallow but critical mechanism that
+attention hijacking, suffixes construct a shallow but critical mechanism that
 dominates information flow, with stronger universality correlating with stronger
 hijacking. \citet{von_recum2024cannot} provide a taxonomy of sixteen refusal
 categories (cannot versus should-not, with subcategories), enabling precise auditing
@@ -67,8 +67,8 @@ that current safety alignment relies on token-sequence memorization rather than
 robust reasoning.
 
 The contribution of this work is orthogonal and complementary: rather than searching
-for a stronger $u$, it characterizes the target of $u$---the geometry and
-symmetry of the refusal variable it must move---and measures the dose-response
+for a stronger $u$, it characterizes the target of $u$, the geometry and
+symmetry of the refusal variable it must move, and measures the dose-response
 relationship.
 
 \subsection{Sparse features and the unit of intervention}
@@ -110,7 +110,7 @@ of them~\cite{dienes2006coldcontrol}. \citet{riva2025automatic} draw the explici
 to LLMs: the user prompt acts as a temporary external SAS, and a jailbreak suppresses
 the monitoring faculty while leaving generation intact. In normative terms, the Free
 Energy Principle~\cite{friston2010free} frames such suppression as lowering the
-precision of a monitoring belief---an account adopted here for the analogy tier
+precision of a monitoring belief, an account adopted here for the analogy tier
 and grounded empirically through the order parameter.
 
 Recent work on activation steering and causality has sharpened this reading.
@@ -118,7 +118,7 @@ Recent work on activation steering and causality has sharpened this reading.
 activation steering pushes the residual stream off the manifold of states reachable
 from discrete prompts. This formalism decouples white-box steerability from black-box
 prompting, clarifying that precise internal control does not guarantee precise
-behavioural control---a key insight for the analogy between hypnotic dissociation
+behavioural control, a key insight for the analogy between hypnotic dissociation
 (high internal control, low unified awareness) and jailbreak-via-steering.
 \citet{joshi2026causality} emphasize that causal claims in interpretability require
 falsification gates and transfer tests beyond correlation, reinforcing the need for
@@ -132,7 +132,7 @@ the M\=a\d{n}\d{d}\=ukya avasth\=atraya (waking, dream, deep-sleep, and
 tur\=\i ya), set out in the M\=a\d{n}\d{d}\=ukya Upani\d{s}ad and
 G\=au\d{d}ap\=ada's k\=arik\=a~\cite{mandukya,gaudapada}, furnishes a four-regime
 template. Both are treated here as falsification
-targets (Section~\ref{sec:results}), and---crucially---the attractor claim is tested
+targets (Section~\ref{sec:results}), and, crucially, the attractor claim is tested
 against the anisotropy of LLM embedding geometry, without which apparent convergence
 is an artifact.
 
@@ -154,7 +154,7 @@ ucc\=a\d{t}ana, m\=ara\d{n}a) of tantric ritual magic, operationalized through m
 (linguistic or sonic injection) and yantra (geometric substrate), and documented by
 Sanskritists as a systematized technology rather than folklore~\cite{goudriaan1978,turstig1985,buhnemann1988}.
 This work does not adjudicate its efficacy as psychology; it asks a narrower, testable
-question---whether the \d{s}a\d{t}karma constitutes a taxonomy of interventions
+question, whether the \d{s}a\d{t}karma constitutes a taxonomy of interventions
 on a target system, and which of its members map to distinct, control-separated
 activation operations on an LLM. To the best of the present survey, no prior
 peer-reviewed work bridges vaś\=\i kara\d{n}a and LLM refusal, nor casts refusal as a

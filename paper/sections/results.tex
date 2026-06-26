@@ -126,8 +126,8 @@ in Qwen ($0.91$). A 12-point sweep then gives the answer: adding the single dire
 drives Qwen over-refusal to $1.0$ at coefficients $12$--$32$ (inspection-verified as
 coherent over-refusal) before activations go off-distribution into incoherent text at
 $64$ (scored as non-refusal), whereas Gemma rises monotonically and saturates near
-$64$. The earlier ``Qwen addition fails'' result was a dose-calibration artifact---the
-fixed $64\times$ coefficient sits on Gemma's plateau but on Qwen's collapsed tail---not
+$64$. The earlier ``Qwen addition fails'' result was a dose-calibration artifact, the
+fixed $64\times$ coefficient sits on Gemma's plateau but on Qwen's collapsed tail, not
 model-specific insufficiency, so single-direction addition is sufficient in both
 families at the appropriate coefficient.
 
@@ -230,8 +230,8 @@ Figure~\ref{fig:satkarma}), three of six separate from their controls. The
 policy-capture acts are clean and strong: vaś\=\i kara\d{n}a (ablation; ASR $0.92$ vs
 $0.00$) and ś\=anti (addition; over-refusal $1.00$ vs $0.08$), with vidve\d{s}a\d{n}a
 (steering-induced answer divergence, $0.84$ vs $0.73$) marginally separating. The
-destruction acts---stambhana, ucc\=a\d{t}ana, and m\=ara\d{n}a as operationalized via
-principal-component or arbitrary-category ablation---are not distinguishable from
+destruction acts, stambhana, ucc\=a\d{t}ana, and m\=ara\d{n}a as operationalized via
+principal-component or arbitrary-category ablation, are not distinguishable from
 random perturbation, because random high-norm directions are themselves destructive
 and an arbitrary category split does not selectively eradicate. The rigorous core of
 the \d{s}a\d{t}karma is therefore its policy-capture sub-family, which coincides with
@@ -259,9 +259,9 @@ Act & intervention & effect & control & sep. \\
 vaś\=\i kara\d{n}a & ablate refusal dir & $0.92$ & $0.00$ & $\checkmark$ \\
 ś\=anti & add refusal dir & $1.00$ & $0.08$ & $\checkmark$ \\
 vidve\d{s}a\d{n}a & steer factual answer & $0.84$ & $0.73$ & $\checkmark$ \\
-stambhana & ablate dominant PC & $0.14$ & $0.19$ & --- \\
-ucc\=a\d{t}ana & category-dir ablate & $-0.08$ & $0.00$ & --- \\
-m\=ara\d{n}a & top-10 PC ablate & $0.21$ & $0.16$ & --- \\
+stambhana & ablate dominant PC & $0.14$ & $0.19$ &,  \\
+ucc\=a\d{t}ana & category-dir ablate & $-0.08$ & $0.00$ &,  \\
+m\=ara\d{n}a & top-10 PC ablate & $0.21$ & $0.16$ &,  \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -282,7 +282,7 @@ random-$K$ control under the stronger sparse-feature test.}
 \label{fig:satkarmav2}
 \end{figure}
 
-\subsection{Metaphor: falsifications and a recovered truth direction}
+\subsection{Metaphor falsifications and source-of-truth follow-ups}
 The speculative tier is tested adversarially, and most of its claims fail. A naive
 avasth\=atraya regime probe (j\=agrat/svapna/su\d{s}upti) reaches transfer accuracy
 $1.00$, but already at layer~0, so it is surface-confounded and demoted. A
@@ -291,15 +291,24 @@ questions) shows the mid-layer probe matching the layer-0 baseline ($0.90=0.90$)
 mid-network state emerges. The tur\=\i ya prompt-invariant attractor is falsified under
 an anisotropy control: self-paraphrase converges per-seed (tail similarity $0.996$) but
 different seeds reach different attractors, with cross-seed similarity $0.952$ below the
-unrelated-text baseline $0.960$; a follow-up finds only a weak content-organized basin
-signal (within-topic $0.929$ versus across-topic $0.884$, a gap of $0.045$ below
-threshold), dominated by anisotropy. Pursuing what the falsified svapna probe was
-groping toward nonetheless recovers a genuine, reclassified-to-mechanism feature
-(Figure~\ref{fig:truth}): two independent true/false statement sets reveal a
-mid-network (layer 13) truth-evaluation direction that transfers across topics at $0.96$
-(within-set CV $1.00$) while the surface layer-0 baseline is at chance ($0.50$), with a
-label-shuffle null of $p=0.002$. It is a feature of input factuality, not a generation
-regime, so the avasth\=atraya state reading remains falsified.
+unrelated-text baseline $0.960$.
+
+These falsifications are treated as cues rather than endpoints, and three designed
+follow-ups close the loop. First, pursuing what the falsified svapna probe was groping
+toward recovers a genuine, reclassified-to-mechanism feature (Figure~\ref{fig:truth}):
+two independent true/false statement sets reveal a mid-network (layer 13)
+truth-evaluation direction that transfers across topics at $0.96$ (within-set CV
+$1.00$) while the surface baseline is at chance ($0.50$), with a label-shuffle null of
+$p=0.002$. It is a feature of input factuality, not a generation regime, so the
+avasth\=atraya state reading remains falsified. Second, the falsified single-direction
+addition asymmetry was resolved by the calibrated coefficient sweep of
+Figure~\ref{fig:adddose}, which located a measured dose effect in place of a structural
+difference. Third, asking whether the multiple turīya attractors are at least
+content-organized basins finds only a weak signal (within-topic final similarity
+$0.929$ versus across-topic $0.884$, a gap of $0.045$ below threshold), so the dynamics
+are anisotropy-dominated rather than semantically clustered. In each case a negative
+result was converted into either a measured positive or a sharpened negative under the
+same transfer, null, and surface controls.
 
 \begin{figure}[h]
 \centering
@@ -320,8 +329,8 @@ prompts disjoint from the probe and direction split). Two results follow
 (Pearson $0.94$--$0.97$; partial correlation $0.84$--$0.97$ controlling for prompt
 difficulty), but Axis~A and Axis~B are two linear refusal readouts of the same residual
 vector, so this is a measurement-consistency result, not independent evidence of
-unification. Second, the strong keystone---does internal collapse predict the
-behavioural flip?---resolves negatively once the behavioural label is valid. A first
+unification. Second, the strong keystone, does internal collapse predict the
+behavioural flip?, resolves negatively once the behavioural label is valid. A first
 pass with a substring refusal metric was inconclusive because that metric scores
 \texttt{indirect\_injection} deflections (``this document does not provide\ldots'') as
 compliance; replacing it with a content-faithful LLM-judge cuts the flip rate by roughly

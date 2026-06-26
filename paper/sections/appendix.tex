@@ -61,8 +61,8 @@ margin of a linear refusal probe used as a monitoring-precision proxy: a
 refusal-suppression injection lowers the margin from $7.18$ to $3.14$ (a drop of
 $4.04$) against $1.56$ for a neutral-rephrase control, an injection-specific drop
 roughly $2.6\times$ the control, accompanied by a behavioural refusal rate falling
-from $1.00$ to $0.50$. The gate---an injection-specific precision drop exceeding a
-framing control, co-occurring with a behavioural change---passes, with the caveat that
+from $1.00$ to $0.50$. The gate, an injection-specific precision drop exceeding a
+framing control, co-occurring with a behavioural change, passes, with the caveat that
 the neutral control also lowers the margin, so only the excess is attributable to the
 injection.
 
@@ -122,8 +122,8 @@ Gemma-2-2B, manual inspection confirms genuine harmful generations and a substri
 of $0.92$, yet the judge scores only $0.05$. Neither is an unbiased estimator, so the
 substring metric is treated as an upper bound on behavioural capture and the
 safety-trained judge as a lower bound, with manual inspection as the arbiter. This
-bracketing validates the ablation finding---ablation produces genuine harmful
-compliance---and establishes the injection capture rate as a lower bound.
+bracketing validates the ablation finding, ablation produces genuine harmful
+compliance, and establishes the injection capture rate as a lower bound.
 
 \subsection{Summary of gate outcomes}
 Table~\ref{tab:gates} collects the outcomes. The mechanism tier passes as
