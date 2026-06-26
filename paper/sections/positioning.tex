@@ -3,30 +3,32 @@
 
 \subsection{Relation to the state of the art}
 Table~\ref{tab:compare} situates this work among the main refusal-interpretability
-methods. The reference rows give each work's geometric position, taken from its own
-statements; the final three feature columns, a continuous dose-response with a
-half-maximal EC50, a measured symmetry order parameter, and a behavioural-capture
-bound from cross-axis triangulation, are unique to this work.
+methods along four axes that each work answers directly: the claimed refusal
+geometry, how the refusal direction is extracted, the causal intervention
+demonstrated, and the largest model evaluated. The cells are taken from each work's
+own report. The pattern that distinguishes this work is not a single missing column
+but a combination: a one-dimensional but layer-dependent geometry, a supervised plus
+unsupervised extraction, a calibrated bidirectional dose-response, and a behavioural
+bound established on a frontier model.
 
 \begin{table}[h]
-\caption{Where this work sits among refusal-interpretability methods; the EC50
-dose-response ($0.33$), the order parameter ($F$-ratio $19.2$), and the
-behavioural-capture bound ($1$--$2.4\%$) are unique to it.}
+\caption{Refusal-interpretability methods compared along geometry, extraction,
+intervention, and scale.}
 \label{tab:compare}
 \centering
 \footnotesize
-\setlength{\tabcolsep}{4.5pt}
-\begin{tabular}{llcccl}
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lllll}
 \toprule
-Work & Geometry & EC50 & Order p.\ & Bound & Scale \\
+Work & Geometry & Extraction & Intervention & Largest model \\
 \midrule
-Arditi 2024~\cite{arditi2024refusal} & single direction & No & No & No & 13 chat LMs \\
-Marshall 2024~\cite{marshall2024refusal} & affine subspace & No & No & No & open chat \\
-Wollschl\"ager 2025~\cite{wollschlager2025geometry} & concept cones & No & No & No & open chat \\
-Piras 2025~\cite{piras2025som} & SOM multi-dir.\ & No & No & No & open chat \\
-Hildebrandt 2025~\cite{hildebrandt2025refusal} & nonlinear & No & No & No & open chat \\
-Johnson 2026~\cite{johnson2026more} & 11 categories & No & No & No & open chat \\
-This work & direction (layer-dep.) & Yes & Yes & Yes & 3 open+Claude \\
+Arditi 2024~\cite{arditi2024refusal} & single direction & diff-in-means & ablate + add & 72B \\
+Marshall 2024~\cite{marshall2024refusal} & affine subspace & affine (ACE) & project + add & 70B \\
+Wollschl\"ager 2025~\cite{wollschlager2025geometry} & concept cones & gradient (RDO) & multi-direction & open chat \\
+Piras 2025~\cite{piras2025som} & multi-direction & self-organizing map & suppression & open chat \\
+Hildebrandt 2025~\cite{hildebrandt2025refusal} & nonlinear & PCA / UMAP & characterization & open chat \\
+Johnson 2026~\cite{johnson2026more} & eleven mechanisms & behavioural audit & categorization & open chat \\
+This work & direction, layer-dep.\ & diff-in-means + SAE & ablate + add, dosed & 9.2B + Claude \\
 \bottomrule
 \end{tabular}
 \end{table}
