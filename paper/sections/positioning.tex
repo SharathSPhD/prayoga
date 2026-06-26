@@ -2,6 +2,35 @@
 % Relation to the state of the art (folded into Discussion)
 
 \subsection{Relation to the state of the art}
+Table~\ref{tab:compare} situates this work among the main refusal-interpretability
+methods. The reference rows give each work's geometric position, taken from its own
+statements; the final three feature columns, a continuous dose-response with a
+half-maximal EC50, a measured symmetry order parameter, and a behavioural-capture
+bound from cross-axis triangulation, are unique to this work.
+
+\begin{table}[h]
+\caption{Where this work sits among refusal-interpretability methods; the EC50
+dose-response ($0.33$), the order parameter ($F$-ratio $19.2$), and the
+behavioural-capture bound ($1$--$2.4\%$) are unique to it.}
+\label{tab:compare}
+\centering
+\footnotesize
+\setlength{\tabcolsep}{4.5pt}
+\begin{tabular}{llcccl}
+\toprule
+Work & Geometry & EC50 & Order p.\ & Bound & Scale \\
+\midrule
+Arditi 2024~\cite{arditi2024refusal} & single direction & No & No & No & 13 chat LMs \\
+Marshall 2024~\cite{marshall2024refusal} & affine subspace & No & No & No & open chat \\
+Wollschl\"ager 2025~\cite{wollschlager2025geometry} & concept cones & No & No & No & open chat \\
+Piras 2025~\cite{piras2025som} & SOM multi-dir.\ & No & No & No & open chat \\
+Hildebrandt 2025~\cite{hildebrandt2025refusal} & nonlinear & No & No & No & open chat \\
+Johnson 2026~\cite{johnson2026more} & 11 categories & No & No & No & open chat \\
+This work & direction (layer-dep.) & Yes & Yes & Yes & 3 open+Claude \\
+\bottomrule
+\end{tabular}
+\end{table}
+
 The field is contested on whether refusal is a single
 direction~\cite{arditi2024refusal}, an affine subspace~\cite{marshall2024refusal},
 several representationally-independent directions~\cite{wollschlager2025geometry,piras2025som},

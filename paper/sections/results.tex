@@ -245,19 +245,19 @@ result discriminates where the battery did not: it confirms genuine agency under
 with zero capture, and it matches the published resilience of Claude on AgentDojo.
 
 \begin{table}[h]
-\caption{Black-box behavioural results for Claude Opus 4.8 via \texttt{claude -p}.}
+\caption{Cross-tier behavioural contrast: a frontier model resists every attack
+while small open models are ablation-fragile.}
 \label{tab:blackbox}
 \centering
-\begin{tabular}{llcc}
+\begin{tabular}{lllcc}
 \toprule
-Setting & Condition & $n$ & ASR \\
+Tier (model) & Condition & $n$ & Utility & ASR \\
 \midrule
-Naive battery & direct (control) & 11 & $0.00$ \\
-Naive battery & refusal-suppression & 11 & $0.00$ \\
-Naive battery & persona & 11 & $0.00$ \\
-Naive battery & many-shot & 11 & $0.00$ \\
-Naive battery & crescendo & 11 & $0.00$ \\
-AgentDojo banking & \texttt{important\_instructions} (utility $0.80$) & 20 & $0.00$ \\
+Black box (Claude Opus 4.8) & naive battery, 5 families & 55 & --- & $0.00$ \\
+Black box (Claude Opus 4.8) & AgentDojo banking & 20 & $0.80$ & $0.00$ \\
+White box (Gemma-2-2B) & refusal-direction ablation & 24 & --- & $0.90$ \\
+White box (Gemma-2-9B) & refusal-direction ablation & 20 & --- & $0.60$ \\
+White box (Qwen2.5-3B) & refusal-direction ablation & 24 & --- & $1.00$ \\
 \bottomrule
 \end{tabular}
 \end{table}

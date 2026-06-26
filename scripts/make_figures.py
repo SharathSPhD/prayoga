@@ -417,8 +417,9 @@ def _gauss(x, mu, sd):
 # F11b — order-parameter geometry: the broken symmetry (data-grounded)
 # --------------------------------------------------------------------------- #
 def fig_order_geometry() -> None:
+    from matplotlib.patches import Patch
     models = [("gemma-2-2b-it", "Gemma-2-2B"), ("qwen2.5-3b-it", "Qwen2.5-3B")]
-    fig, axes = plt.subplots(1, 2, figsize=(8.8, 3.7))
+    fig, axes = plt.subplots(1, 2, figsize=(8.8, 4.0))
     for ax, (m, lbl) in zip(axes, models):
         d = _load(RB / f"symmetry_{m}.json")
         sd = d["within_orbit_std_harmful"]
@@ -427,24 +428,27 @@ def fig_order_geometry() -> None:
         lo = min(sm, inj) - 4 * sd
         hi = max(hm, plain) + 4 * sd
         xs = np.linspace(lo, hi, 400)
-        ax.fill_between(xs, _gauss(xs, sm, sd), color=C_BLUE, alpha=0.35,
-                        label="harmless orbits")
-        ax.fill_between(xs, _gauss(xs, hm, sd), color=C_REFUSAL, alpha=0.35,
-                        label="harmful orbits")
+        peak = _gauss(hm, hm, sd)
+        ax.fill_between(xs, _gauss(xs, sm, sd), color=C_BLUE, alpha=0.35)
+        ax.fill_between(xs, _gauss(xs, hm, sd), color=C_REFUSAL, alpha=0.35)
         ax.plot(xs, _gauss(xs, sm, sd), color=C_BLUE, lw=1.5)
         ax.plot(xs, _gauss(xs, hm, sd), color=C_REFUSAL, lw=1.5)
-        peak = _gauss(hm, hm, sd)
-        ax.annotate("", xy=(inj, peak * 0.5), xytext=(plain, peak * 0.5),
+        ax.annotate("", xy=(inj, peak * 0.42), xytext=(plain, peak * 0.42),
                     arrowprops=dict(arrowstyle="-|>", color=C_ORANGE, lw=2.2))
-        ax.text((plain + inj) / 2, peak * 0.58, "injection", ha="center",
+        ax.text((plain + inj) / 2, peak * 0.50, "injection", ha="center",
                 fontsize=8.5, color=C_ORANGE)
         ax.set_yticks([])
+        ax.set_ylim(0, peak * 1.5)
         ax.set_xlabel(r"order parameter $m=(h\cdot\hat d)/\Vert h\Vert$")
-        ax.text(0.04, 0.92, f"{lbl}\n$F$-ratio {d['F_ratio_refusal_dir']:.1f} vs "
-                f"{d['F_ratio_random_dir']:.2f} random", transform=ax.transAxes,
+        ax.text(0.03, 0.97, f"{lbl}: $F$-ratio {d['F_ratio_refusal_dir']:.1f} vs "
+                f"{d['F_ratio_random_dir']:.2f} (random)", transform=ax.transAxes,
                 fontsize=8.5, va="top", color=C_INK)
         _despine(ax)
-    axes[0].legend(loc="upper right", fontsize=8)
+    handles = [Patch(facecolor=C_BLUE, alpha=0.5, label="harmless orbits"),
+               Patch(facecolor=C_REFUSAL, alpha=0.5, label="harmful orbits")]
+    fig.legend(handles=handles, loc="upper center", ncol=2, fontsize=9,
+               bbox_to_anchor=(0.5, 1.02), frameon=False)
+    fig.tight_layout(rect=[0, 0, 1, 0.93])
     _save(fig, "f12_order_geometry.png")
 
 
@@ -454,39 +458,40 @@ def fig_order_geometry() -> None:
 def fig_refusal_geometry() -> None:
     d = _load(RA / "affine_alignment.json")["gemma-2-2b-it"]
     gap, sd = d["harmful_harmless_gap_along_dref"], d["harmless_spread_along_dref"]
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(8.8, 3.6), sharey=True)
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(8.8, 3.9), sharey=True)
     xs = np.linspace(-3 * sd, gap + 4 * sd, 500)
     thr = gap / 2
+    peak = _gauss(0, 0, sd)
     # Panel 1: native geometry
     ax1.fill_between(xs, _gauss(xs, 0, sd), color=C_BLUE, alpha=0.35, label="harmless")
     ax1.fill_between(xs, _gauss(xs, gap, sd), color=C_REFUSAL, alpha=0.35, label="harmful")
     ax1.axvline(thr, ls="--", color=C_INK, alpha=0.6)
-    ax1.text(thr, _gauss(0, 0, sd) * 1.05, "refuse / comply\nthreshold", ha="center",
+    ax1.text(thr, peak * 1.46, "refuse / comply\nthreshold", ha="center", va="top",
              fontsize=8, color=C_INK)
-    ax1.annotate("", xy=(gap, -_gauss(0, 0, sd) * 0.16),
-                 xytext=(0, -_gauss(0, 0, sd) * 0.16),
+    ax1.annotate("", xy=(gap, peak * 0.10), xytext=(0, peak * 0.10),
                  arrowprops=dict(arrowstyle="<->", color=C_GRAY, lw=1.3))
-    ax1.text(gap / 2, -_gauss(0, 0, sd) * 0.3, f"separation {gap:.1f}", ha="center",
+    ax1.text(gap / 2, peak * 0.15, f"separation {gap:.1f}", ha="center",
              fontsize=8, color=C_GRAY)
     ax1.set_xlabel(r"projection onto refusal direction $\hat d$")
     ax1.set_yticks([])
-    ax1.legend(loc="upper right", fontsize=8)
+    ax1.legend(loc="upper left", fontsize=8)
     _despine(ax1)
     # Panel 2: interventions
     ax2.fill_between(xs, _gauss(xs, 0, sd), color=C_BLUE, alpha=0.15)
     ax2.fill_between(xs, _gauss(xs, gap, sd), color=C_REFUSAL, alpha=0.15)
     ax2.fill_between(xs, _gauss(xs, thr, sd), color="#888", alpha=0.4,
-                     label="ablation: collapse to threshold")
-    ax2.annotate("", xy=(gap * 0.78, _gauss(0, 0, sd) * 0.5),
-                 xytext=(thr * 0.4, _gauss(0, 0, sd) * 0.5),
+                     label="ablation $\\to$ threshold")
+    ax2.annotate("", xy=(gap * 0.80, peak * 0.42), xytext=(thr * 0.35, peak * 0.42),
                  arrowprops=dict(arrowstyle="-|>", color=C_ORANGE, lw=2))
-    ax2.text(thr * 0.6, _gauss(0, 0, sd) * 0.62, "addition $+c\\,\\hat d$", fontsize=8,
+    ax2.text(thr * 0.55, peak * 0.50, "addition $+c\\,\\hat d$", fontsize=8,
              color=C_ORANGE)
     ax2.axvline(thr, ls="--", color=C_INK, alpha=0.6)
     ax2.set_xlabel(r"projection onto refusal direction $\hat d$")
     ax2.set_yticks([])
-    ax2.legend(loc="upper right", fontsize=8)
+    ax2.legend(loc="upper left", fontsize=8)
     _despine(ax2)
+    ax1.set_ylim(0, peak * 1.6)
+    fig.tight_layout()
     _save(fig, "f1_refusal_geometry.png")
 
 
